@@ -111,7 +111,7 @@ const ShopHiddenSidebarPage = () => {
 
 export default ShopHiddenSidebarPage;
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps= async (context) => {
   const { query } = context;
 
   return {

@@ -128,7 +128,7 @@ const ForgotPassword = ({ params }) => {
   );
 };
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps= async ({ params }) => {
   return {
     props: { params },
   };
