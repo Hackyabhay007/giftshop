@@ -22,7 +22,7 @@ const ProductGadgetArea = () => {
     isLoading,
   } = useGetProductTypeQuery(activeTab);
 
-  console.log("Products from API:", products); // Log the entire products object
+ 
 
   let content = null;
 
@@ -87,7 +87,7 @@ const ProductGadgetArea = () => {
           >
             <div className="tp-product-gadget-banner-content">
               <span className="tp-product-gadget-banner-price">
-                Only ₹ {b.price.toFixed(2)}
+                Only $ {b.price.toFixed(2)}
               </span>
               <h3 className="tp-product-gadget-banner-title">
                 <Link href="/shop">{b.title}</Link>

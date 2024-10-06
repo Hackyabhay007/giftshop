@@ -1,65 +1,82 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetUserQuery } from "@/redux/features/auth/authApi";
-import { userLoggedIn, userLoggedOut } from "@/redux/features/auth/authSlice";
+import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import Cookies from "js-cookie";
 
 function ProfileSetting({ active, handleActive }) {
   const dispatch = useDispatch();
   const router = useRouter();
-
-  // Fetch user info using RTK query
-  const { data: userInfo, isLoading, error } = useGetUserQuery();
-
-  useEffect(() => {
-    // Sync user state with Redux when component mounts
-    if (userInfo) {
-      const { user, token } = userInfo;
-      if (user && token) {
-        dispatch(userLoggedIn({ user, accessToken: token }));
-      }
-    }
-  }, [userInfo, dispatch]);
+  const user = useSelector((state) => state.auth.user); // Accessing the user state
 
   const handleLogout = () => {
     dispatch(userLoggedOut());
-    Cookies.remove("userInfo"); 
-    router.push('/');
+    Cookies.remove("userInfo");
+    router.push("/");
   };
-  
 
-  // if (isLoading) return <div>Loading...</div>; // Optional loading state
-  // if (error) return <div>Error fetching user data</div>; // Error state
-
-  const user = userInfo?.user; // Extract user object
+  const [hovered, setHovered] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null); // State to track hovered item
 
   return (
     <div className="tp-header-top-menu-item tp-header-setting">
       <span
-        onClick={() => handleActive("setting")}
         className="tp-header-setting-toggle"
         id="tp-header-setting-toggle"
+        onClick={() => handleActive("setting")} // Call handleActive on click
       >
         Setting
       </span>
-      <ul className={active === "setting" ? "tp-setting-list-open" : ""}>
-        <li onClick={() => handleActive("setting")}>
-          <Link href="/profile">My Profile</Link>
+      <ul
+        style={{ fontWeight: "bold" }}
+        className={active === "setting" ? "tp-setting-list-open" : ""}
+      >
+        <li>
+          <Link
+            onMouseEnter={() => setHoveredItem("profile")}
+            onMouseLeave={() => setHoveredItem(null)}
+            onClick={() => handleActive("setting")}
+            style={{ color: hoveredItem === "profile" ? "#990100" : "inherit" }}
+            href="/profile"
+          >
+            My Profile
+          </Link>
         </li>
-        <li onClick={() => handleActive("setting")}>
-          <Link href="/cart">Cart</Link>
+        <li>
+          <Link
+            onMouseEnter={() => setHoveredItem("cart")}
+            onMouseLeave={() => setHoveredItem(null)}
+            onClick={() => handleActive("setting")}
+            style={{ color: hoveredItem === "cart" ? "#990100" : "inherit" }}
+            href="/cart"
+          >
+            Cart
+          </Link>
         </li>
-        <li onClick={() => handleActive("setting")}>
+        <li>
           {!user ? (
-            <Link href="/login" className="cursor-pointer">
+            <Link
+              onMouseEnter={() => setHoveredItem("login")}
+              onMouseLeave={() => setHoveredItem(null)}
+              onClick={() => handleActive("setting")}
+              style={{ color: hoveredItem === "login" ? "#990100" : "inherit" }} // Change color on hover
+              href="/login"
+              className="cursor-pointer"
+            >
               Login
             </Link>
           ) : (
-            <a onClick={handleLogout} className="cursor-pointer">
+            <span
+              onMouseEnter={() => setHoveredItem("login")}
+              onMouseLeave={() => setHoveredItem(null)}
+            
+              style={{ color: hoveredItem === "login" ? "#990100" : "inherit" }} // Change color on hover
+              onClick={handleLogout}
+              className="cursor-pointer"
+            >
               Logout
-            </a>
+            </span>
           )}
         </li>
       </ul>
@@ -69,14 +86,16 @@ function ProfileSetting({ active, handleActive }) {
 
 // HeaderTopRight Component
 const HeaderTopRight = () => {
-  const [active, setIsActive] = useState("");
+  const [active, setActive] = useState(""); // State for active menu
+  const user = useSelector((state) => state.auth.user); // Accessing the user state
+
   const handleActive = (type) => {
-    setIsActive((prev) => (type === prev ? "" : type));
+    setActive((prev) => (type === prev ? "" : type)); // Toggle active menu
   };
 
   return (
     <div className="tp-header-top-menu d-flex align-items-center justify-content-end">
-      <ProfileSetting active={active} handleActive={handleActive} />
+      <ProfileSetting active={active} handleActive={handleActive} user={user} />
     </div>
   );
 };

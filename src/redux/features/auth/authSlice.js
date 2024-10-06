@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 // Initialize state from cookies if available
 const userInfo = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : null;
 
+
 const initialState = {
   accessToken: userInfo ? userInfo.accessToken : undefined,
   user: userInfo ? userInfo.user : undefined,

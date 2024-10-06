@@ -47,7 +47,7 @@ const Header = () => {
                       <ShippingCar />
                     </span>
                     <p style={{ fontSize: "14px", color: "#fff" }}>
-                      FREE Express Shipping On Orders ₹ 570+
+                      FREE Express Shipping On Orders $ 570+
                     </p>
                   </div>
                 </div>
@@ -79,7 +79,7 @@ const Header = () => {
           <div className="tp-header-main tp-header-sticky">
             <div className="container">
               <div className="row align-items-center">
-                <div className="col-xl-4 col-lg-2 col-md-4 col-6">
+                <div className="col-xl-4  col-lg-4 col-md-3 col-6">
                   <div className="logo">
                     <Link href="/">
                       <Image
@@ -91,7 +91,7 @@ const Header = () => {
                   </div>
                 </div>
 
-                <div className="col-xl-4 d-none d-lg-block col-lg-5">
+                <div className="col-xl-5  d-none d-lg-block col-lg-5">
                   <div className="main-menu menu-style-1">
                     <nav className="tp-main-menu-content">
                       <Menus />
@@ -99,7 +99,7 @@ const Header = () => {
                   </div>
                 </div>
 
-                <div className="col-xl-4 col-lg-3 col-md-8 col-6">
+                <div className="col-xl-3  col-lg-3 col-md-8 col-6">
                   <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
                 </div>
               </div>
@@ -107,24 +107,7 @@ const Header = () => {
           </div>
 
 
-          {/* header bottom start */}
-          {/* <div className="tp-header-bottom tp-header-bottom-border d-none d-lg-block">
-            <div className="container">
-              <div className="tp-mega-menu-wrapper p-relative">
-                <div className="row align-items-center">
-                  <div className="col-xl-6 col-lg-6">
-                    <div className="main-menu menu-style-1">
-                      <nav className="tp-main-menu-content">
-                        <Menus />
-                      </nav>
-                    </div>
-                  </div>
-                  
-                  
-                </div>
-              </div>
-            </div>
-          </div> */}
+         
         </div>
       </header>
 
