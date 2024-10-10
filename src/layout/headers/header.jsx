@@ -50,7 +50,7 @@ const Header = () => {
                       <ShippingCar />
                     </span>
                     <p style={{ fontSize: "14px", color: "#000000" }}>
-                      FREE Express Shipping On Orders Rs 570+
+                      FREE Express Shipping On Orders Rs500+
                     </p>
                   </div>
                 </div>
@@ -82,7 +82,7 @@ const Header = () => {
           <div className="tp-header-main  tp-header-sticky">
             <div className="container">
               <div className="row align-items-center">
-                <div className="col-xl-4  col-lg-4 col-md-3 col-6">
+                <div className="col-xl-3  col-lg-4 col-md-3 col-6">
                   <div className="logo">
                     <Link href="/">
                       <Image
@@ -94,7 +94,7 @@ const Header = () => {
                   </div>
                 </div>
 
-                <div className="col-xl-5  d-none d-lg-block col-lg-5">
+                <div className="col-xl-6  d-none d-lg-block col-lg-6">
                   <div className="main-menu menu-style-1">
                     <nav className="tp-main-menu-content">
                       <Menus />
@@ -102,7 +102,7 @@ const Header = () => {
                   </div>
                 </div>
 
-                <div className="col-xl-3  col-lg-3 col-md-8 col-6">
+                <div className="col-xl-3  col-lg-2 col-md-8 col-6">
                   <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
                 </div>
               </div>
@@ -127,20 +127,20 @@ const Header = () => {
                   <Link href="/">
                     <Image
                       src={logo}
-                      style={{ width: "100px", height: "100px" }}
+                      style={{ width: "100px", height: "100px" ,objectFit:"cover" }}
                       alt="logo"
                     />
                   </Link>
                 </div>
               </div>
-              <div className="col-xl-6   d-flex align-items-center justify-content-end pl-120 col-lg-6 col-md-6 d-none d-md-block">
+              <div className="col-xl-7 col-lg-7  d-flex align-items-center justify-content-end pl-120 col-lg-6 col-md-6 d-none d-md-block">
                 <div className="tp-header-sticky-menu main-menu menu-style-1 d-none d-lg-block">
                   <nav id="mobile-menu">
                     <Menus />
                   </nav>
                 </div>
               </div>
-              <div className="col-xl-3 col-lg-3 col-md-3 col-6">
+              <div className="col-xl-2 col-lg-2 col-md-3 col-6">
                 <div className="tp-header-action d-flex align-items-center justify-content-end ml-50">
                   <div className="tp-header-action-item d-none d-lg-block"></div>
 
