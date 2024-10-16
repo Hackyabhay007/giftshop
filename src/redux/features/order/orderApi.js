@@ -6,13 +6,13 @@ export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     // createPaymentIntent
-    createPaymentIntent: builder.mutation({
-      query: (data) => {
-        const { accessToken } = data; // Access token passed in data
+    createRazorpayOrder: builder.mutation({
+      query: (orderInfo) => {
+        const { accessToken, ...rest } = orderInfo; // Destructure access token and rest of the data
         return {
-          url: "https://apiv2.mysweetwishes.com/api/user/orders",
+          url: "https://apiv2.mysweetwishes.com/api/initiate-order", // Your endpoint
           method: "POST",
-          body: data,
+          body: rest, // Send the entire orderInfo object
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
@@ -22,9 +22,9 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          dispatch(set_client_secret(result.clientSecret));
+          dispatch(set_client_secret(result.clientSecret)); // Assuming you need to set client secret here
         } catch (err) {
-          // do nothing
+          console.error("Error creating Razorpay order:", err);
         }
       },
     }),
@@ -33,9 +33,9 @@ export const authApi = apiSlice.injectEndpoints({
     saveOrder: builder.mutation({
       query: (data) => {
         const { accessToken, ...rest } = data; // Destructure access token and rest of the data
-      
+
         return {
-          url: "https://apiv2.mysweetwishes.com/api/orders",
+          url: "https://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
           body: rest, // Send the rest of the data without the accessToken
           headers: {
@@ -44,7 +44,7 @@ export const authApi = apiSlice.injectEndpoints({
           },
         };
       },
-      invalidatesTags: ['UserOrders'],
+      invalidatesTags: ["UserOrders"],
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -58,12 +58,10 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    
 
     // getUserOrders
     getUserOrders: builder.query({
       query: (accessToken) => {
-       
         return {
           url: "https://apiv2.mysweetwishes.com/api/user/orders",
           headers: {
@@ -78,8 +76,6 @@ export const authApi = apiSlice.injectEndpoints({
     // getUserOrderById
     getUserOrderById: builder.query({
       query: ({ id, accessToken }) => {
-      
-    
         return {
           url: `https://apiv2.mysweetwishes.com/api/orders/${id}`,
           headers: {
@@ -90,12 +86,45 @@ export const authApi = apiSlice.injectEndpoints({
       providesTags: (result, error, arg) => [{ type: "UserOrder", id: arg }],
       keepUnusedDataFor: 600,
     }),
+
+    // cancelOrder
+    cancelOrder: builder.mutation({
+      query: ({ order_id, accessToken }) => {
+        return {
+          url: "https://apiv2.mysweetwishes.com/api/cancel-order", // Your cancel order endpoint
+          method: "POST",
+          body: { order_id }, // The order ID to cancel
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        };
+      },
+      invalidatesTags: ["UserOrders"], // Invalidate user orders after canceling an order
+    }),
+    ///track order
+    trackOrder: builder.query({
+      query: ({ orderId, accessToken }) => {
+        return {
+          url: `https://apiv2.mysweetwishes.com/api/orders/${orderId}/track`,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+      },
+      providesTags: (result, error, arg) => [{ type: "OrderTrack", id: arg.orderId }],
+      keepUnusedDataFor: 600, // Cache the data for 600 seconds
+    }),
   }),
+  
 });
 
 export const {
-  useCreatePaymentIntentMutation,
+  useCreateRazorpayOrderMutation,
   useSaveOrderMutation,
   useGetUserOrderByIdQuery,
   useGetUserOrdersQuery,
+  useCancelOrderMutation,
+  useTrackOrderQuery, 
+
 } = authApi;

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
 import ReactToPrint from "react-to-print";
@@ -14,6 +14,12 @@ import { useGetUserOrderByIdQuery } from "@/redux/features/order/orderApi";
 import PrdDetailsLoader from "@/components/loader/prd-details-loader";
 import { useSelector } from "react-redux";
 import { useGetUserOrdersQuery } from "@/redux/api/apiSlice";
+import {
+  useCancelOrderMutation,
+  useTrackOrderQuery,
+} from "@/redux/features/order/orderApi";
+import { notifyError, notifySuccess } from "@/utils/toast";
+import OrderTrackingComponent from "@/components/OrderTrackingCompoent";
 
 const SingleOrder = ({ params }) => {
   const { accessToken } = useSelector((state) => state.auth); // Retrieve access token from Redux
@@ -45,6 +51,34 @@ const SingleOrder = ({ params }) => {
   if (isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
+
+  const [cancelOrder, { isLoading: isCanceling }] = useCancelOrderMutation();
+
+  const handleCancelOrder = async () => {
+    try {
+      // Trigger the cancelOrder mutation
+      const response = await cancelOrder({
+        order_id: orderId,
+        accessToken,
+      }).unwrap();
+
+      // Check the status and message from the response
+      if (response.status === "success") {
+        notifySuccess(response.message); // Example: "Order canceled and stock restored."
+      } else {
+        notifyError("Failed to cancel order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Failed to cancel order:", error);
+      notifyError("Failed to cancel order.");
+    }
+  };
+
+  const [trackOrderId, setTrackOrderId] = useState(false);
+
+  const handleTrackOrder = () => {
+    setTrackOrderId(!trackOrderId);
+  };
 
   if (!isLoading && !isError && data) {
     const order = data.order; // Directly access the order object
@@ -89,21 +123,34 @@ const SingleOrder = ({ params }) => {
                     <div className="col-xl-12">
                       <div className="invoice__header pb-20">
                         <div className="row align-items-end">
-                          <div style={{backgroundColor:"#990100",borderRadius:"10px"}} className="col-md-12 col-sm-6">
+                          <div
+                            style={{
+                              backgroundColor: "#990100",
+                              borderRadius: "10px",
+                            }}
+                            className="col-md-12 col-sm-6"
+                          >
                             <div className="invoice__left pt-10">
-                              <Image src={logo} height={100} width={100} alt="logo" />
-                              <p className="mt-15" style={{color:"white"}}>
+                              <Image
+                                src={logo}
+                                height={100}
+                                width={100}
+                                alt="logo"
+                              />
+                              <p className="mt-15" style={{ color: "white" }}>
                                 83, Mahaveer Complex, <br /> Kurukshetra 136118
                                 Haryana
                               </p>
                             </div>
                             <div className="invoice__right mt-15 mt-sm-0 text-sm-end">
-                              <h3 style={{color:"white"}} className="text-uppercase font-70 ">
+                              <h3
+                                style={{ color: "white" }}
+                                className="text-uppercase font-70 "
+                              >
                                 Invoice
                               </h3>
                             </div>
                           </div>
-                          
                         </div>
                       </div>
                     </div>
@@ -134,7 +181,7 @@ const SingleOrder = ({ params }) => {
                   </div>
                 </div>
                 {/* Table wrapped with table-responsive */}
-                <div className="invoice__order-table pt-30 pb-30 pl-40 pr-40 bg-white mb-30 table-responsive">
+                <div className="invoice__order-table pt-30 pb-30 pl-10 pr-10 bg-white mb-30 table-responsive">
                   <table className="table">
                     <thead className="table-light">
                       <tr>
@@ -158,7 +205,7 @@ const SingleOrder = ({ params }) => {
                     </tbody>
                   </table>
                 </div>
-                <div className="invoice__total pt-40 pb-10 alert-success pl-40 pr-40 mb-30">
+                <div className="invoice__total pt-40 pb-10 alert-success pl-0 pr-0 mb-30">
                   <div className="row">
                     <div className="col-lg-3 col-md-4">
                       <div className="invoice__payment-method mb-30">
@@ -176,6 +223,40 @@ const SingleOrder = ({ params }) => {
                         </p>
                       </div>
                     </div>
+                    <div className=" col-lg-6 col-md-4 mb-3">
+                      <button
+                        type="button"
+                        className="tp-btn mb-5  tp-btn-danger me-3"
+                        onClick={() => handleCancelOrder()}
+                      >
+                        Cancel Order
+                      </button>
+                      <button
+                        type="button"
+                        className="tp-btn  tp-btn-primary"
+                        onClick={() => handleTrackOrder()}
+                      >
+                        Track Order{" "}
+                        <span
+                          style={{
+                            display: "inline-block",
+                            marginLeft: "5px",
+                            transition: "transform 0.3s ease",
+                            transform: trackOrderId
+                              ? "rotate(0deg)"
+                              : "rotate(-90deg)",
+                          }}
+                        >
+                          ▼
+                        </span>
+                      </button>
+                    </div>
+                    {trackOrderId && (
+                      <OrderTrackingComponent
+                        orderId={orderId}
+                        accessToken={accessToken}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
