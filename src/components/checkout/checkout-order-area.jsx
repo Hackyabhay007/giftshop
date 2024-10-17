@@ -84,7 +84,7 @@ const CheckoutOrderArea = ({ checkoutData, setShowCard, showCard }) => {
       </div>
 
       <div className="tp-checkout-payment">
-        <div className="tp-checkout-payment-item">
+        {/* <div className="tp-checkout-payment-item">
           <input
             {...register(`payment`, { required: `Payment Option is required!` })}
             type="radio"
@@ -97,7 +97,7 @@ const CheckoutOrderArea = ({ checkoutData, setShowCard, showCard }) => {
           </label>
          
           <ErrorMsg msg={errors?.payment?.message} />
-        </div>
+        </div> */}
         <div className="tp-checkout-payment-item">
           <input
             {...register(`payment`, { required: `Payment Option is required!` })}
