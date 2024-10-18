@@ -154,7 +154,7 @@ const useCheckoutSubmit = () => {
       state: data.state,
       city: data.city,
       pincode: data.zipCode,
-      country: data.country,
+      country: "India",
       phone_number: data.contactNo,
       price: cartTotal,
       payment_type: data.payment,

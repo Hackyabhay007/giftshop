@@ -56,7 +56,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   {...register("country", { required: `Country is required!` })}
                   name="country"
                   id="country"
-                  disabled="true"
                   type="text"
                   placeholder="India"
                   defaultValue="India" // Set default value to India
