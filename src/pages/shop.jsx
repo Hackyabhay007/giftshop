@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // Import useRef
 import { useRouter } from "next/router";
 import SEO from "@/components/seo";
 import Wrapper from "@/layout/wrapper";
@@ -16,8 +16,8 @@ import ErrorMsg from "@/components/common/error-msg";
 
 const ShopPage = ({ query }) => {
   const [categoryId, setCategoryId] = useState(query?.category || null);
-
   const [currPage, setCurrPage] = useState(1);
+  const shopAreaRef = useRef(null); // Create a ref for the shop area
 
   const {
     data: allProducts,
@@ -52,6 +52,20 @@ const ShopPage = ({ query }) => {
       setCategoryId(query.category);
     }
   }, [query?.category]);
+
+  // Scroll to shop area when the component mounts
+  useEffect(() => {
+    const scrollToShopArea = () => {
+      if (shopAreaRef.current) {
+        shopAreaRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    // Delay the scroll to ensure the component is fully rendered
+    const timer = setTimeout(scrollToShopArea, 200); // Adjust the delay as needed
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
 
   let product_items = categoryId ? categoryProducts : allProducts?.data || [];
 
@@ -89,22 +103,26 @@ const ShopPage = ({ query }) => {
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
-      <ShopBreadcrumb   title={categoryName} subtitle="Product Grid" />
+      <ShopBreadcrumb title={categoryName} subtitle="Product Grid" />
 
-      <ShopArea
-        all_products={allProducts?.data}
-        products={product_items}
-        otherProps={{
-          priceFilterValues: { priceValue, handleChanges: setPriceValue },
-          selectHandleFilter: (e) => {
-            setCurrPage(1);
-            setSelectValue(e.value);
-          },
-          currPage,
-          setCurrPage,
-        }}
-        resetCategory={resetCategory}
-      />
+      {/* Attach the ref to the ShopArea component */}
+      <div ref={shopAreaRef}>
+        <ShopArea
+          all_products={allProducts?.data}
+          products={product_items}
+          otherProps={{
+            priceFilterValues: { priceValue, handleChanges: setPriceValue },
+            selectHandleFilter: (e) => {
+              setCurrPage(1);
+              setSelectValue(e.value);
+            },
+            currPage,
+            setCurrPage,
+          }}
+          resetCategory={resetCategory}
+        />
+      </div>
+
       <ShopFilterOffCanvas
         all_products={allProducts?.data}
         otherProps={{

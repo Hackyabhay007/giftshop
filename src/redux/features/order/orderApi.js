@@ -105,6 +105,8 @@ export const authApi = apiSlice.injectEndpoints({
     ///track order
     trackOrder: builder.query({
       query: ({ orderId, accessToken }) => {
+        console.log(orderId, accessToken);
+        
         return {
           url: `https://apiv2.mysweetwishes.com/api/orders/${orderId}/track`,
           headers: {

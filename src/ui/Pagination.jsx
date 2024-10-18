@@ -43,13 +43,12 @@ const Pagination = ({
               <PaginationPrev />
             </button>
           </li>
-
           {Array.from({ length: totalPage }, (_, i) => i + 1).map((n) => (
             <li key={n} onClick={() => setPage(n)}>
               <span
                 style={{
-                  backgroundColor: "#990100",
-                  color: "white",
+                  backgroundColor: currPage === n ? "#990100" : "white", // Filled background for the current page
+                  color: currPage === n ? "white" : "#990100", // Text color for the current page
                   border: "solid 1px #990100",
                 }}
                 className={`${currPage === n ? "current" : ""}`}

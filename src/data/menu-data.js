@@ -64,67 +64,27 @@ export const mobile_menu = [
     id: 2,
     single_link: true,
     sub_menu: true,
-    title: 'Products',
+    title: 'All Products',
     link: '/shop',
    
   },
   {
-    id: 3,
-    sub_menu: true,
-    title: 'eCommerce',
-    sub_menus: [
-      { title: 'Shopping Cart', link: '/cart' },
-      { title: 'Checkout', link: '/checkout' },
-      { title: 'My account', link: '/profile' },
-    ],
-  },
-  {
-    id: 4,
-    sub_menu: true,
-    title: 'Setting',
-    sub_menus: [
-      { title: 'Login', link: '/login' },
-      { title: 'Register', link: '/register' },
-      { title: 'Forgot Password', link: '/forgot' },
-      { title: 'Change Password', link: '/profile' },
-     
-    ],
-  },
-  {
-    id: 4,
-    sub_menu: true,
-    title: 'Legal',
-    sub_menus: [
-      { title: 'Terms and Conditions', link: 'termsandconditions' },
-      { title: 'Privacy Policy', link: '/privacypolicy' },
-      { title: 'Refund Policy', link: '/refundpolicy' },
-      { title: 'Shipping Policy', link: '/shippingpolicy' },
-     
-    ],
-  },
-  {
-    id: 4,
+    id: 7,
     single_link: true,
     title: 'Coupons',
     link: '/coupon',
   },
   {
-    id: 5,
+    id: 8,
     sub_menu: true,
     title: 'Blog',
     link: '/blog',
    
   },
   {
-    id: 6,
-    single_link: true,
-    title: 'About Us',
-    link: '/aboutus',
-  },
-  {
-    id: 7,
+    id: 10,
     single_link: true,
     title: 'Contact Us',
-    link: '/contact',
+    link: '/contactus',
   },
 ]

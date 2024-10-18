@@ -111,6 +111,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
         {/* Buy Now Button */}
         <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
           <button
+            onClick={() => handleAddProduct(productItem)}
             className="tp-product-details-buy-now-btn"
             style={buttonStyle}
             onMouseEnter={() => setIsHovered(true)} // Set hover state to true

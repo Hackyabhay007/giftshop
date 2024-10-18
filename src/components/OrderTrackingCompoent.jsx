@@ -35,6 +35,7 @@ const OrderTrackingComponent = ({ orderId, accessToken }) => {
 
   // Get the tracking details
   const trackingInfo = data.tracking_info.tracking_data; // Directly access the tracking_data object
+console.log(trackingInfo);
 
   // Check if trackingInfo is valid before proceeding
   if (!trackingInfo) {

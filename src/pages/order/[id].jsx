@@ -40,16 +40,6 @@ const SingleOrder = ({ params }) => {
     accessToken: accessToken,
   });
 
-  const [isCanceled, setIsCanceled] = useState(false); // State to track order cancellation
-
-  useEffect(() => {
-    // Retrieve canceled status from localStorage
-    const canceledStatus = localStorage.getItem(`canceled_${orderId}`);
-    if (canceledStatus) {
-      setIsCanceled(JSON.parse(canceledStatus)); // Set state from localStorage
-    }
-  }, [orderId]);
-
   const [cancelOrder, { isLoading: isCanceling }] = useCancelOrderMutation();
 
   const handleCancelOrder = async () => {
@@ -61,8 +51,7 @@ const SingleOrder = ({ params }) => {
 
       if (response.status === "success") {
         notifySuccess(response.message);
-        setIsCanceled(true);
-        localStorage.setItem(`canceled_${orderId}`, true); // Save state to localStorage
+        // No need to set canceled state from local storage
       } else {
         notifyError("Failed to cancel order. Please try again.");
       }
@@ -115,6 +104,13 @@ const SingleOrder = ({ params }) => {
                 ref={printRef}
                 className="invoice__wrapper grey-bg-2 pt-40 pb-40 pl-40 pr-40 tp-invoice-print-wrapper"
               >
+                {/* Conditional Message for Canceled Orders (Only for Online Payments) */}
+                {status === "canceled" && payment_type === "online" ? (
+                  <div className="alert alert-warning" role="alert" style={{ marginBottom: "20px" }}>
+                    Your order has been canceled. You will receive a refund in some time.
+                  </div>
+                ) : null}
+
                 <div className="invoice__header-wrapper border-2 border-bottom border-white mb-40">
                   <div className="row">
                     <div className="col-xl-12">
@@ -177,12 +173,13 @@ const SingleOrder = ({ params }) => {
                     </div>
                   </div>
                 </div>
-                <div className="invoice__order-table pt-30 pb-30 pl-10 pr-10 bg-white mb-30 table-responsive">
+
+                {/* Product Table for Desktop View */}
+                <div className="invoice__order-table pt-30 pb-30 pl-10 pr-10 bg-white mb-30 d-none d-md-block">
                   <table className="table">
                     <thead className="table-light">
                       <tr>
-                        <th scope="col">SL</th>
-                        <th scope="col">Product ID</th>
+                        <th scope="col">Product Name</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Item Price</th>
                         <th scope="col">Amount</th>
@@ -191,8 +188,7 @@ const SingleOrder = ({ params }) => {
                     <tbody className="table-group-divider">
                       {products?.map((item, i) => (
                         <tr key={i}>
-                          <td>{i + 1}</td>
-                          <td>{item.product_id}</td>
+                          <td>{item.name}</td>
                           <td>{item.quantity}</td>
                           <td>₹{Number(item.price).toFixed(2)}</td>
                           <td>₹{(item.price * item.quantity).toFixed(2)}</td>
@@ -201,6 +197,19 @@ const SingleOrder = ({ params }) => {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Product Cards for Mobile View */}
+                <div className="invoice__order-cards pt-30 pb-30 pl-10 pr-10 bg-white mb-30 d-md-none">
+                  {products?.map((item, i) => (
+                    <div key={i} className="product-card" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", margin: "10px 0", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                      <h5 style={{ margin: "0 0 10px" }}>{item.name}</h5>
+                      <p style={{ margin: "5px 0" }}><strong>Quantity:</strong> {item.quantity}</p>
+                      <p style={{ margin: "5px 0" }}><strong>Item Price:</strong> ₹{Number(item.price).toFixed(2)}</p>
+                      <p style={{ margin: "5px 0" }}><strong>Amount:</strong> ₹{(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                  ))}
+                </div>
+
                 <div className="invoice__total pt-40 pb-10 alert-success pl-0 pr-0 mb-30">
                   <div className="row">
                     <div className="col-lg-3 col-md-4">
@@ -221,7 +230,7 @@ const SingleOrder = ({ params }) => {
                     </div>
                     <div className="col-lg-6 col-md-4 mb-3">
                       {/* Only show buttons if the order is not canceled */}
-                      {!isCanceled && status !== "canceled" && (
+                      {status !== "canceled" && (
                         <>
                           <button
                             type="button"
@@ -239,7 +248,7 @@ const SingleOrder = ({ params }) => {
                           </button>
                         </>
                       )}
-                      {isCanceled || status === "canceled" ? (
+                      {status === "canceled" ? (
                         <p className="text-danger">This order has been canceled</p>
                       ) : null}
                     </div>

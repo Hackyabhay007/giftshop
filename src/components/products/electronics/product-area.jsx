@@ -4,6 +4,7 @@ import { ShapeLine } from "@/svg";
 import ProductItem from "./product-item";
 import ErrorMsg from "@/components/common/error-msg";
 import HomePrdLoader from "@/components/loader/home/home-prd-loader";
+import Link from "next/link";
 
 const tabs = ["Trending"];
 
@@ -69,7 +70,7 @@ const ProductArea = () => {
             <div className="tp-section-title-wrapper mb-40">
               <h3 className="tp-section-title text-20">
                 Trending Products
-                <ShapeLine />
+               
               </h3>
             </div>
           </div>
@@ -97,6 +98,36 @@ const ProductArea = () => {
         </div>
         <div className="row">{content}</div>
       </div>
+              {/* See More Button */}
+              <div className="text-md-start text-center mt-4">
+  <Link href="/shop">
+    <button
+      className="btn"
+      style={{
+        backgroundColor: "transparent", // Remove background color
+        color: "#990100", // Set text color
+        padding: "10px 20px",
+        borderRadius: "5px",
+        border: "2px solid #990100", // Set border color
+        cursor: "pointer", // Change cursor to pointer
+        fontSize: "16px", // Increase font size for better readability
+        transition: "background-color 0.3s, color 0.3s, transform 0.3s", // Smooth transition for hover effects
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = "#990100"; // Set background color on hover
+        e.currentTarget.style.color = "white"; // Change text color on hover
+        e.currentTarget.style.transform = "scale(1.05)"; // Slightly enlarge on hover
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "transparent"; // Reset to transparent background
+        e.currentTarget.style.color = "#990100"; // Reset text color
+        e.currentTarget.style.transform = "scale(1)"; // Reset size
+      }}
+    >
+      See More Products
+    </button>
+  </Link>
+</div>
     </section>
   );
 };
