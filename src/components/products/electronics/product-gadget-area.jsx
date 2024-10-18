@@ -148,29 +148,33 @@ const ProductGadgetArea = () => {
           <div className="row">{content}</div>
         </div>
                 {/* See More Button */}
-                <div className="text-md-start text-center mt-4">
-  <Link href="/shop">
+{/* See More Button */}
+{/* See More Button */}
+<div className="text-center mt-4">
+  <Link href="/shop" className="d-inline-block">
     <button
       className="btn"
       style={{
-        backgroundColor: "transparent", // Remove background color
-        color: "#990100", // Set text color
+        backgroundColor: "transparent",
+        color: "#990100",
         padding: "10px 20px",
         borderRadius: "5px",
-        border: "2px solid #990100", // Set border color
-        cursor: "pointer", // Change cursor to pointer
-        fontSize: "16px", // Increase font size for better readability
-        transition: "background-color 0.3s, color 0.3s, transform 0.3s", // Smooth transition for hover effects
+        border: "2px solid #990100",
+        cursor: "pointer",
+        fontSize: "16px",
+        transition: "background-color 0.3s, color 0.3s, transform 0.3s",
+        maxWidth: "100%", // Ensure button doesn't overflow on small screens
+        minWidth: "200px", // Maintain a minimum width on larger screens
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#990100"; // Set background color on hover
-        e.currentTarget.style.color = "white"; // Change text color on hover
-        e.currentTarget.style.transform = "scale(1.05)"; // Slightly enlarge on hover
+        e.currentTarget.style.backgroundColor = "#990100";
+        e.currentTarget.style.color = "white";
+        e.currentTarget.style.transform = "scale(1.05)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "transparent"; // Reset to transparent background
-        e.currentTarget.style.color = "#990100"; // Reset text color
-        e.currentTarget.style.transform = "scale(1)"; // Reset size
+        e.currentTarget.style.backgroundColor = "transparent";
+        e.currentTarget.style.color = "#990100";
+        e.currentTarget.style.transform = "scale(1)";
       }}
     >
       See More Products
