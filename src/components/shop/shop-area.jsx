@@ -14,7 +14,7 @@ const ShopArea = ({ all_products, products, otherProps,resetCategory }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } = otherProps;
   const [filteredRows, setFilteredRows] = useState(products);
   const [pageStart, setPageStart] = useState(0);
-  const countOfPage = 5;
+  const countOfPage = 10;
 
   const paginatedData = (items, startPage) => {
     setFilteredRows(items);

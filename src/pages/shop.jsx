@@ -18,6 +18,7 @@ const ShopPage = ({ query }) => {
   const [categoryId, setCategoryId] = useState(query?.category || null);
   const [currPage, setCurrPage] = useState(1);
   const shopAreaRef = useRef(null); // Create a ref for the shop area
+  const router = useRouter(); // Get the router instance
 
   const {
     data: allProducts,
@@ -53,19 +54,16 @@ const ShopPage = ({ query }) => {
     }
   }, [query?.category]);
 
-  // Scroll to shop area when the component mounts
+  // Scroll to shop area when the component mounts or when the category changes
+  const scrollToShopArea = () => {
+    if (shopAreaRef.current) {
+      shopAreaRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
-    const scrollToShopArea = () => {
-      if (shopAreaRef.current) {
-        shopAreaRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    };
-
-    // Delay the scroll to ensure the component is fully rendered
-    const timer = setTimeout(scrollToShopArea, 200); // Adjust the delay as needed
-
-    return () => clearTimeout(timer); // Cleanup the timer
-  }, []);
+    scrollToShopArea(); // Scroll when the component mounts or when the category changes
+  }, [categoryId]); // Dependency on categoryId
 
   let product_items = categoryId ? categoryProducts : allProducts?.data || [];
 
@@ -96,7 +94,6 @@ const ShopPage = ({ query }) => {
   product_items = product_items.filter(
     (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
   );
-  const router = useRouter();
   const categoryName = router.query.name || "All Products";
 
   return (
