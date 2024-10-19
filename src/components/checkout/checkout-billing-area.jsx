@@ -22,10 +22,8 @@ const stateCityData = {
   "Odisha": () => import("./states/Odisha.json"),
   "Punjab": () => import("./states/Punjab.json"),
   "Chhattisgarh": () => import("./states/Chhattisgarh.json"),
-  "Haryana": () => import("./states/Haryana.json"),
   "Uttarakhand": () => import("./states/Uttarakhand.json"),
   "Jharkhand": () => import("./states/Jharkhand.json"),
-  // Add other states here
 };
 
 const CheckoutBillingArea = ({ register, errors, setError, watch, user, selectedAddress, setSelectedAddress }) => {
@@ -85,13 +83,18 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
     setVillages(selectedSubDistrictData ? selectedSubDistrictData.villages : []);
   };
 
+  // Log form values on change
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => console.log(value, name, type));
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   return (
     <div className="tp-checkout-bill-area">
       <h3 className="tp-checkout-bill-title">Billing Details</h3>
 
       <div className="tp-checkout-bill-form">
         <div className="tp-checkout-bill-inner">
-      
           <div className="row">
             <div className="col-md-6">
               <div className="tp-checkout-input">
@@ -119,19 +122,7 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
             </div>
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>Country <span>*</span></label>
-                <input
-                  {...register("country", { required: "Country is required!" })}
-                  type="text"
-                  placeholder="India"
-                  defaultValue={selectedAddress?.country || "India"}
-                />
-                <ErrorMsg msg={errors?.country?.message} />
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="tp-checkout-input">
-                <label>Street address</label>
+                <label>Street address <span>*</span></label>
                 <input
                   {...register("address", { required: "Address is required!" })}
                   type="text"
@@ -145,9 +136,13 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
               <CustomDropdown
                 options={Object.keys(stateCityData)}
                 label="State"
-                onChange={handleStateChange}
+                onChange={(value) => {
+                  handleStateChange(value);
+                  register("state").onChange({ target: { value: value, name: "state" } });
+                }}
                 register={register}
                 name="state"
+                value={selectedState}
               />
               <ErrorMsg msg={errors?.state?.message} />
             </div>
@@ -155,9 +150,13 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
               <CustomDropdown
                 options={districts.map(d => d.district)}
                 label="City"
-                onChange={handleDistrictChange}
+                onChange={(value) => {
+                  handleDistrictChange(value);
+                  register("city").onChange({ target: { value: value, name: "city" } });
+                }}
                 register={register}
                 name="city"
+                value={selectedDistrict}
               />
               <ErrorMsg msg={errors?.city?.message} />
             </div>
@@ -166,7 +165,10 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
                 <CustomDropdown
                   options={subDistricts.map(sd => sd.subDistrict)}
                   label="Sub-District"
-                  onChange={handleSubDistrictChange}
+                  onChange={(value) => {
+                    handleSubDistrictChange(value);
+                    register("subDistrict").onChange({ target: { value: value, name: "subDistrict" } });
+                  }}
                   register={register}
                   name="subDistrict"
                 />
@@ -177,7 +179,9 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
                 <CustomDropdown
                   options={villages}
                   label="Village (Optional)"
-                  onChange={() => {}}
+                  onChange={(value) => {
+                    register("village").onChange({ target: { value: value, name: "village" } });
+                  }}
                   register={register}
                   name="village"
                 />
@@ -185,7 +189,7 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
             )}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>Postcode ZIP</label>
+                <label>Postcode ZIP <span>*</span></label>
                 <input
                   {...register("zipCode", { required: "Zip Code is required!" })}
                   type="text"
@@ -195,7 +199,7 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
                 <ErrorMsg msg={errors?.zipCode?.message} />
               </div>
             </div>
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div className="tp-checkout-input">
                 <label>Phone <span>*</span></label>
                 <input
@@ -217,15 +221,6 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
                   defaultValue={selectedAddress?.email || user?.email}
                 />
                 <ErrorMsg msg={errors?.email?.message} />
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="tp-checkout-input">
-                <label>Order notes (optional)</label>
-                <textarea
-                  {...register("orderNote", { required: false })}
-                  placeholder="Notes about your order, e.g. special notes for delivery."
-                />
               </div>
             </div>
           </div>

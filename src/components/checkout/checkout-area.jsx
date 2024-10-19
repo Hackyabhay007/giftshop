@@ -19,6 +19,7 @@ const CheckoutArea = () => {
     discountAmount,
     setError,
     watch,
+    isSubmitting,
   } = useCheckoutSubmit();
 
   const [showCard, setShowCard] = useState(false);
@@ -70,11 +71,11 @@ const CheckoutArea = () => {
         {cart_products.length === 0 && (
           <div className="text-center pt-50">
             <h3 className="py-2">No items found in cart to checkout</h3>
-            <Link 
+            <Link
               style={linkStyle}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              href="/shop" 
+              href="/shop"
               className="tp-btn tp-btn-border"
             >
               Return to shop
@@ -94,8 +95,8 @@ const CheckoutArea = () => {
               <div className="row">
                 <div className="col-lg-7">
                   <CheckoutBillingArea 
-                    register={register} 
-                    errors={errors} 
+                    register={register}
+                    errors={errors}
                     setError={setError}
                     watch={watch}
                     user={user}
@@ -112,6 +113,7 @@ const CheckoutArea = () => {
                     setShowCard={setShowCard}
                     showCard={showCard}
                     cart_products={cart_products}
+                    isSubmitting={isSubmitting}
                   />
                 </div>
               </div>

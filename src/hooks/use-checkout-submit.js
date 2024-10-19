@@ -21,20 +21,22 @@ const useCheckoutSubmit = () => {
   const { shipping_info } = useSelector((state) => state.order);
   const { total } = useCartInfo();
 
+  const [createRazorpayOrder] = useCreateRazorpayOrderMutation();
   const [saveOrder] = useSaveOrderMutation();
-  const [createPaymentIntent] = useCreateRazorpayOrderMutation();
   const [matchCoupon] = useMatchCouponMutation();
 
   const [couponInfo, setCouponInfo] = useState();
   const [cartTotal, setCartTotal] = useState(total);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [couponApplyMsg, setCouponApplyMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
     setValue,
     setError,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -87,22 +89,13 @@ const useCheckoutSubmit = () => {
       setValue("zipCode", shipping_info.zipCode);
       setValue("contactNo", shipping_info.contactNo);
       setValue("email", shipping_info.email);
-      setValue("orderNote", shipping_info.orderNote);
     }
   }, [shipping_info, setValue]);
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   const submitHandler = async (data) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     dispatch(set_shipping(data));
 
     const products = cart_products
@@ -117,6 +110,7 @@ const useCheckoutSubmit = () => {
 
     if (products.length === 0) {
       notifyError("No valid products in cart.");
+      setIsSubmitting(false);
       return;
     }
 
@@ -141,42 +135,41 @@ const useCheckoutSubmit = () => {
       if (data.payment === "online") {
         await handlePaymentWithRazorpay(orderInfo);
       } else if (data.payment === "cod") {
-        const res = await saveOrder(orderInfo);
-        notifySuccess("Your Order Confirmed! Thank you for your purchase!");
-
-        if (res?.error) {
-          console.error("Error saving order:", res.error);
-        } else {
+        const res = await saveOrder(orderInfo).unwrap();
+        if (res?.order_id) {
+          notifySuccess("Your Order Confirmed! Thank you for your purchase!");
           localStorage.removeItem("cart_products");
-          router.push(`/order/${res.data?.order_id}`);
+          router.push(`/order/${res.order_id}`);
+        } else {
+          notifyError("Error saving order. Please try again.");
         }
       }
     } catch (error) {
       console.error("Error during order submission:", error);
       notifyError("There was an error placing your order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handlePaymentWithRazorpay = async (orderInfo) => {
     try {
-      if (!orderInfo) {
-        notifyError("Order information is missing. Please try again.");
-        return;
-      }
+      console.log("Initiating Razorpay order with info:", orderInfo);
+      const orderResponse = await createRazorpayOrder(orderInfo).unwrap();
+      console.log("Received order response:", orderResponse);
 
-      const orderResponse = await createPaymentIntent(orderInfo);
-      if (!orderResponse || orderResponse.data?.status !== "success") {
-        notifyError("Failed to initiate payment. Please try again.");
-        return;
+      if (!orderResponse || orderResponse.status !== "success") {
+        console.error("Invalid order response:", orderResponse);
+        throw new Error("Failed to initiate payment: Invalid server response");
       }
 
       const options = {
         key: "rzp_live_2sTBLvpxef5qxP",
-        amount: orderResponse.data.amount,
+        amount: orderResponse.amount,
         currency: "INR",
         name: "MySweetWishes",
         description: "Order Payment",
-        order_id: orderResponse.data.razorpay_order_id,
+        order_id: orderResponse.razorpay_order_id,
         handler: async (response) => {
           await verifyAndSaveOrder(response, orderInfo);
         },
@@ -196,7 +189,9 @@ const useCheckoutSubmit = () => {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
-      notifyError("Failed to initiate payment. Please try again.");
+      console.error("Error in handlePaymentWithRazorpay:", error);
+      notifyError(`Failed to initiate payment: ${error.message}`);
+      throw error;
     }
   };
 
@@ -222,19 +217,14 @@ const useCheckoutSubmit = () => {
 
       if (verifyData.status === "success") {
         notifySuccess("Your payment has been verified successfully!");
-
-        const saveOrderResponse = await saveOrder(orderInfo);
-        if (!saveOrderResponse?.error) {
-          localStorage.removeItem("cart_products");
-          router.push(`/order/${saveOrderResponse.data?.order_id}`);
-        } else {
-          notifyError("Error saving order. Please try again.");
-        }
+        localStorage.removeItem("cart_products");
+        router.push(`/order/${verifyData.order_id}`);
       } else {
-        notifyError("Payment verification failed. Please try again.");
+        notifyError("Payment verification failed. Please contact support.");
       }
     } catch (error) {
-      notifyError("Payment verification request failed. Please try again.");
+      console.error("Payment verification error:", error);
+      notifyError("Payment verification request failed. Please contact support.");
     }
   };
 
@@ -248,9 +238,9 @@ const useCheckoutSubmit = () => {
     cartTotal,
     discountAmount,
     couponRef,
-    handlePaymentWithRazorpay,
     setError,
-    watch: (field) => register(field).value,
+    isSubmitting,
+    watch,  // Return the watch function directly
   };
 };
 
