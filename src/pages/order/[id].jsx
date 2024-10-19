@@ -100,6 +100,9 @@ const SingleOrder = ({ params }) => {
         payment_type,
         created_at,
         status,
+        refund_id,        // Ensure these fields exist in your API response
+        refund_amount,
+        refund_status,
       } = order;
 
       content = (
@@ -123,6 +126,17 @@ const SingleOrder = ({ params }) => {
                     This order has been shipped. Cancellation is not allowed.
                   </div>
                 )}
+
+</div>
+                  {/* Refund Details Section */}
+                  {payment_type === "online" && refund_id && (
+                    <div className="alert alert-success" role="alert" style={{ marginBottom: "20px" }}>
+                      <h5>Refund Details</h5>
+                      <p><strong>Refund ID:</strong> {refund_id}</p>
+                      <p><strong>Refund Amount:</strong> ₹{Number(refund_amount).toFixed(2)}</p>
+                      <p><strong>Refund Status:</strong> {refund_status}</p>
+                    </div>
+                  )}
 
                 <div className="invoice__header-wrapper border-2 border-bottom border-white mb-40">
                   <div className="row">
@@ -214,7 +228,7 @@ const SingleOrder = ({ params }) => {
                 {/* Product Cards for Mobile View */}
                 <div className="invoice__order-cards pt-30 pb-30 pl-10 pr-10  mb-30 d-md-none">
                   {products?.map((item, i) => (
-                    <div key={i} className="product-card" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", margin: "10px 0", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                    <div key={i} className="product-card" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", margin: "10px 0", boxShadow: "0 2px 10px rgba(0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                       <h5 style={{ margin: "0 0 10px" }}>{item.name}</h5>
                       <p style={{ margin: "5px 0" }}><strong>Quantity:</strong> {item.quantity}</p>
                       <p style={{ margin: "5px 0" }}><strong>Item Price:</strong> ₹{Number(item.price).toFixed(2)}</p>
@@ -274,7 +288,10 @@ const SingleOrder = ({ params }) => {
                     </div>
                   </div>
                 </div>
-                {trackOrderId && (status !== "canceled" || status === "shipped") && <OrderTrackingComponent orderId={orderId} />}
+
+                {trackOrderId && (status !== "canceled" || status === "shipped") && (
+                  <OrderTrackingComponent orderId={orderId} />
+                )}
               </div>
 
               <div className="invoice__print text-end mt-3">
@@ -288,7 +305,7 @@ const SingleOrder = ({ params }) => {
                         >
                           <span className="mr-5">
                             <i className="fa-regular fa-print"></i>
-                          </span>{" "}
+                          </span>
                           Print
                         </button>
                       )}
@@ -298,7 +315,6 @@ const SingleOrder = ({ params }) => {
                   </div>
                 </div>
               </div>
-            </div>
           </section>
         </>
       );
