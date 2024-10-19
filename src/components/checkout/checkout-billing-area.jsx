@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from "react";
 import ErrorMsg from "../common/error-msg";
+import CustomDropdown from "./CustomDropdown";
+
+const stateCityData = {
+  "Delhi": () => import("./states/Delhi.json"),
+  "Madhya Pradesh": () => import("./states/MadhyaPradesh.json"),
+  "Arunachal Pradesh": () => import("./states/Arunachal Pradesh.json"),
+  "Haryana": () => import("./states/Haryana.json"),
+  "Himachal Pradesh": () => import("./states/Himachal Pradesh.json"),
+  // Add other states here
+};
 
 const CheckoutBillingArea = ({ register, errors, setError, watch, user, selectedAddress, setSelectedAddress }) => {
   const [addresses, setAddresses] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [subDistricts, setSubDistricts] = useState([]);
+  const [villages, setVillages] = useState([]);
 
   useEffect(() => {
     // Fetch user's addresses here
@@ -25,6 +40,32 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
+  };
+
+  const handleStateChange = async (state) => {
+    setSelectedState(state);
+    if (stateCityData[state]) {
+      const data = await stateCityData[state]();
+      setDistricts(data.districts || []);
+      setSubDistricts([]);
+      setVillages([]);
+    } else {
+      setDistricts([]);
+      setSubDistricts([]);
+      setVillages([]);
+    }
+  };
+
+  const handleDistrictChange = (district) => {
+    setSelectedDistrict(district);
+    const selectedDistrictData = districts.find(d => d.district === district);
+    setSubDistricts(selectedDistrictData ? selectedDistrictData.subDistricts : []);
+    setVillages([]);
+  };
+
+  const handleSubDistrictChange = (subDistrict) => {
+    const selectedSubDistrictData = subDistricts.find(sd => sd.subDistrict === subDistrict);
+    setVillages(selectedSubDistrictData ? selectedSubDistrictData.villages : []);
   };
 
   return (
@@ -104,29 +145,47 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
               </div>
             </div>
             <div className="col-md-6">
-              <div className="tp-checkout-input">
-                <label>Town / City</label>
-                <input
-                  {...register("city", { required: "City is required!" })}
-                  type="text"
-                  placeholder="City"
-                  defaultValue={selectedAddress?.city}
-                />
-                <ErrorMsg msg={errors?.city?.message} />
-              </div>
+              <CustomDropdown
+                options={Object.keys(stateCityData)}
+                label="State"
+                onChange={handleStateChange}
+                register={register}
+                name="state"
+              />
+              <ErrorMsg msg={errors?.state?.message} />
             </div>
             <div className="col-md-6">
-              <div className="tp-checkout-input">
-                <label>State <span>*</span></label>
-                <input
-                  {...register("state", { required: "State is required!" })}
-                  type="text"
-                  placeholder="State"
-                  defaultValue={selectedAddress?.state}
-                />
-                <ErrorMsg msg={errors?.state?.message} />
-              </div>
+              <CustomDropdown
+                options={districts.map(d => d.district)}
+                label="City"
+                onChange={handleDistrictChange}
+                register={register}
+                name="city"
+              />
+              <ErrorMsg msg={errors?.city?.message} />
             </div>
+            {selectedDistrict && (
+              <div className="col-md-6">
+                <CustomDropdown
+                  options={subDistricts.map(sd => sd.subDistrict)}
+                  label="Sub-District"
+                  onChange={handleSubDistrictChange}
+                  register={register}
+                  name="subDistrict"
+                />
+              </div>
+            )}
+            {villages.length > 0 && (
+              <div className="col-md-6">
+                <CustomDropdown
+                  options={villages}
+                  label="Village (Optional)"
+                  onChange={() => {}}
+                  register={register}
+                  name="village"
+                />
+              </div>
+            )}
             <div className="col-md-6">
               <div className="tp-checkout-input">
                 <label>Postcode ZIP</label>
