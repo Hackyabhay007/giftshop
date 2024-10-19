@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ErrorMsg from "../common/error-msg";
-import CustomDropdown from './CustomDropdown';
+import CustomDropdown from './custom-drop-down';
 
 const stateCityData = {
   "Delhi": () => import("./states/Delhi.json"),
