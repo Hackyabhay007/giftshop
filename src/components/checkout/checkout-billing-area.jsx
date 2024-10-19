@@ -74,25 +74,7 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
 
       <div className="tp-checkout-bill-form">
         <div className="tp-checkout-bill-inner">
-          {addresses.length > 0 && (
-            <div className="mb-3">
-              <h4>Select an existing address:</h4>
-              {addresses.map((address) => (
-                <div key={address.id} className="form-check">
-                  <input
-                    type="radio"
-                    id={`address-${address.id}`}
-                    name="selectedAddress"
-                    className="form-check-input"
-                    onChange={() => handleAddressSelect(address)}
-                  />
-                  <label htmlFor={`address-${address.id}`} className="form-check-label">
-                    {address.address}, {address.city}, {address.state}, {address.zipCode}
-                  </label>
-                </div>
-              ))}
-            </div>
-          )}
+        
 
           <h4>Or enter a new address:</h4>
           <div className="row">
