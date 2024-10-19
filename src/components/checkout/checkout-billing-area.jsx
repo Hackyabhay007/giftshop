@@ -91,9 +91,7 @@ const CheckoutBillingArea = ({ register, errors, setError, watch, user, selected
 
       <div className="tp-checkout-bill-form">
         <div className="tp-checkout-bill-inner">
-        
-
-          <h4>Or enter a new address:</h4>
+      
           <div className="row">
             <div className="col-md-6">
               <div className="tp-checkout-input">
