@@ -8,6 +8,23 @@ const stateCityData = {
   "Arunachal Pradesh": () => import("./states/Arunachal Pradesh.json"),
   "Haryana": () => import("./states/Haryana.json"),
   "Himachal Pradesh": () => import("./states/Himachal Pradesh.json"),
+  "Uttar Pradesh": () => import("./states/Uttar Pradesh.json"),
+  "Bihar": () => import("./states/Bihar.json"),
+  "West Bengal": () => import("./states/West Bengal.json"),
+  "Maharashtra": () => import("./states/Maharashtra.json"),
+  "Tamil Nadu": () => import("./states/Tamil Nadu.json"),
+  "Karnataka": () => import("./states/Karnataka.json"),
+  "Gujarat": () => import("./states/Gujarat.json"),
+  "Rajasthan": () => import("./states/Rajasthan.json"),
+  "Kerala": () => import("./states/Kerala.json"),
+  "Telangana": () => import("./states/Telangana.json"),
+  "Andhra Pradesh": () => import("./states/Andhra Pradesh.json"),
+  "Odisha": () => import("./states/Odisha.json"),
+  "Punjab": () => import("./states/Punjab.json"),
+  "Chhattisgarh": () => import("./states/Chhattisgarh.json"),
+  "Haryana": () => import("./states/Haryana.json"),
+  "Uttarakhand": () => import("./states/Uttarakhand.json"),
+  "Jharkhand": () => import("./states/Jharkhand.json"),
   // Add other states here
 };
 
