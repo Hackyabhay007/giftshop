@@ -100,7 +100,7 @@ const ShopPage = ({ query }) => {
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
-      <ShopBreadcrumb title={categoryName} subtitle="Product Grid" />
+      <ShopBreadcrumb title={categoryName} subtitle="All Products" />
 
       {/* Attach the ref to the ShopArea component */}
       <div ref={shopAreaRef}>

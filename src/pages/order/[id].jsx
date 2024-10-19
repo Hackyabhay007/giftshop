@@ -17,23 +17,23 @@ import {
   useCancelOrderMutation,
   useTrackOrderQuery,
 } from "@/redux/features/order/orderApi";
-import { notifyError, notifySuccess } from "@/utils/toast";
+import { notifyError, notifySuccess, notifyWarning } from "@/utils/toast";
 import OrderTrackingComponent from "@/components/OrderTrackingCompoent";
 
 const SingleOrder = ({ params }) => {
-  const { accessToken } = useSelector((state) => state.auth); // Retrieve access token from Redux
+  const { accessToken } = useSelector((state) => state.auth);
   const { data: orders } = useGetUserOrdersQuery(accessToken, {
-    skip: !accessToken, // Skip query if accessToken is not available
+    skip: !accessToken,
   });
-  const router = useRouter(); // For navigation
+  const router = useRouter();
 
   useEffect(() => {
     if (!accessToken) {
-      router.push("/login"); // Redirect to login if no access token
+      router.push("/login");
     }
   }, [accessToken, router]);
 
-  const { id: orderId } = router.query; // Extract `id` from query params
+  const { id: orderId } = router.query;
   const printRef = useRef();
   const { data, isError, isLoading } = useGetUserOrderByIdQuery({
     id: orderId,
@@ -41,8 +41,14 @@ const SingleOrder = ({ params }) => {
   });
 
   const [cancelOrder, { isLoading: isCanceling }] = useCancelOrderMutation();
+  const [isCanceled, setIsCanceled] = useState(false);
 
   const handleCancelOrder = async () => {
+    if (data?.order?.status === "shipped") {
+      notifyWarning("Order has been shipped. Cancellation is not allowed.");
+      return;
+    }
+
     try {
       const response = await cancelOrder({
         order_id: orderId,
@@ -50,8 +56,8 @@ const SingleOrder = ({ params }) => {
       }).unwrap();
 
       if (response.status === "success") {
-        notifySuccess(response.message);
-        // No need to set canceled state from local storage
+        notifySuccess("Order Cancelled Successfully");
+        setIsCanceled(true);
       } else {
         notifyError("Failed to cancel order. Please try again.");
       }
@@ -93,7 +99,7 @@ const SingleOrder = ({ params }) => {
         price,
         payment_type,
         created_at,
-        status, // Get the status of the order
+        status,
       } = order;
 
       content = (
@@ -104,12 +110,19 @@ const SingleOrder = ({ params }) => {
                 ref={printRef}
                 className="invoice__wrapper grey-bg-2 pt-40 pb-40 pl-40 pr-40 tp-invoice-print-wrapper"
               >
-                {/* Conditional Message for Canceled Orders (Only for Online Payments) */}
-                {status === "canceled" && payment_type === "online" ? (
+                {/* Order Status Message */}
+                {(isCanceled || status === "canceled") && (
                   <div className="alert alert-warning" role="alert" style={{ marginBottom: "20px" }}>
-                    Your order has been canceled. You will receive a refund in some time.
+                    This order has been canceled. 
+                    {payment_type === "online" && " You will receive a refund in some time."}
                   </div>
-                ) : null}
+                )}
+
+                {status === "shipped" && (
+                  <div className="alert alert-info" role="alert" style={{ marginBottom: "20px" }}>
+                    This order has been shipped. Cancellation is not allowed.
+                  </div>
+                )}
 
                 <div className="invoice__header-wrapper border-2 border-bottom border-white mb-40">
                   <div className="row">
@@ -199,7 +212,7 @@ const SingleOrder = ({ params }) => {
                 </div>
 
                 {/* Product Cards for Mobile View */}
-                <div className="invoice__order-cards pt-30 pb-30 pl-10 pr-10 bg-white mb-30 d-md-none">
+                <div className="invoice__order-cards pt-30 pb-30 pl-10 pr-10  mb-30 d-md-none">
                   {products?.map((item, i) => (
                     <div key={i} className="product-card" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", margin: "10px 0", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                       <h5 style={{ margin: "0 0 10px" }}>{item.name}</h5>
@@ -229,8 +242,8 @@ const SingleOrder = ({ params }) => {
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-4 mb-3">
-                      {/* Only show buttons if the order is not canceled */}
-                      {status !== "canceled" && (
+                      {/* Only show buttons if the order is not canceled and not shipped */}
+                      {!isCanceled && status !== "canceled" && status !== "shipped" && (
                         <>
                           <button
                             type="button"
@@ -248,13 +261,20 @@ const SingleOrder = ({ params }) => {
                           </button>
                         </>
                       )}
-                      {status === "canceled" ? (
-                        <p className="text-danger">This order has been canceled</p>
-                      ) : null}
+                      {/* Always show Track Order button if the order is shipped */}
+                      {status === "shipped" && (
+                        <button
+                          type="button"
+                          className="tp-btn tp-btn-primary"
+                          onClick={handleTrackOrder}
+                        >
+                          {trackOrderId ? "Hide" : "Track"} Order
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
-                {trackOrderId && <OrderTrackingComponent />}
+                {trackOrderId && (status !== "canceled" || status === "shipped") && <OrderTrackingComponent orderId={orderId} />}
               </div>
 
               <div className="invoice__print text-end mt-3">
