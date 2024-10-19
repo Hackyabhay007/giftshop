@@ -1,5 +1,6 @@
 import { apiSlice } from "../../api/apiSlice";
 import { set_client_secret } from "./orderSlice";
+import { v4 as uuidv4 } from 'uuid';  // Import UUID for generating unique idempotency keys
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -7,6 +8,7 @@ export const authApi = apiSlice.injectEndpoints({
     createRazorpayOrder: builder.mutation({
       query: (orderInfo) => {
         const { accessToken, ...rest } = orderInfo;
+        const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {
           url: "https://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
@@ -14,6 +16,7 @@ export const authApi = apiSlice.injectEndpoints({
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
+            "Idempotency-Key": idempotencyKey, // Include the idempotency key
           },
         };
       },
@@ -32,6 +35,7 @@ export const authApi = apiSlice.injectEndpoints({
     saveOrder: builder.mutation({
       query: (data) => {
         const { accessToken, ...rest } = data;
+        const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {
           url: "https://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
@@ -39,6 +43,7 @@ export const authApi = apiSlice.injectEndpoints({
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
+            "Idempotency-Key": idempotencyKey, // Include the idempotency key
           },
         };
       },
