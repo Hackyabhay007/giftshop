@@ -3,7 +3,7 @@ import useCartInfo from "@/hooks/use-cart-info";
 
 const RenderCartProgress = () => {
   const { total } = useCartInfo();
-  const freeShippingThreshold = 300;
+  const freeShippingThreshold = 500;
   const progress = (total / freeShippingThreshold) * 100;
 
   if (total < freeShippingThreshold) {

@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ErrorMsg from "../common/error-msg";
-import { useSelector } from "react-redux";
 
-const CheckoutBillingArea = ({ register, errors }) => {
-  const { user } = useSelector((state) => state.auth);
+const CheckoutBillingArea = ({ register, errors, setError, watch, user, selectedAddress, setSelectedAddress }) => {
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    // Fetch user's addresses here
+    // For now, let's use a dummy address
+    setAddresses([
+      {
+        id: 1,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        address: "123 Main St",
+        city: "Example City",
+        state: "Example State",
+        country: "India",
+        zipCode: "12345",
+        contactNo: "1234567890",
+        email: user?.email
+      }
+    ]);
+  }, [user]);
+
+  const handleAddressSelect = (address) => {
+    setSelectedAddress(address);
+  };
 
   return (
     <div className="tp-checkout-bill-area">
@@ -11,54 +33,60 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       <div className="tp-checkout-bill-form">
         <div className="tp-checkout-bill-inner">
+          {addresses.length > 0 && (
+            <div className="mb-3">
+              <h4>Select an existing address:</h4>
+              {addresses.map((address) => (
+                <div key={address.id} className="form-check">
+                  <input
+                    type="radio"
+                    id={`address-${address.id}`}
+                    name="selectedAddress"
+                    className="form-check-input"
+                    onChange={() => handleAddressSelect(address)}
+                  />
+                  <label htmlFor={`address-${address.id}`} className="form-check-label">
+                    {address.address}, {address.city}, {address.state}, {address.zipCode}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <h4>Or enter a new address:</h4>
           <div className="row">
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>
-                  First Name <span>*</span>
-                </label>
+                <label>First Name <span>*</span></label>
                 <input
-                  {...register("firstName", {
-                    required: `First Name is required!`,
-                  })}
-                  name="firstName"
-                  id="firstName"
+                  {...register("firstName", { required: "First Name is required!" })}
                   type="text"
                   placeholder="First Name"
-                  defaultValue={user?.firstName}
+                  defaultValue={selectedAddress?.firstName || user?.firstName}
                 />
                 <ErrorMsg msg={errors?.firstName?.message} />
               </div>
             </div>
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>
-                  Last Name <span>*</span>
-                </label>
+                <label>Last Name <span>*</span></label>
                 <input
-                  {...register("lastName", {
-                    required: `Last Name is required!`,
-                  })}
-                  name="lastName"
-                  id="lastName"
+                  {...register("lastName", { required: "Last Name is required!" })}
                   type="text"
                   placeholder="Last Name"
+                  defaultValue={selectedAddress?.lastName || user?.lastName}
                 />
                 <ErrorMsg msg={errors?.lastName?.message} />
               </div>
             </div>
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>
-                  Country <span>*</span>
-                </label>
+                <label>Country <span>*</span></label>
                 <input
-                  {...register("country", { required: `Country is required!` })}
-                  name="country"
-                  id="country"
+                  {...register("country", { required: "Country is required!" })}
                   type="text"
                   placeholder="India"
-                  defaultValue="India" // Set default value to India
+                  defaultValue={selectedAddress?.country || "India"}
                 />
                 <ErrorMsg msg={errors?.country?.message} />
               </div>
@@ -67,11 +95,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
               <div className="tp-checkout-input">
                 <label>Street address</label>
                 <input
-                  {...register("address", { required: `Address is required!` })}
-                  name="address"
-                  id="address"
+                  {...register("address", { required: "Address is required!" })}
                   type="text"
                   placeholder="House number and street name"
+                  defaultValue={selectedAddress?.address}
                 />
                 <ErrorMsg msg={errors?.address?.message} />
               </div>
@@ -80,70 +107,58 @@ const CheckoutBillingArea = ({ register, errors }) => {
               <div className="tp-checkout-input">
                 <label>Town / City</label>
                 <input
-                  {...register("city", { required: `City is required!` })}
-                  name="city"
-                  id="city"
+                  {...register("city", { required: "City is required!" })}
                   type="text"
                   placeholder="City"
+                  defaultValue={selectedAddress?.city}
                 />
                 <ErrorMsg msg={errors?.city?.message} />
               </div>
             </div>
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>State <span>*</span></label> {/* Add label for State */}
+                <label>State <span>*</span></label>
                 <input
-                  {...register("state", { required: `State is required!` })} 
-                  name="state"
-                  id="state"
+                  {...register("state", { required: "State is required!" })}
                   type="text"
                   placeholder="State"
+                  defaultValue={selectedAddress?.state}
                 />
-                <ErrorMsg msg={errors?.state?.message} /> {/* Display error for State */}
+                <ErrorMsg msg={errors?.state?.message} />
               </div>
             </div>
             <div className="col-md-6">
               <div className="tp-checkout-input">
                 <label>Postcode ZIP</label>
                 <input
-                  {...register("zipCode", { required: `Zip Code is required!` })}
-                  name="zipCode"
-                  id="zipCode"
+                  {...register("zipCode", { required: "Zip Code is required!" })}
                   type="text"
                   placeholder="Postcode ZIP"
+                  defaultValue={selectedAddress?.zipCode}
                 />
                 <ErrorMsg msg={errors?.zipCode?.message} />
               </div>
             </div>
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>
-                  Phone <span>*</span>
-                </label>
+                <label>Phone <span>*</span></label>
                 <input
-                  {...register("contactNo", {
-                    required: `Contact Number is required!`,
-                  })}
-                  name="contactNo"
-                  id="contactNo"
+                  {...register("contactNo", { required: "Contact Number is required!" })}
                   type="text"
                   placeholder="Phone"
+                  defaultValue={selectedAddress?.contactNo}
                 />
                 <ErrorMsg msg={errors?.contactNo?.message} />
               </div>
             </div>
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>
-                  Email address <span>*</span>
-                </label>
+                <label>Email address <span>*</span></label>
                 <input
-                  {...register("email", { required: `Email is required!` })}
-                  name="email"
-                  id="email"
+                  {...register("email", { required: "Email is required!" })}
                   type="email"
                   placeholder="Email"
-                  defaultValue={user?.email}
+                  defaultValue={selectedAddress?.email || user?.email}
                 />
                 <ErrorMsg msg={errors?.email?.message} />
               </div>
@@ -153,8 +168,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 <label>Order notes (optional)</label>
                 <textarea
                   {...register("orderNote", { required: false })}
-                  name="orderNote"
-                  id="orderNote"
                   placeholder="Notes about your order, e.g. special notes for delivery."
                 />
               </div>
