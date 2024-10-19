@@ -6,6 +6,7 @@ const CustomDropdown = ({ options, label, onChange, register, name }) => {
   const dropdownRef = useRef(null);
 
   const filteredOptions = options.filter(option =>
+    
     option.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
