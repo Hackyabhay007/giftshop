@@ -8,7 +8,7 @@ const social_data = [
   },
   {
     id: 2,
-    link: 'https://www.instagram.com/mysweetwishes10/profilecard/?igsh=NGZ2MHFsZjl2cXEw',
+    link: 'https://www.instagram.com/mysweetwishes10',
     icon: 'fa-brands fa-instagram',
     title: 'Instagram',
   },
