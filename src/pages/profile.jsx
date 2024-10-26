@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
@@ -12,32 +11,38 @@ import ProfileArea from "@/components/my-account/profile-area";
 import { useGetUserOrdersQuery } from "@/redux/features/order/orderApi";
 import Loader from "@/components/loader/loader";
 
-
-
 const ProfilePage = () => {
-  const [mounted, setMounted] = useState(false); // Track when the component has mounted
-  const { accessToken } = useSelector((state) => state.auth); 
-  const router = useRouter();
-  const { data: orders, error, isLoading } = useGetUserOrdersQuery(accessToken, {
-    skip: !accessToken,
-  });
+  const [mounted, setMounted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1); // Add pagination state
+  const { accessToken } = useSelector((state) => state.auth);
 
-  // Use useEffect to set mounted to true when the component is mounted on the client
+  const router = useRouter();
+  
+  const { data: orders, error, isLoading } = useGetUserOrdersQuery(
+    { accessToken, page: currentPage },
+    {
+      skip: !accessToken,
+    }
+  );
+
+  // Set mounted to true when component mounts
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Handle authentication
   useEffect(() => {
     if (!accessToken && mounted) {
       router.push("/login");
     }
   }, [accessToken, router, mounted]);
 
-  // Prevent rendering until the component is mounted to avoid SSR issues
+  // Prevent rendering until mounted
   if (!mounted) {
-    return null; // This avoids any discrepancies during server-side rendering
+    return null;
   }
 
+  // Show loading state
   if (isLoading) {
     return (
       <div className="d-flex align-items-center justify-content-center" style={{ height: "100vh" }}>
@@ -46,6 +51,7 @@ const ProfilePage = () => {
     );
   }
 
+  // Show error state
   if (error) {
     return (
       <div className="text-center">
@@ -59,16 +65,14 @@ const ProfilePage = () => {
     <Wrapper>
       <SEO pageTitle="Profile" />
       <HeaderTwo style_2={true} />
-      <ProfileArea orderData={orders} />
+      <ProfileArea
+        orderData={orders}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
       <Footer style_2={true} />
     </Wrapper>
   );
 };
 
 export default ProfilePage;
-
-
-
-
-
-

@@ -16,6 +16,9 @@ const useCheckoutSubmit = () => {
   const dispatch = useDispatch();
   const couponRef = useRef(null);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [orderIdForModal, setOrderIdForModal] = useState(null);
+
   const { accessToken, user } = useSelector((state) => state.auth);
   const { cart_products } = useSelector((state) => state.cart);
   const { shipping_info } = useSelector((state) => state.order);
@@ -34,11 +37,13 @@ const useCheckoutSubmit = () => {
   const {
     register,
     handleSubmit,
+    formState: { errors },
     setValue,
     setError,
     watch,
-    formState: { errors },
+    reset
   } = useForm();
+
 
   const handleCouponCode = async (event) => {
     event.preventDefault();
@@ -95,9 +100,9 @@ const useCheckoutSubmit = () => {
   const submitHandler = async (data) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-
+  
     dispatch(set_shipping(data));
-
+  
     const products = cart_products
       .map((product) => ({
         product_id: product.product_id,
@@ -107,13 +112,13 @@ const useCheckoutSubmit = () => {
       .filter(
         (product) => product.product_id && product.quantity && product.price
       );
-
+  
     if (products.length === 0) {
       notifyError("No valid products in cart.");
       setIsSubmitting(false);
       return;
     }
-
+  
     const orderInfo = {
       products,
       email: data.email,
@@ -130,16 +135,17 @@ const useCheckoutSubmit = () => {
       last_name: data.lastName,
       accessToken,
     };
-
+  
     try {
       if (data.payment === "online") {
         await handlePaymentWithRazorpay(orderInfo);
       } else if (data.payment === "cod") {
         const res = await saveOrder(orderInfo).unwrap();
         if (res?.order_id) {
-          notifySuccess("Your Order Confirmed! Thank you for your purchase!");
           localStorage.removeItem("cart_products");
-          router.push(`/order/${res.order_id}`);
+          setOrderIdForModal(res.order_id);
+          reset();
+          setShowSuccessModal(true);
         } else {
           notifyError("Error saving order. Please try again.");
         }
@@ -233,14 +239,19 @@ const useCheckoutSubmit = () => {
     handleCouponCode,
     handleSubmit,
     submitHandler,
-    errors,
+    formState: { errors }, // Return the entire formState object with errors
     couponApplyMsg,
     cartTotal,
     discountAmount,
     couponRef,
     setError,
     isSubmitting,
-    watch,  // Return the watch function directly
+    watch,
+    setValue,
+    reset,
+    showSuccessModal,
+    setShowSuccessModal,
+    orderIdForModal,
   };
 };
 

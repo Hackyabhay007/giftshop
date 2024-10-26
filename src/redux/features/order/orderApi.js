@@ -63,8 +63,8 @@ export const authApi = apiSlice.injectEndpoints({
     }),
 
     getUserOrders: builder.query({
-      query: (accessToken) => ({
-        url: "https://apiv2.mysweetwishes.com/api/user/orders",
+      query: ({ accessToken, page = 1 }) => ({
+        url: `https://apiv2.mysweetwishes.com/api/user/orders?page=${page}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -72,6 +72,7 @@ export const authApi = apiSlice.injectEndpoints({
       providesTags: ["UserOrders"],
       keepUnusedDataFor: 600,
     }),
+    
 
     getUserOrderById: builder.query({
       query: ({ id, accessToken }) => ({
