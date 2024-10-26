@@ -367,6 +367,7 @@ const CheckoutBillingArea = ({
       </div>
     </div>
   );
+  
 };
 
 export default CheckoutBillingArea;
