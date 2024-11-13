@@ -16,12 +16,12 @@ function generateSiteMap(pages) {
   export async function getServerSideProps({ res }) {
     const pages = [
       { path: '/', priority: '1.0' },
-      { path: '/teddy-maddy', priority: '0.9' },
-      { path: '/happy-cards', priority: '0.9' },
-      { path: '/wall-paintings', priority: '0.9' },
-      { path: '/diwali-gifts', priority: '0.8' },
-      { path: '/personalised-gifts', priority: '0.8' },
-      { path: '/surprise-box', priority: '0.8' }
+      { path: '/shop', priority: '0.9' },
+      { path: '/blog', priority: '0.9' },
+      { path: '/coupon', priority: '0.9' },
+      { path: '/aboutus', priority: '0.8' },
+      { path: '/contactus', priority: '0.8' },
+  
     ];
   
     const sitemap = generateSiteMap(pages);
