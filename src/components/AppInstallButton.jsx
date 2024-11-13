@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-// App Install Manager Utility
 class AppInstallManager {
   constructor() {
     this.deferredPrompt = null;
     this.platform = this.detectPlatform();
+    this.installPromptEvent = null;
   }
 
   detectPlatform() {
@@ -13,72 +13,104 @@ class AppInstallManager {
       isAndroid: /android/i.test(userAgent),
       isIOS: /iphone|ipad|ipod/i.test(userAgent),
       isMobile: /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent),
+      isStandalone: window.matchMedia('(display-mode: standalone)').matches
     };
   }
 
-  setupDesktopInstall() {
+  setupPWAInstall() {
     if (typeof window !== 'undefined') {
-      // Capture the beforeinstallprompt event to show the install prompt later
+      // Capture install prompt for web browsers
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
-        this.deferredPrompt = e; // Store the event for later use
+        this.installPromptEvent = e;
+      });
+
+      // Handle iOS Add to Home Screen detection
+      window.addEventListener('load', () => {
+        if (this.platform.isIOS && !this.platform.isStandalone) {
+          this.showIOSInstallInstructions();
+        }
       });
     }
+  }
+
+  showIOSInstallInstructions() {
+    // Custom method to show iOS installation instructions
+    const iosInstallGuide = `
+      To install the app on iOS:
+      1. Tap the Share button in Safari
+      2. Scroll and tap "Add to Home Screen"
+      3. Name the app and tap "Add"
+    `;
+    alert(iosInstallGuide);
   }
 
   triggerInstall(onSuccess, onFailure) {
-    if (this.platform.isMobile) {
-      this.mobilePlatformRedirect(onSuccess, onFailure);
+    if (this.platform.isAndroid) {
+      this.triggerAndroidPWAInstall(onSuccess, onFailure);
+    } else if (this.platform.isIOS) {
+      this.triggerIOSInstall(onSuccess, onFailure);
     } else {
-      this.desktopInstall(onSuccess, onFailure);
+      this.triggerDesktopPWAInstall(onSuccess, onFailure);
     }
   }
 
-  desktopInstall(onSuccess, onFailure) {
-    if (this.deferredPrompt) {
-      this.deferredPrompt.prompt(); // Show the install prompt
-      this.deferredPrompt.userChoice.then((choiceResult) => {
+  triggerAndroidPWAInstall(onSuccess, onFailure) {
+    if (this.installPromptEvent) {
+      this.installPromptEvent.prompt();
+      this.installPromptEvent.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
           onSuccess && onSuccess();
         } else {
-          console.log('User dismissed the install prompt');
           onFailure && onFailure();
         }
-        this.deferredPrompt = null; // Reset the deferred prompt
-      }).catch((error) => {
-        console.error('Install failed', error);
-        onFailure && onFailure(error);
-      });
+        this.installPromptEvent = null;
+      }).catch(onFailure);
     } else {
-      onFailure && onFailure(new Error('No install prompt available'));
+      // Fallback for Android if prompt is not available
+      this.showFallbackInstallInstructions();
+      onFailure && onFailure(new Error('Install prompt not available'));
     }
   }
 
-  mobilePlatformRedirect(onSuccess, onFailure) {
-    const installLink = this.platform.isAndroid
-      ? 'https://play.google.com/store/apps/details?id=your.package.name' // Replace with actual package name
-      : this.platform.isIOS
-      ? 'https://apps.apple.com/app/your-app-name/id1234567890' // Replace with actual app ID
-      : null;
-
-    if (installLink && typeof window !== 'undefined') {
-      try {
-        window.location.href = installLink;
-        onSuccess && onSuccess();
-      } catch (error) {
-        console.error('Redirect failed', error);
-        onFailure && onFailure(error);
-      }
+  triggerIOSInstall(onSuccess, onFailure) {
+    if (this.platform.isIOS && !this.platform.isStandalone) {
+      this.showIOSInstallInstructions();
+      onSuccess && onSuccess();
     } else {
-      onFailure && onFailure(new Error('No install link available'));
+      onFailure && onFailure(new Error('iOS installation not supported'));
     }
+  }
+
+  triggerDesktopPWAInstall(onSuccess, onFailure) {
+    if (this.installPromptEvent) {
+      this.installPromptEvent.prompt();
+      this.installPromptEvent.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          onSuccess && onSuccess();
+        } else {
+          onFailure && onFailure();
+        }
+        this.installPromptEvent = null;
+      }).catch(onFailure);
+    } else {
+      this.showFallbackInstallInstructions();
+      onFailure && onFailure(new Error('Desktop install not available'));
+    }
+  }
+
+  showFallbackInstallInstructions() {
+    alert(`
+      PWA Installation Instructions:
+      1. Make sure you're using a compatible browser
+      2. Look for the install icon in the address bar
+      3. Click the install/add button in your browser
+    `);
   }
 }
 
-// Reusable App Install Button Component
 const AppInstallButton = ({
-  variant = 'danger', // Defaulting to red variant
+  variant = 'danger',
   size = 'md',
   fullWidth = false,
   className = '',
@@ -89,49 +121,68 @@ const AppInstallButton = ({
   ...props
 }) => {
   const [installManager, setInstallManager] = useState(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     const manager = new AppInstallManager();
     setInstallManager(manager);
 
-    // Setup desktop installation options
-    if (!manager.platform.isMobile) {
-      manager.setupDesktopInstall();
-      setShowInstallButton(true);
-    }
+    // Setup PWA installation
+    manager.setupPWAInstall();
 
-    // Setup for mobile installation
-    if (manager.platform.isMobile) {
-      setShowInstallButton(true);
-    }
+    // Check installability
+    const checkInstallability = () => {
+      const isEligibleForInstall = 
+        manager.installPromptEvent || 
+        (manager.platform.isIOS && !manager.platform.isStandalone);
+      
+      setIsInstallable(!!isEligibleForInstall);
+    };
+
+    checkInstallability();
+    window.addEventListener('beforeinstallprompt', checkInstallability);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', checkInstallability);
+    };
   }, []);
 
   const handleInstallClick = () => {
     if (installManager) {
       installManager.triggerInstall(
-        () => { onInstallSuccess && onInstallSuccess(); },
-        (error) => { onInstallFailure && onInstallFailure(error); }
+        () => {
+          console.log('App install initiated');
+          onInstallSuccess && onInstallSuccess();
+        },
+        (error) => {
+          console.error('Installation failed', error);
+          onInstallFailure && onInstallFailure(error);
+        }
       );
     }
   };
 
-  // Determine button text and icon
-  const buttonText = installManager?.platform.isMobile ? (children || 'Get App') : (children || 'Install App');
-  const buttonIcon = installManager?.platform.isMobile ? 'bi-phone' : 'bi-download';
+  // Don't render if not installable
+  if (!isInstallable) return null;
 
-  // Dynamic class generation for button styles
+  // Dynamic button classes
   const buttonClasses = [
     'btn',
     `btn-${variant}`,
     size !== 'md' && `btn-${size}`,
     fullWidth && 'w-100',
     'install-app-btn',
-    className,
+    className
   ].filter(Boolean).join(' ');
 
-  // Don't render if the install is not supported
-  if (!showInstallButton) return null;
+  // Determine button text and icon
+  const buttonText = installManager?.platform.isMobile 
+    ? (children || 'Get App') 
+    : (children || 'Install App');
+  
+  const buttonIcon = installManager?.platform.isMobile 
+    ? 'bi-phone' 
+    : 'bi-download';
 
   return (
     <button
@@ -158,19 +209,19 @@ const AppInstallButton = ({
   );
 };
 
-// Preset configurations with red theme
+// Preset configurations remain the same
 AppInstallButton.presets = {
   navbar: {
-    variant: 'outline-danger', // Outline red for navbar
+    variant: 'outline-danger',
     size: 'sm',
   },
   hero: {
-    variant: 'danger', // Solid red for hero section
+    variant: 'danger',
     size: 'lg',
     fullWidth: true,
   },
   card: {
-    variant: 'danger', // Solid red for card
+    variant: 'danger',
     size: 'md',
   },
 };

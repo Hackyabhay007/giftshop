@@ -51,9 +51,7 @@ const Footer = ({
              
                     </div>
                     <SocialMedia />
-                    <div className="pt-10">
-                  <AppInstallButton/>
-                  </div>
+          
                     <div>
                       <h2 style={{ textTransform: "uppercase",fontSize:"22px" ,marginTop:"20px",color:"white" }}>
                         My Sweet Wishes
