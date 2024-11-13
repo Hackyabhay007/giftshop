@@ -10,7 +10,6 @@ import ProductBanner from "@/components/products/electronics/product-banner";
 import BlogArea from "@/components/blog/electronic/blog-area";
 import InstagramArea from "@/components/instagram/instagram-area";
 import Footer from "@/layout/footers/footer";
-import AppInstallButton from "@/components/AppInstallButton";
 
 export default function Home() {
   // Comprehensive SEO Metadata Configuration
@@ -63,12 +62,7 @@ export default function Home() {
       {/* Page Layout Components */}
       <Header />
 
-      <AppInstallButton 
-      onInstallSuccess={() => console.log('Install started')}
-      onInstallFailure={(error) => console.error(error)}
-    >
-      Install Our PWA
-    </AppInstallButton>
+      
       <CategorySection />
       <HomeHeroSlider />
       

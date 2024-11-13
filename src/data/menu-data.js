@@ -34,17 +34,23 @@ const menu_data = [
     link: '/blog',
    
   },
-  {
-    id: 6,
-    single_link: true,
-    title: 'About Us',
-    link: '/aboutus',
-  },
+  // {
+  //   id: 6,
+  //   single_link: true,
+  //   title: 'About Us',
+  //   link: '/aboutus',
+  // },
   {
     id: 7,
     single_link: true,
     title: 'Contact Us',
     link: '/contactus',
+  },
+  {
+    id: 7,
+    single_link: true,
+    title: 'Install App',
+    link: '/AppInstallPage',
   },
 ]
 

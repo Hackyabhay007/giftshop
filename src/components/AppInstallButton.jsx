@@ -19,30 +19,11 @@ class AppInstallManager {
 
   setupPWAInstall() {
     if (typeof window !== 'undefined') {
-      // Capture install prompt for web browsers
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         this.installPromptEvent = e;
       });
-
-      // Handle iOS Add to Home Screen detection
-      window.addEventListener('load', () => {
-        if (this.platform.isIOS && !this.platform.isStandalone) {
-          this.showIOSInstallInstructions();
-        }
-      });
     }
-  }
-
-  showIOSInstallInstructions() {
-    // Custom method to show iOS installation instructions
-    const iosInstallGuide = `
-      To install the app on iOS:
-      1. Tap the Share button in Safari
-      2. Scroll and tap "Add to Home Screen"
-      3. Name the app and tap "Add"
-    `;
-    alert(iosInstallGuide);
   }
 
   triggerInstall(onSuccess, onFailure) {
@@ -67,15 +48,18 @@ class AppInstallManager {
         this.installPromptEvent = null;
       }).catch(onFailure);
     } else {
-      // Fallback for Android if prompt is not available
-      this.showFallbackInstallInstructions();
       onFailure && onFailure(new Error('Install prompt not available'));
     }
   }
 
   triggerIOSInstall(onSuccess, onFailure) {
     if (this.platform.isIOS && !this.platform.isStandalone) {
-      this.showIOSInstallInstructions();
+      alert(`
+        To install the app on iOS:
+        1. Tap the Share button in Safari
+        2. Scroll and tap "Add to Home Screen"
+        3. Name the app and tap "Add"
+      `);
       onSuccess && onSuccess();
     } else {
       onFailure && onFailure(new Error('iOS installation not supported'));
@@ -94,34 +78,22 @@ class AppInstallManager {
         this.installPromptEvent = null;
       }).catch(onFailure);
     } else {
-      this.showFallbackInstallInstructions();
       onFailure && onFailure(new Error('Desktop install not available'));
     }
-  }
-
-  showFallbackInstallInstructions() {
-    alert(`
-      PWA Installation Instructions:
-      1. Make sure you're using a compatible browser
-      2. Look for the install icon in the address bar
-      3. Click the install/add button in your browser
-    `);
   }
 }
 
 const AppInstallButton = ({
-  variant = 'danger',
-  size = 'md',
-  fullWidth = false,
-  className = '',
-  children,
-  iconPosition = 'left',
+  children = 'Install App',
   onInstallSuccess,
   onInstallFailure,
+  className = '',
+  style = {},
   ...props
 }) => {
   const [installManager, setInstallManager] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const manager = new AppInstallManager();
@@ -165,65 +137,68 @@ const AppInstallButton = ({
   // Don't render if not installable
   if (!isInstallable) return null;
 
-  // Dynamic button classes
-  const buttonClasses = [
-    'btn',
-    `btn-${variant}`,
-    size !== 'md' && `btn-${size}`,
-    fullWidth && 'w-100',
-    'install-app-btn',
-    className
-  ].filter(Boolean).join(' ');
-
-  // Determine button text and icon
-  const buttonText = installManager?.platform.isMobile 
-    ? (children || 'Get App') 
-    : (children || 'Install App');
-  
-  const buttonIcon = installManager?.platform.isMobile 
-    ? 'bi-phone' 
-    : 'bi-download';
+  // Button Style
+  const buttonStyle = {
+    backgroundColor: isHovered ? "#990100" : "transparent",
+    color: isHovered ? "white" : "#990100",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    border: "2px solid #990100",
+    cursor: "pointer",
+    fontSize: "16px",
+    transition: "all 0.3s ease",
+    maxWidth: "100%",
+    minWidth: "200px",
+    transform: isHovered ? "scale(1.05)" : "scale(1)",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textTransform: "uppercase",
+    fontWeight: 600,
+    letterSpacing: "1px",
+    boxShadow: isHovered 
+      ? "0 4px 6px rgba(153, 1, 0, 0.3)" 
+      : "none",
+    ...style
+  };
 
   return (
     <button
       onClick={handleInstallClick}
-      className={buttonClasses}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '0.5rem',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-        transition: 'all 0.3s ease',
-        ...props.style,
-      }}
+      style={buttonStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`install-btn ${className}`}
       {...props}
     >
-      {iconPosition === 'left' && <i className={`bi ${buttonIcon}`}></i>}
-      {buttonText}
-      {iconPosition === 'right' && <i className={`bi ${buttonIcon}`}></i>}
+      {children}
     </button>
   );
 };
 
-// Preset configurations remain the same
+// Preset Configurations
 AppInstallButton.presets = {
   navbar: {
-    variant: 'outline-danger',
-    size: 'sm',
+    style: {
+      fontSize: "14px",
+      padding: "8px 16px",
+      minWidth: "150px"
+    }
   },
   hero: {
-    variant: 'danger',
-    size: 'lg',
-    fullWidth: true,
+    style: {
+      fontSize: "18px",
+      padding: "12px 24px",
+      minWidth: "250px"
+    }
   },
   card: {
-    variant: 'danger',
-    size: 'md',
-  },
+    style: {
+      fontSize: "16px",
+      padding: "10px 20px",
+      minWidth: "200px"
+    }
+  }
 };
 
 export default AppInstallButton;
