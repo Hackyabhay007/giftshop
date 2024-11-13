@@ -87,10 +87,17 @@ export const mobile_menu = [
     link: '/blog',
    
   },
+ 
   {
     id: 10,
     single_link: true,
     title: 'Contact Us',
     link: '/contactus',
+  },
+  {
+    id: 7,
+    single_link: true,
+    title: 'Install App',
+    link: '/AppInstallPage',
   },
 ]
