@@ -8,9 +8,7 @@ class AppInstallManager {
   }
 
   detectPlatform() {
-    const userAgent = typeof window !== 'undefined'
-      ? window.navigator.userAgent.toLowerCase()
-      : '';
+    const userAgent = typeof window !== 'undefined' ? window.navigator.userAgent.toLowerCase() : '';
     return {
       isAndroid: /android/i.test(userAgent),
       isIOS: /iphone|ipad|ipod/i.test(userAgent),
@@ -20,9 +18,10 @@ class AppInstallManager {
 
   setupDesktopInstall() {
     if (typeof window !== 'undefined') {
+      // Capture the beforeinstallprompt event to show the install prompt later
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
-        this.deferredPrompt = e;
+        this.deferredPrompt = e; // Store the event for later use
       });
     }
   }
@@ -37,7 +36,7 @@ class AppInstallManager {
 
   desktopInstall(onSuccess, onFailure) {
     if (this.deferredPrompt) {
-      this.deferredPrompt.prompt();
+      this.deferredPrompt.prompt(); // Show the install prompt
       this.deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the install prompt');
@@ -46,7 +45,7 @@ class AppInstallManager {
           console.log('User dismissed the install prompt');
           onFailure && onFailure();
         }
-        this.deferredPrompt = null;
+        this.deferredPrompt = null; // Reset the deferred prompt
       }).catch((error) => {
         console.error('Install failed', error);
         onFailure && onFailure(error);
@@ -58,9 +57,9 @@ class AppInstallManager {
 
   mobilePlatformRedirect(onSuccess, onFailure) {
     const installLink = this.platform.isAndroid
-      ? 'https://play.google.com/store/apps/details?id=your.package.name'
+      ? 'https://play.google.com/store/apps/details?id=your.package.name' // Replace with actual package name
       : this.platform.isIOS
-      ? 'https://apps.apple.com/app/your-app-name/id1234567890'
+      ? 'https://apps.apple.com/app/your-app-name/id1234567890' // Replace with actual app ID
       : null;
 
     if (installLink && typeof window !== 'undefined') {
@@ -77,7 +76,7 @@ class AppInstallManager {
   }
 }
 
-// Reusable Install Button Component
+// Reusable App Install Button Component
 const AppInstallButton = ({
   variant = 'danger', // Defaulting to red variant
   size = 'md',
@@ -96,13 +95,13 @@ const AppInstallButton = ({
     const manager = new AppInstallManager();
     setInstallManager(manager);
 
-    // Desktop setup
+    // Setup desktop installation options
     if (!manager.platform.isMobile) {
       manager.setupDesktopInstall();
       setShowInstallButton(true);
     }
 
-    // Mobile setup
+    // Setup for mobile installation
     if (manager.platform.isMobile) {
       setShowInstallButton(true);
     }
@@ -111,26 +110,15 @@ const AppInstallButton = ({
   const handleInstallClick = () => {
     if (installManager) {
       installManager.triggerInstall(
-        () => {
-          // Success callback
-          onInstallSuccess && onInstallSuccess();
-        },
-        (error) => {
-          // Failure callback
-          onInstallFailure && onInstallFailure(error);
-        }
+        () => { onInstallSuccess && onInstallSuccess(); },
+        (error) => { onInstallFailure && onInstallFailure(error); }
       );
     }
   };
 
   // Determine button text and icon
-  const buttonText = installManager?.platform.isMobile
-    ? (children || 'Get App')
-    : (children || 'Install App');
-
-  const buttonIcon = installManager?.platform.isMobile 
-    ? 'bi-phone' 
-    : 'bi-download';
+  const buttonText = installManager?.platform.isMobile ? (children || 'Get App') : (children || 'Install App');
+  const buttonIcon = installManager?.platform.isMobile ? 'bi-phone' : 'bi-download';
 
   // Dynamic class generation for button styles
   const buttonClasses = [
@@ -142,7 +130,7 @@ const AppInstallButton = ({
     className,
   ].filter(Boolean).join(' ');
 
-  // Don't render if install is not supported
+  // Don't render if the install is not supported
   if (!showInstallButton) return null;
 
   return (
@@ -163,13 +151,9 @@ const AppInstallButton = ({
       }}
       {...props}
     >
-      {iconPosition === 'left' && (
-        <i className={`bi ${buttonIcon}`}></i>
-      )}
+      {iconPosition === 'left' && <i className={`bi ${buttonIcon}`}></i>}
       {buttonText}
-      {iconPosition === 'right' && (
-        <i className={`bi ${buttonIcon}`}></i>
-      )}
+      {iconPosition === 'right' && <i className={`bi ${buttonIcon}`}></i>}
     </button>
   );
 };
@@ -188,7 +172,7 @@ AppInstallButton.presets = {
   card: {
     variant: 'danger', // Solid red for card
     size: 'md',
-  }
+  },
 };
 
 export default AppInstallButton;
