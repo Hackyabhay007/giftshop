@@ -19,6 +19,7 @@ import {
   Phone,
   ShippingCar,
 } from "@/svg";
+import AppInstallButton from "@/components/AppInstallButton";
 
 const Header = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -44,11 +45,14 @@ const Header = () => {
                 <div className="col-md-4">
                   <div className="tp-header-welcome d-flex align-items-center">
                     <span>
+                      
                       <ShippingCar />
                     </span>
                     <p style={{ fontSize: "14px", color: "#000000" }}>
                       FREE Express Shipping On Orders Rs500+
                     </p>
+
+                 
                   </div>
                 </div>
 
@@ -91,10 +95,12 @@ const Header = () => {
                   </div>
                 </div>
 
+             
                 <div className="col-xl-6  d-none d-lg-block col-lg-6">
                   <div className="main-menu menu-style-1">
                     <nav className="tp-main-menu-content">
                       <Menus />
+                    
                     </nav>
                   </div>
                 </div>

@@ -7,6 +7,7 @@ import pay from "@assets/img/icon/payment-option.png";
 import social_data from "@/data/social-data";
 import { Email, Location } from "@/svg";
 import SocialMedia from "@/components/SocialMedial/SocialMedia";
+import AppInstallButton from "@/components/AppInstallButton";
 
 const Footer = ({
   style_2 = false,
@@ -46,8 +47,13 @@ const Footer = ({
                           alt="logo"
                         />
                       </Link>
+
+             
                     </div>
                     <SocialMedia />
+                    <div className="pt-10">
+                  <AppInstallButton/>
+                  </div>
                     <div>
                       <h2 style={{ textTransform: "uppercase",fontSize:"22px" ,marginTop:"20px",color:"white" }}>
                         My Sweet Wishes
