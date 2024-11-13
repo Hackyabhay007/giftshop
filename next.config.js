@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
 
+
+   // PWA Configuration
+   pwa: {
+    dest: 'public',
+    register: true,
+    skipWaiting: true,
+    disable: 'production'
+  },
+
   images: {
     domains: [
       'apiv2.mysweetwishes.com',
