@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react"; // Import useRef
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import Head from 'next/head';
 import SEO from "@/components/seo";
 import Wrapper from "@/layout/wrapper";
 import HeaderTwo from "@/layout/headers/header-2";
@@ -17,8 +18,8 @@ import ErrorMsg from "@/components/common/error-msg";
 const ShopPage = ({ query }) => {
   const [categoryId, setCategoryId] = useState(query?.category || null);
   const [currPage, setCurrPage] = useState(1);
-  const shopAreaRef = useRef(null); // Create a ref for the shop area
-  const router = useRouter(); // Get the router instance
+  const shopAreaRef = useRef(null);
+  const router = useRouter();
 
   const {
     data: allProducts,
@@ -37,8 +38,8 @@ const ShopPage = ({ query }) => {
 
   // Reset category filter
   const resetCategory = () => {
-    setCategoryId(null); // Clear category ID
-    setCurrPage(1); // Reset to the first page
+    setCategoryId(null);
+    setCurrPage(1);
   };
 
   useEffect(() => {
@@ -62,8 +63,8 @@ const ShopPage = ({ query }) => {
   };
 
   useEffect(() => {
-    scrollToShopArea(); // Scroll when the component mounts or when the category changes
-  }, [categoryId]); // Dependency on categoryId
+    scrollToShopArea();
+  }, [categoryId]);
 
   let product_items = categoryId ? categoryProducts : allProducts?.data || [];
 
@@ -94,15 +95,85 @@ const ShopPage = ({ query }) => {
   product_items = product_items.filter(
     (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
   );
+
   const categoryName = router.query.name || "All Products";
+
+  // SEO Configuration
+  const seoConfig = {
+    pageTitle: `Shop ${categoryName} | My Sweet Wishes`,
+    description: `Explore our extensive collection of ${categoryName}. Find the perfect gift with our carefully curated selection of high-quality products.`,
+    keywords: [
+      "online shopping",
+      `${categoryName} gifts`,
+      "personalized presents",
+      "unique gift ideas",
+      "gift store"
+    ],
+    canonicalUrl: `/shop/${categoryId || ''}`,
+    structured_data: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": `Shop ${categoryName} | My Sweet Wishes`,
+      "description": `Explore our extensive collection of ${categoryName}. Find the perfect gift with our carefully curated selection of high-quality products.`,
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": product_items.map((product, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Product",
+            "name": product.name,
+            "image": product.image,
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "INR",
+              "price": product.price,
+              "availability": product.inStock ? "InStock" : "OutOfStock"
+            }
+          }
+        }))
+      }
+    }
+  };
 
   return (
     <Wrapper>
-      <SEO pageTitle="Shop" />
+      {/* Advanced SEO Metadata */}
+      <Head>
+        {/* Primary Meta Tags */}
+        <title>{seoConfig.pageTitle}</title>
+        <meta name="description" content={seoConfig.description} />
+        <meta name="keywords" content={seoConfig.keywords.join(', ')} />
+
+        {/* Open Graph Tags */}
+        <meta property="og:title" content={seoConfig.pageTitle} />
+        <meta property="og:description" content={seoConfig.description} />
+        <meta property="og:type" content="product.group" />
+        <meta property="og:url" content={`https://mysweetwishes.com${seoConfig.canonicalUrl}`} />
+
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoConfig.pageTitle} />
+        <meta name="twitter:description" content={seoConfig.description} />
+
+        {/* Canonical URL */}
+        <link 
+          rel="canonical" 
+          href={`https://mysweetwishes.com${seoConfig.canonicalUrl}`} 
+        />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ 
+            __html: JSON.stringify(seoConfig.structured_data) 
+          }}
+        />
+      </Head>
+
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb title={categoryName} subtitle="All Products" />
 
-      {/* Attach the ref to the ShopArea component */}
       <div ref={shopAreaRef}>
         <ShopArea
           all_products={allProducts?.data}

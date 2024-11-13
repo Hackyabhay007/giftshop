@@ -15,12 +15,9 @@ import HeaderMainRight from "./header-com/header-main-right";
 import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
 import {
   CartTwo,
-  CategoryMenu,
-  Compare,
   Menu,
   Phone,
   ShippingCar,
-  Wishlist,
 } from "@/svg";
 
 const Header = () => {

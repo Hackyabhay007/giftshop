@@ -8,8 +8,8 @@ import Link from "next/link";
 
 const tabs = ["Trending"];
 
-const ProductArea = () => {
-  const [activeTab, setActiveTab] = useState("trending");
+const ProductArea = ({categories}) => {
+  const [activeTab, setActiveTab] = useState(categories);
   const [sortOption, setSortOption] = useState("none"); // Add sort option state
   const {
     data: products,
@@ -69,7 +69,7 @@ const ProductArea = () => {
           <div className="col-xl-4 col-lg-5 col-md-5">
             <div className="tp-section-title-wrapper mb-40">
               <h3 className="tp-section-title text-20">
-                Trending Products
+                {categories} Products
                
               </h3>
             </div>
