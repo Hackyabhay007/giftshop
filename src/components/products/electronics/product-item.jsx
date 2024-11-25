@@ -68,34 +68,55 @@ const ProductItem = ({ product, offer_style = false }) => {
   const handleWishlistProduct = () => {
     dispatch(add_to_wishlist(product));
   };
+
   const [isHovered, setIsHovered] = useState(false);
+
+  // Check if the device is mobile
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust width threshold for mobile
+    };
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
-      className={`${
-        offer_style ? "tp-product-offer-item" : "mb-25"
-      } tp-product-item transition-3`}
+      className={`
+        ${offer_style ? "tp-product-offer-item" : "mb-25"} 
+        tp-product-item transition-3 
+        ${isMobile ? "m-0" : ""}  // Adding mobile-specific margin
+      `}
+      style={{ height: isMobile ? "auto" : "unset",
+        
+       }} // Full height for mobile cards
     >
       <div
         style={{
           overflow: "hidden",
-          height: "320px",
+          height: isMobile ? "100px" : "320px", // Set height of image for mobile
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          
         }} // Flexbox centering
         className="tp-product-thumb p-relative fix"
       >
         <Link href={`/product-details/${product_id}`}>
           <Image
             src={images[0]} // Use the first image
-            width={300} // Adjust width based on your layout
-            height={300} // Adjust height based on your layout
+            width={isMobile ? 100 : 300} // Adjust width based on your layout
+            height={isMobile ? 100 : 300} // Adjust height for mobile
             alt={name} // Use product name for alt text
             className="w-full h-auto"
             style={{
               objectFit: "contain",
-              maxWidth: "100%",
+              maxWidth:isMobile ? "100px" : "100%", 
               maxHeight: "100%",
             }} // Keep the image contained within its container
           />

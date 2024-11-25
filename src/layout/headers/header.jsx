@@ -12,13 +12,9 @@ import { openCartMini } from "@/redux/features/cartSlice";
 import HeaderCategory from "./header-com/header-category";
 import HeaderTopRight from "./header-com/header-top-right";
 import HeaderMainRight from "./header-com/header-main-right";
+import { useIsMobile } from "@/utils/isMobileUtil";
 import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
-import {
-  CartTwo,
-  Menu,
-  Phone,
-  ShippingCar,
-} from "@/svg";
+import { CartTwo, Menu, Phone, ShippingCar } from "@/svg";
 import AppInstallButton from "@/components/AppInstallButton";
 
 const Header = () => {
@@ -28,6 +24,7 @@ const Header = () => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+  const isMobile = useIsMobile();
   return (
     <>
       <header>
@@ -45,14 +42,11 @@ const Header = () => {
                 <div className="col-md-4">
                   <div className="tp-header-welcome d-flex align-items-center">
                     <span>
-                      
                       <ShippingCar />
                     </span>
                     <p style={{ fontSize: "14px", color: "#000000" }}>
                       FREE Express Shipping On Orders Rs500+
                     </p>
-
-                 
                   </div>
                 </div>
 
@@ -85,27 +79,27 @@ const Header = () => {
               <div className="row align-items-center">
                 <div className="col-xl-3  col-lg-4 col-md-3 col-6">
                   <div className="logo">
-                    <Link href="/">
-                      <Image
-                        style={{ width: "100px", height: "100px" }}
-                        src={logo}
-                        alt="logo"
-                      />
-                    </Link>
+                    <Image
+                      src={logo}
+                      alt="logo"
+                      style={{
+                        width: isMobile ? "50px" : "100px", // Apply 50px width on mobile, 100px on desktop
+                        height: isMobile ? "50px" : "100px", // Apply 50px height on mobile, 100px on desktop
+                        objectFit: "cover",
+                      }}
+                    />
                   </div>
                 </div>
 
-             
                 <div className="col-xl-6  d-none d-lg-block col-lg-6">
                   <div className="main-menu menu-style-1">
                     <nav className="tp-main-menu-content">
                       <Menus />
-                 
                     </nav>
                   </div>
                 </div>
 
-                <div className="col-xl-3  col-lg-2 col-md-8 col-6">
+                <div className="col-xl-3  d-md-block  col-lg-2 col-md-8 col-6">
                   <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
                 </div>
               </div>
@@ -116,7 +110,7 @@ const Header = () => {
 
       {/* sticky header start */}
       <div
-        style={{backgroundColor:"#990100"}}
+        style={{ backgroundColor: "#990100" }}
         id="header-sticky-2"
         className={`tp-header-sticky-area p-2 ${
           sticky ? "header-sticky-2" : ""
@@ -130,8 +124,12 @@ const Header = () => {
                   <Link href="/">
                     <Image
                       src={logo}
-                      style={{ width: "100px", height: "100px" ,objectFit:"cover" }}
                       alt="logo"
+                      style={{
+                        width: isMobile ? "50px" : "100px", // Apply 50px width on mobile, 100px on desktop
+                        height: isMobile ? "50px" : "100px", // Apply 50px height on mobile, 100px on desktop
+                        objectFit: "cover",
+                      }}
                     />
                   </Link>
                 </div>
@@ -147,14 +145,22 @@ const Header = () => {
                 <div className="tp-header-action d-flex align-items-center justify-content-end ml-50">
                   <div className="tp-header-action-item d-none d-lg-block"></div>
 
-                  <div className="tp-header-action-item">
+                  <div className="tp-header-action-item d-none d-md-block">
                     <button
                       onClick={() => dispatch(openCartMini())}
                       type="button"
                       className="tp-header-action-btn cartmini-open-btn"
                     >
                       <CartTwo />
-                      <span style={{backgroundColor:"#990100",borderColor:"white"}} className="tp-header-action-badge">{quantity}</span>
+                      <span
+                        style={{
+                          backgroundColor: "#990100",
+                          borderColor: "white",
+                        }}
+                        className="tp-header-action-badge"
+                      >
+                        {quantity}
+                      </span>
                     </button>
                   </div>
                   <div className="tp-header-action-item d-lg-none">

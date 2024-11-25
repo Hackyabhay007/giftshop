@@ -9,6 +9,7 @@ import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_cart_product } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
+import { useIsMobile } from "@/utils/isMobileUtil";
 
 const ProductItem = ({ product, style_2 = false }) => {
   const { product_id, name, images, categories, price, stock_quantity } =
@@ -23,6 +24,7 @@ const ProductItem = ({ product, style_2 = false }) => {
     (prd) => prd.product_id === product_id
   );
   const dispatch = useDispatch();
+  const isMobile = useIsMobile(); // Mobile detection
 
   useEffect(() => {
     if (product?.reviews && product?.reviews.length > 0) {
@@ -40,17 +42,25 @@ const ProductItem = ({ product, style_2 = false }) => {
     dispatch(add_cart_product(prd));
   };
 
- 
-
   return (
-    <div className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}`}>
+    <div
+      className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}`}
+      style={{
+        height: isMobile ? "300px" : "auto", // Fixed height for mobile cards
+        borderRadius: isMobile ? "12px" : "0", // Rounded corners in mobile view
+        boxShadow: isMobile
+          ? "0px 4px 10px rgba(0, 0, 0, 0.1)" // Shadow for mobile view
+          : "none",
+        overflow: "hidden",
+      }}
+    >
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
         <Link href={`/product-details/${product_id}`}>
           <div
             style={{
               position: "relative",
               width: "100%",
-              paddingTop: "140%",
+              paddingTop: "100%",
               overflow: "hidden",
               background: "transparent",
             }}
@@ -59,7 +69,7 @@ const ProductItem = ({ product, style_2 = false }) => {
               src={images[0]}
               alt={name}
               layout="fill" // Use fill layout
-              objectFit="contain" // Maintain aspect ratio
+
               style={{
                 position: "absolute",
                 top: 0,
@@ -68,6 +78,7 @@ const ProductItem = ({ product, style_2 = false }) => {
                 height: "100%",
                 background: "transparent",
                 mixBlendMode: "multiply", // Apply your desired blend mode here
+                objectFit: isMobile ? "cover" : "contain",
               }}
             />
           </div>
@@ -119,7 +130,7 @@ const ProductItem = ({ product, style_2 = false }) => {
           </div>
         </div>
       </div>
-      <div className="tp-product-content-2 pt-15">
+      <div className="tp-product-content-2 p-3 ">
         <div className="tp-product-tag-2">
           {/* {categories.map((category, i) => (
             <a key={i} href="#">
@@ -140,8 +151,11 @@ const ProductItem = ({ product, style_2 = false }) => {
           /> */}
         </div>
         <div className="tp-product-price-wrapper-2">
-          <span className="tp-product-price-2 new-price">
-          ₹{Number(price).toFixed(2)}
+          <span className="tp-product-price-2 new-price"  style={{
+              color: isMobile ? "gray" : "black", // Gray color for mobile price
+              fontSize: isMobile ? "12px" : "inherit", // Smaller price font size for mobile
+            }}>
+            ₹{Number(price).toFixed(2)}
           </span>
         </div>
       </div>

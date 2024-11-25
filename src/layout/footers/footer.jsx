@@ -8,12 +8,19 @@ import social_data from "@/data/social-data";
 import { Email, Location } from "@/svg";
 import SocialMedia from "@/components/SocialMedial/SocialMedia";
 import AppInstallButton from "@/components/AppInstallButton";
-
+import { useIsMobile } from "@/utils/isMobileUtil";
+import MobileFooter from "./MobileFooter";
 const Footer = ({
   style_2 = false,
   style_3 = false,
   primary_style = false,
 }) => {
+  const isMobile = useIsMobile(); // Check if it's a mobile device
+
+  if (isMobile) {
+    // If mobile, render the MobileFooter component
+    return <MobileFooter />;
+  }
   return (
     <footer>
       <div
@@ -193,7 +200,7 @@ const Footer = ({
                     className="tp-footer-widget-title"
                     style={{ color: "#FFFFFF" }}
                   >
-                    Talk To Us
+                    Talk To Us 
                   </h4>
                   <div className="tp-footer-widget-content">
                     <div className="tp-footer-talk mb-20">
@@ -328,6 +335,7 @@ const Footer = ({
           </div>
         </div>
       </div>
+     
     </footer>
   );
 };

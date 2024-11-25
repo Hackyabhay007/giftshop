@@ -7,6 +7,7 @@ import { Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_cart_product } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
+import { useIsMobile } from "@/utils/isMobileUtil";
 
 const ProductItem = ({
   products,
@@ -33,7 +34,7 @@ const ProductItem = ({
     (prd) => prd.product_id === product_id
   );
   const dispatch = useDispatch();
-
+  const isMobile = useIsMobile();
   // handle add product
   const handleAddProduct = (prd) => {
     dispatch(add_cart_product(prd));
@@ -60,13 +61,24 @@ const ProductItem = ({
 
   return (
     <div
-      className={`tp-product-item-3 mb-50 ${primary_style ? "tp-product-style-primary" : ""} ${prdCenter ? "text-center" : ""}`}
+      className={`tp-product-item-3 mb-50 ${primary_style ? "tp-product-style-primary" : ""} ${prdCenter ? "text-center" : ""}`}  style={{
+        width: isMobile ? "90%" : "100%", // Smaller width for mobile
+        margin: isMobile ? "10px" : "0",
+        borderRadius: isMobile ? "4px" : "0",
+        padding: isMobile ? "5px" : "0",
+        boxShadow: isMobile ? "5px 4px 10px rgba(0, 0, 0, 0.1)" : "none",
+      }}
     >
       {/* Responsive container */}
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1 flex items-center justify-center"
-        style={{ height: "300px" }}
+        style={{
+          height: isMobile ? "150px" : "300px", // Adjust height for mobile
+         
+        }}
       >
-        <Link href={`/product-details/${product_id}`}>
+        <Link href={`/product-details/${product_id}`}  className={`relative w-full h-full flex items-center justify-center ${
+              isMobile ? "p-2" : ""
+            }`} >
           {/* Responsive Image */}
           <div className="relative w-full h-full flex items-center justify-center">
             <Image
@@ -74,7 +86,7 @@ const ProductItem = ({
               alt="product image"
               width={282}
               height={320}
-              className="object-contain mx-auto" // Center and maintain aspect ratio
+              className={`object-contain mx-auto ${isMobile ? "rounded" : ""}`}
             />
           </div>
         </Link>
@@ -146,25 +158,29 @@ const ProductItem = ({
 
       {/* Product content */}
       <div className="tp-product-content-3">
-        <h3 className="tp-product-title-3">
-          <Link
-            style={{
-              color: isHovered ? "#990100" : "black", // Change color on hover
-              transition: "color 0.3s ease", // Smooth transition for color change
-            }}
-            onMouseEnter={() => setIsHovered(true)} // When mouse enters
-            onMouseLeave={() => setIsHovered(false)} // When mouse leaves
-            href={`/product-details/${product_id}`}
-          >
-            {name}
-          </Link>
+        <h3
+          className="tp-product-title-3"
+          style={{
+            fontSize: isMobile ? "12px" : "", // Smaller font size for mobile
+            marginBottom: isMobile ? "5px" : "10px",
+          }}
+        >
+          <Link href={`/product-details/${product_id}`}>{name}</Link>
         </h3>
-        <div className="tp-product-price-wrapper-3">
+        <div
+          className="tp-product-price-wrapper-3"
+          style={{ fontSize: isMobile ? "10px" : "14px" }}
+        >
           <span className="tp-product-price-3">₹{Number(price).toFixed(2)}</span>
         </div>
-        <div className="tp-product-stock-status">
-          <span>In Stock: {stock_quantity}</span>
-        </div>
+        {isMobile && (
+          <div
+            className="tp-product-stock-status"
+            style={{ fontSize: "10px", marginTop: "5px" }}
+          >
+            In Stock: {stock_quantity}
+          </div>
+        )}
       </div>
     </div>
   );

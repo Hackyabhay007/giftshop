@@ -64,6 +64,7 @@ const ChangePassword = () => {
                   name="currentPassword"
                   id="currentPassword"
                   type="password"
+                  className="rounded"
                 />
               </div>
               <div className="tp-profile-input-title">
@@ -83,6 +84,7 @@ const ChangePassword = () => {
                   name="newPassword"
                   id="newPassword"
                   type="password"
+                  className="rounded"
                 />
               </div>
               <div className="tp-profile-input-title">
@@ -100,6 +102,7 @@ const ChangePassword = () => {
                   name="confirmPassword"
                   id="confirmPassword"
                   type="password"
+                  className="rounded"
                 />
               </div>
               <div className="tp-profile-input-title">
@@ -111,7 +114,7 @@ const ChangePassword = () => {
 
           <div className="col-xxl-6 col-md-6">
             <div className="profile__btn">
-              <button type="submit" className="tp-btn">
+              <button type="submit" className="tp-btn rounded">
                 Change Password
               </button>
             </div>

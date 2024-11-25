@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useGetProductTypeQuery } from "@/redux/features/productApi"; // Ensure this hook is updated to fetch products based on category
-import { ShapeLine } from "@/svg";
+import { useGetProductTypeQuery } from "@/redux/features/productApi";
 import ProductItem from "./product-item";
 import ErrorMsg from "@/components/common/error-msg";
 import HomePrdLoader from "@/components/loader/home/home-prd-loader";
 import Link from "next/link";
+import { useIsMobile } from "@/utils/isMobileUtil";
 
-const tabs = ["Trending"];
-
-const ProductArea = ({categories}) => {
-  const [activeTab, setActiveTab] = useState(categories);
-  const [sortOption, setSortOption] = useState("none"); // Add sort option state
-  const {
-    data: products,
-    isError,
-    isLoading,
-    refetch,
-  } = useGetProductTypeQuery(activeTab); // Pass activeTab to the query
+const ProductArea = ({ categories }) => {
+  const isMobile = useIsMobile(); // Check if the device is mobile
+  const [activeTab, setActiveTab] = useState("Trending");
+  const [sortOption, setSortOption] = useState("none");
+  const { data: products, isError, isLoading, refetch } = useGetProductTypeQuery(activeTab);
 
   useEffect(() => {
-    refetch(); // Refetch when the active tab changes
+    refetch(); // Refetch products when activeTab changes
   }, [activeTab, refetch]);
+
+  // Handle tab switch
+  const handleTabSwitch = (tab) => {
+    setActiveTab(tab);
+  };
 
   // Handle sorting option change
   const handleSortChange = (e) => {
@@ -32,31 +31,44 @@ const ProductArea = ({categories}) => {
   if (isLoading) {
     content = <HomePrdLoader loading={isLoading} />;
   } else if (isError) {
-    content = <ErrorMsg msg="There was an error" />;
+    content = <ErrorMsg msg="There was an error fetching products." />;
   } else if (!products?.length) {
     content = <ErrorMsg msg="No Products found!" />;
   } else {
-    // Filter and sort products based on active tab and selected sort option
-    const filteredProducts = products.filter((product) => {
-      if (Array.isArray(product.categories)) {
-        return product.categories;
-      }
-      return false;
-    });
+    // Sort and filter products
+    const filteredProducts = products.filter((product) =>
+      Array.isArray(product.categories)
+    );
 
-    // Sort filtered products based on price
     if (sortOption === "lowToHigh") {
-      filteredProducts.sort((a, b) => a.price - b.price); // Sort ascending
+      filteredProducts.sort((a, b) => a.price - b.price);
     } else if (sortOption === "highToLow") {
-      filteredProducts.sort((a, b) => b.price - a.price); // Sort descending
+      filteredProducts.sort((a, b) => b.price - a.price);
     }
 
     if (filteredProducts.length === 0) {
-      content = <ErrorMsg msg="No Products found in this category!" />;
+      content = <ErrorMsg msg="No products found in this category!" />;
     } else {
-      content = filteredProducts.map((prd, i) => (
-        <div key={prd.id} className="col-xl-3 col-lg-3 col-sm-6">
-          <ProductItem product={prd} />
+      // Limit to 4 products on mobile
+      const displayedProducts = isMobile ? filteredProducts.slice(0, 4) : filteredProducts;
+      content = displayedProducts.map((prd) => (
+        <div
+          key={prd.id}
+          className={`col-xl-3 col-lg-3 col-sm-6 ${isMobile ? 'col-6 ' : ''}`} // Added gap-4 for mobile
+          style={{
+            borderRadius: isMobile ? "24px" : "", // Apply radius for mobile only
+            boxShadow: isMobile ? "1px 10px 20px rgba(0, 0, 0, 0.1)" : "", // Apply shadow for mobile only
+            height: isMobile ? "auto" : "", // Optional: You can set a fixed height for mobile if needed
+            marginBottom: isMobile ? "15px" : "", // Adding margin for mobile
+          }}
+        >
+          <ProductItem
+            product={prd}
+            style={{
+              height: isMobile ? "200px" : "auto", // Set fixed height for product image in mobile
+              fontSize: isMobile ? "14px" : "16px", // Reduce font size for mobile
+            }}
+          />
         </div>
       ));
     }
@@ -65,72 +77,103 @@ const ProductArea = ({categories}) => {
   return (
     <section className="tp-product-area mt-40 pb-55">
       <div className="container">
-        <div className="row align-items-start">
-          <div className="col-xl-4 col-lg-5 col-md-5">
-            <div className="tp-section-title-wrapper mb-40">
-              <h3 className="tp-section-title text-20">
-                {categories} Products
-               
-              </h3>
-            </div>
-          </div>
-          <div className="col-xl-8 text-md-end text-sm-start mb-3 mb-md-0 col-lg-7 col-md-7">
-            <div className="sort-filter">
-              <select
-                style={{ 
-                   width:"180px",
-                  padding:"5px",
-                  outline: "none", 
-                  border: "1px solid #ccc", 
-                  boxShadow: "none",
-                  borderRadius:"5px"
+        {/* Mobile Layout */}
+        {isMobile ? (
+          <>
+            <div className="mb-4 text-center">
+              <button
+                className={`btn ${activeTab === "Trending" ? "bg-white shadow" : ""}`}
+                style={{
+                  borderRadius: "999px",
+                  marginRight: "10px",
+                  padding: "10px 20px",
+                  cursor: "pointer",
                 }}
-                id="sort-by-price"
-                value={sortOption}
-                onChange={handleSortChange}
+                onClick={() => handleTabSwitch("Trending")}
               >
-                <option value="none">Sort by :Default</option>
-                <option value="lowToHigh">Price: Low to High</option>
-                <option value="highToLow">Price: High to Low</option>
-              </select>
+                Trending
+              </button>
+              <button
+                className={`btn ${activeTab === "Featured" ? "bg-white shadow" : ""}`}
+                style={{
+                  borderRadius: "999px",
+                  padding: "10px 20px",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleTabSwitch("Featured")}
+              >
+                Featured
+              </button>
             </div>
-          </div>
+            <div className="row">{content}</div>
+          </>
+        ) : (
+          /* Desktop Layout */
+          <>
+            <div className="row align-items-start">
+              <div className="col-xl-4 col-lg-5 col-md-5">
+                <div className="tp-section-title-wrapper mb-40">
+                  <h3 className="tp-section-title text-20">{categories} Products</h3>
+                </div>
+              </div>
+              <div className="col-xl-8 text-md-end text-sm-start mb-3 mb-md-0 col-lg-7 col-md-7">
+                <div className="sort-filter">
+                  <select
+                    style={{
+                      width: "180px",
+                      padding: "5px",
+                      outline: "none",
+                      border: "1px solid #ccc",
+                      boxShadow: "none",
+                      borderRadius: "5px",
+                    }}
+                    id="sort-by-price"
+                    value={sortOption}
+                    onChange={handleSortChange}
+                  >
+                    <option value="none">Sort by: Default</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="highToLow">Price: High to Low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="row">{content}</div>
+          </>
+        )}
+        {/* See More Button */}
+        <div className="text-center mt-4">
+          <Link href="/shop">
+            <button
+              className="btn"
+              style={{
+                backgroundColor: "transparent",
+                color: "#990100",
+                padding: "10px 20px",
+                borderRadius: "5px",
+                border: "2px solid #990100",
+                cursor: "pointer",
+                fontSize: "16px",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
+                maxWidth: "100%",
+                minWidth: "200px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#990100";
+                e.currentTarget.style.color = "white";
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "#990100";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
+              See More Products
+            </button>
+          </Link>
         </div>
-        <div className="row">{content}</div>
       </div>
-{/* See More Button */}
-{/* See More Button */}
-<div className="text-center mt-4">
-  <Link href="/shop" className="d-inline-block">
-    <button
-      className="btn"
-      style={{
-        backgroundColor: "transparent",
-        color: "#990100",
-        padding: "10px 20px",
-        borderRadius: "5px",
-        border: "2px solid #990100",
-        cursor: "pointer",
-        fontSize: "16px",
-        transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-        maxWidth: "100%", // Ensure button doesn't overflow on small screens
-        minWidth: "200px", // Maintain a minimum width on larger screens
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#990100";
-        e.currentTarget.style.color = "white";
-        e.currentTarget.style.transform = "scale(1.05)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "transparent";
-        e.currentTarget.style.color = "#990100";
-        e.currentTarget.style.transform = "scale(1)";
-      }}
-    >
-      See More Products
-    </button>
-  </Link>
-</div>
     </section>
   );
 };

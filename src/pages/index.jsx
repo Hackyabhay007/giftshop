@@ -10,9 +10,12 @@ import ProductBanner from "@/components/products/electronics/product-banner";
 import BlogArea from "@/components/blog/electronic/blog-area";
 import InstagramArea from "@/components/instagram/instagram-area";
 import Footer from "@/layout/footers/footer";
+import { useIsMobile } from "@/utils/isMobileUtil";
+import MobileFooter from "@/layout/footers/MobileFooter";
 
 export default function Home() {
-  // Comprehensive SEO Metadata Configuration
+  const isMobile = useIsMobile();
+
   const seoConfig = {
     pageTitle: "My Sweet Wishes - Unique Personalized Gifts",
     category: "home",
@@ -26,29 +29,26 @@ export default function Home() {
       "teddy bears",
       "greeting cards",
       "wall paintings",
-      "Diwali gifts"
+      "Diwali gifts",
     ],
     image: "/og-home-image.jpg",
     canonicalUrl: "/",
-    
-    // Additional SEO Structured Data
     structuredData: {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "My Sweet Wishes",
-      "url": "https://mysweetwishes.com",
-      "description": "Your one-stop destination for unique and personalized gifts",
-      "potentialAction": {
+      name: "My Sweet Wishes",
+      url: "https://mysweetwishes.com",
+      description: "Your one-stop destination for unique and personalized gifts",
+      potentialAction: {
         "@type": "SearchAction",
-        "target": "https://mysweetwishes.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
+        target: "https://mysweetwishes.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
   };
 
   return (
     <Wrapper>
-      {/* SEO Component with Comprehensive Metadata */}
       <SEO
         pageTitle={seoConfig.pageTitle}
         category={seoConfig.category}
@@ -58,29 +58,31 @@ export default function Home() {
         canonicalUrl={seoConfig.canonicalUrl}
         structuredData={seoConfig.structuredData}
       />
-
-      {/* Page Layout Components */}
       <Header />
-
+      {/* Pass isMobile prop to CategorySection */}
+      <CategorySection isMobile={isMobile} />
+      <HomeHeroSlider isMobile={isMobile}  />
       
-      <CategorySection />
-      <HomeHeroSlider />
+      {/* <ProductArea categories="Trending" isMobile={isMobile} />
+      <ProductArea categories="Featured" isMobile={isMobile} /> */}
+      {!isMobile ? (
+        <>
+          <ProductArea categories="Trending" />
+          <ProductArea categories="Featured" />
+          <ProductBanner />
+          <BlogArea />
+          <InstagramArea />
+          
+        </>
+      ) : (
+        <>
+        <ProductArea categories="Trending" isMobile={isMobile} /> 
+       
+        </>
+      )}
       
-      {/* Product Areas with Dynamic Categories */}
-      <ProductArea 
-        categories="Trending"
-      />
+      <Footer/> 
       
-      <ProductArea 
-        categories="Featured"
-      />
-    
-      <ProductBanner />
-      <BlogArea />
-      <InstagramArea />
-      <Footer />
     </Wrapper>
   );
 }
-
-
