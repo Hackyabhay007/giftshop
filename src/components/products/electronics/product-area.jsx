@@ -56,10 +56,11 @@ const ProductArea = ({ categories }) => {
           key={prd.id}
           className={`col-xl-3 col-lg-3 col-sm-6 ${isMobile ? 'col-6 ' : ''}`} // Added gap-4 for mobile
           style={{
-            borderRadius: isMobile ? "24px" : "", // Apply radius for mobile only
-            boxShadow: isMobile ? "1px 10px 20px rgba(0, 0, 0, 0.1)" : "", // Apply shadow for mobile only
+            borderRadius: isMobile ? "0px" : "", // Apply radius for mobile only
+            boxShadow: isMobile ? "0px 0px 0px rgba(0, 0, 0, 0)" : "", // Apply shadow for mobile only
             height: isMobile ? "auto" : "", // Optional: You can set a fixed height for mobile if needed
-            marginBottom: isMobile ? "15px" : "", // Adding margin for mobile
+            marginBottom: isMobile ? "20px" : "", // Adding margin for mobile
+           
           }}
         >
           <ProductItem
@@ -142,21 +143,21 @@ const ProductArea = ({ categories }) => {
           </>
         )}
         {/* See More Button */}
-        <div className="text-center mt-4">
+        <div className="text-center mt-2">
           <Link href="/shop">
             <button
               className="btn"
               style={{
                 backgroundColor: "transparent",
                 color: "#990100",
-                padding: "10px 20px",
+                padding: isMobile ?"5px 10px":"10px 20px",
                 borderRadius: "5px",
                 border: "2px solid #990100",
                 cursor: "pointer",
-                fontSize: "16px",
+                fontSize:isMobile ? "12px":"16px",
                 transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-                maxWidth: "100%",
-                minWidth: "200px",
+                maxWidth: "50%%",
+                minWidth:  isMobile ? "100px" : "",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#990100";

@@ -5,7 +5,7 @@ function SingleNav({ active = false, id, title, icon, onClick }) {
     <button
       onClick={onClick}
       style={{
-        backgroundColor: active ? "#EE4B2B" : "transparent", // Red background when active
+        backgroundColor: active ? "#990100" : "transparent", // Red background when active
         color: active ? "white" : "black", // White text when active
         borderRadius: "12px", // Rounded corners for the button
         border: "none", // No outer border for buttons

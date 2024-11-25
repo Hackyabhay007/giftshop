@@ -65,7 +65,7 @@ const NavProfileTab = ({ orderData }) => {
             <div className="profile__main-logout text-sm-end">
               <a
                 style={{
-                  backgroundColor: "#C04000",
+                  backgroundColor: "#990100",
                   color: "white",
                   borderRadius: "8px",
                 }}

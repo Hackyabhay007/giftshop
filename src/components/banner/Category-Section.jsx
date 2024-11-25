@@ -48,9 +48,10 @@ export default function CategorySection() {
       {isMobile && (
         <h2
           style={{
-            padding: "20px 16px", // Top padding
-            fontSize: "26px",
-            fontWeight: "bold",
+            padding: "0 10px", // Top padding
+            paddingTop:"22px",
+            fontSize: "22px",
+            
           }}
         >
           Categories

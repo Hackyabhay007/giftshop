@@ -93,6 +93,7 @@ const ProductItem = ({ product, offer_style = false }) => {
         ${isMobile ? "m-0" : ""}  // Adding mobile-specific margin
       `}
       style={{ height: isMobile ? "auto" : "unset",
+          
         
        }} // Full height for mobile cards
     >
@@ -103,6 +104,7 @@ const ProductItem = ({ product, offer_style = false }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          
           
         }} // Flexbox centering
         className="tp-product-thumb p-relative fix"
@@ -134,7 +136,7 @@ const ProductItem = ({ product, offer_style = false }) => {
           <style jsx>{`
             .tp-product-action-btn {
               background-color: white;
-              border: 2px solid white;
+              border: 1px solid white;
               color: black;
               transition: background-color 0.3s ease, border-color 0.3s ease;
             }
@@ -152,7 +154,8 @@ const ProductItem = ({ product, offer_style = false }) => {
                 <button
                   className={`tp-product-action-btn  tp-product-add-cart-btn`}
                 >
-                  <Cart /> <span className="tp-product-tooltip">View Cart</span>
+                  <Cart />
+                   <span className="tp-product-tooltip">View Cart</span>
                 </button>
               </Link>
             ) : (

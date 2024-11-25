@@ -15,7 +15,7 @@ function MobileFooter() {
           {/* Home */}
           <Link href="/" className="mobile-footer-item">
             <img
-              src="/assets/img/footer/home_mobile.png"
+              src="/assets/img/footer/home.svg"
               alt="Home"
               className="icon"
             />
@@ -26,7 +26,7 @@ function MobileFooter() {
           {/* Shop */}
           <Link href="/shop" className="mobile-footer-item">
             <img
-              src="/assets/img/footer/shop_mobile.png"
+              src="/assets/img/footer/shop.svg"
               alt="Shop"
               className="icon"
             />
@@ -37,7 +37,7 @@ function MobileFooter() {
           {/* Profile */}
           <Link href="/profile" className="mobile-footer-item">
             <img
-              src="/assets/img/footer/profile_mobile.png"
+              src="/assets/img/footer/profile.svg"
               alt="Profile"
               className="icon"
             />
@@ -51,7 +51,7 @@ function MobileFooter() {
             className="mobile-footer-item cart-button"
           >
             <img
-              src="/assets/img/footer/cart_mobile.png"
+              src="/assets/img/footer/cart.svg"
               alt="Cart"
               className="icon"
             />
