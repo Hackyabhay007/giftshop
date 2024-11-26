@@ -43,10 +43,10 @@ const ShopArea = ({ all_products, products, otherProps, resetCategory }) => {
                   style={{
                     width: "35%",
                     border: "none", // Remove border
-                    backgroundColor:"black",
-                    color:"white",
-                    marginBottom:"12px",
-                    borderRadius:"0px"
+                    backgroundColor: "black",
+                    color: "white",
+                    marginBottom: "12px",
+                    borderRadius: "0px",
                   }}
                 >
                   {showFilters ? "Hide Filters" : "Show Filters"}
@@ -62,7 +62,11 @@ const ShopArea = ({ all_products, products, otherProps, resetCategory }) => {
                     top: "160px", // Adjusted position below the button
                     zIndex: "1000",
                     padding: "10px",
-                    backgroundColor:"white"
+                    backgroundColor: "white",
+                    maxHeight: "400px", // Restrict height for scrolling
+                    overflowY: "auto", // Add vertical scrolling
+                    border: "1px solid #ddd", // Optional for better visibility
+                    borderRadius: "5px", // Rounded edges for better aesthetics
                   }}
                 >
                   <StatusFilter setCurrPage={setCurrPage} />
@@ -82,7 +86,11 @@ const ShopArea = ({ all_products, products, otherProps, resetCategory }) => {
             </div>
           )}
 
-          <div className={`${isMobile && showFilters ? "col-12" : "col-xl-9 col-lg-8"}`}>
+          <div
+            className={`${
+              isMobile && showFilters ? "col-12" : "col-xl-9 col-lg-8"
+            }`}
+          >
             <div className="tp-shop-main-wrapper">
               <div className="tp-shop-top mb-45">
                 <div className="row">
