@@ -14,7 +14,7 @@ const ShopBreadcrumb = ({ title, subtitle }) => {
                 <h3
                   style={{
                     textTransform: "uppercase",
-                    fontSize: isMobile ? "32px" : "", // Adjust font size for mobile
+                    fontSize: isMobile ? "24px" : "", // Adjust font size for mobile
                   }}
                   className="breadcrumb__title"
                 >

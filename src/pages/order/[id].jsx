@@ -107,11 +107,11 @@ const SingleOrder = ({ params }) => {
 
       content = (
         <>
-          <section className="invoice__area pt-120 pb-120">
+          <section className="invoice__area pt-12 pb-120 ml-10">
             <div className="container">
               <div
                 ref={printRef}
-                className="invoice__wrapper grey-bg-2 pt-40 pb-40 pl-40 pr-40 tp-invoice-print-wrapper"
+                className="invoice__wrapper   pt-4 pb-40 pl-50 pr-40 tp-invoice-print-wrapper"
               >
                 {/* Order Status Message */}
                 {(isCanceled || status === "canceled") && (
@@ -176,7 +176,7 @@ const SingleOrder = ({ params }) => {
                     </div>
                   </div>
                 </div>
-                <div className="invoice__customer mb-30">
+                <div className="invoice__customer mb-10">
                   <div className="row ">
                     <div className="col-md-6 col-sm-8">
                       <div className="invoice__customer-details d-flex flex-column flex-sm-row flex-wrap w-100 gap-sm-2">
@@ -226,9 +226,9 @@ const SingleOrder = ({ params }) => {
                 </div>
 
                 {/* Product Cards for Mobile View */}
-                <div className="invoice__order-cards pt-30 pb-30 pl-10 pr-10  mb-30 d-md-none">
+                <div className="invoice__order-cards pt-30 pb-30 pl-10 pr-10  mb-10 d-md-none">
                   {products?.map((item, i) => (
-                    <div key={i} className="product-card" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", margin: "10px 0", boxShadow: "0 2px 10px rgba(0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                    <div key={i} className="product-card" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "15px", margin: "10px 0", boxShadow: "0 2px 4px rgba(0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                       <h5 style={{ margin: "0 0 10px" }}>{item.name}</h5>
                       <p style={{ margin: "5px 0" }}><strong>Quantity:</strong> {item.quantity}</p>
                       <p style={{ margin: "5px 0" }}><strong>Item Price:</strong> ₹{Number(item.price).toFixed(2)}</p>
@@ -237,7 +237,7 @@ const SingleOrder = ({ params }) => {
                   ))}
                 </div>
 
-                <div className="invoice__total pt-40 pb-10 alert-success pl-0 pr-0 mb-30">
+                <div className="invoice__total pt-10 pb-10 alert-success pl-0 pr-0 mb-30">
                   <div className="row">
                     <div className="col-lg-3 col-md-4">
                       <div className="invoice__payment-method mb-30">
