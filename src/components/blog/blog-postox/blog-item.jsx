@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper";
 // Internal component for video popup
 import PopupVideo from "@/components/common/popup-video";
+import { useIsMobile } from "@/utils/isMobileUtil"; // Import the mobile detection hook
 
 // Slider settings
 const sliderSettings = {
@@ -21,6 +22,7 @@ const sliderSettings = {
 
 const BlogItem = ({ item = {} }) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const isMobile = useIsMobile(); // Detect if the screen is mobile
 
   // Function to render the blog thumbnail based on item type
   const renderThumbnail = () => {
@@ -112,7 +114,9 @@ const BlogItem = ({ item = {} }) => {
         {item.slider && renderSliderContent()}
 
         {!item.blockquote && (
-          <div className="tp-postbox-content">
+          <div
+            className={`tp-postbox-content ${isMobile ? "p-4 pb-0 pt-0" : ""}`} // Add padding for mobile screens
+          >
             <div className="tp-postbox-meta">
               <span>
                 <i className="far fa-calendar-check"></i> {item.created_at}
@@ -144,7 +148,10 @@ const BlogItem = ({ item = {} }) => {
             ></div> */}
 
             <div className="tp-postbox-read-more">
-              <Link href={`/blog-details/${item.id}`} className="tp-btn">
+              <Link
+                href={`/blog-details/${item.id}`}
+                className={`tp-btn ${isMobile ? "rounded " : ""}`}
+              >
                 Read More
               </Link>
             </div>

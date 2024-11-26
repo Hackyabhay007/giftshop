@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search } from "@/svg";
+import { useIsMobile } from "@/utils/isMobileUtil"; // Import the mobile detection hook
 
 // Function to format date safely
 const formatDate = (dateString) => {
@@ -14,6 +15,7 @@ const formatDate = (dateString) => {
 
 const BlogSidebar = ({ latestBlog }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const isMobile = useIsMobile(); // Detect if the screen is mobile
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -21,16 +23,18 @@ const BlogSidebar = ({ latestBlog }) => {
 
   return (
     <div className="tp-sidebar-wrapper tp-sidebar-ml--24">
-      
       <div className="tp-sidebar-widget mb-35">
         <h3 className="tp-sidebar-widget-title">Latest Post</h3>
-        <div className="tp-sidebar-widget-content">
-          <div className="tp-sidebar-blog-item-wrapper">
+        <div className={`tp-sidebar-widget-content`}>
+          <div className={`tp-sidebar-blog-item-wrapper  ${isMobile ? "rounded" : ""}`}>
             {latestBlog && latestBlog.length > 0 ? (
               latestBlog.map((blog) => (
-                <div key={blog.id} className="tp-sidebar-blog-item d-flex align-items-center">
+                <div
+                  key={blog.id}
+                  className={`tp-sidebar-blog-item d-flex align-items-center `} // Apply rounded only on mobile
+                >
                   <div
-                    className="tp-sidebar-blog-thumb"
+                    className={`tp-sidebar-blog-thumb ${isMobile ? "rounded overflow-hidden" : ""}`} // Apply rounded corners to the image container on mobile
                     style={{
                       height: "50px",
                       width: "100px",
@@ -46,6 +50,9 @@ const BlogSidebar = ({ latestBlog }) => {
                         src={blog.image_url}
                         alt="Latest blog img"
                         layout="responsive"
+                        style={{
+                          objectFit: "cover",
+                        }}
                       />
                     </Link>
                   </div>
@@ -54,13 +61,19 @@ const BlogSidebar = ({ latestBlog }) => {
                       <span style={{ color: "black" }}>{formatDate(blog.created_at)}</span>
                     </div>
                     <h3 className="tp-sidebar-blog-title">
-                      <Link style={{ color: "#000000", transition: "color 0.3s ease" }} // Initial color black with smooth transition
-                onMouseEnter={(e) => {
-                  e.target.style.color = "#990100"; // Change color to #990100 on hover
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = "#000000"; // Revert back to initial color
-                }} href={`/blog-details/${blog.id}`}>
+                      <Link
+                        style={{
+                          color: "#000000",
+                          transition: "color 0.3s ease",
+                        }} // Initial color black with smooth transition
+                        onMouseEnter={(e) => {
+                          e.target.style.color = "#990100"; // Change color to #990100 on hover
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.color = "#000000"; // Revert back to initial color
+                        }}
+                        href={`/blog-details/${blog.id}`}
+                      >
                         {blog.title}
                       </Link>
                     </h3>

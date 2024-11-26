@@ -21,6 +21,7 @@ import {
 } from "@/svg";
 import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
+import { useIsMobile } from "@/utils/isMobileUtil";
 
 const HeaderTwo = ({ style_2 = false }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -29,6 +30,7 @@ const HeaderTwo = ({ style_2 = false }) => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+  const isMobile = useIsMobile();
   return (
     <>
       <header>
@@ -100,8 +102,17 @@ const HeaderTwo = ({ style_2 = false }) => {
                   <div className="col-xl-5 col-lg-5 col-md-5 col-sm-4 col-6">
                     <div className="logo">
                       <Link href="/">
-                        <Image style={{objectFit:"contain"}} src={logo} width={90}  height={90} alt="logo" priority />
+                      <Image
+                      src={logo}
+                      alt="logo"
+                      style={{
+                        width: isMobile ? "50px" : "100px", // Apply 50px width on mobile, 100px on desktop
+                        height: isMobile ? "50px" : "100px", // Apply 50px height on mobile, 100px on desktop
+                        objectFit: "cover",
+                      }}
+                    />
                       </Link>
+                      
                     </div>
                   </div>
                   <div className="col-xl-5 d-none d-xl-block">
@@ -131,7 +142,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                         <div className="tp-header-action-item">
                           <button
                             onClick={() => dispatch(openCartMini())}
-                            className="tp-header-action-btn cartmini-open-btn"
+                            className="tp-header-action-btn cartmini-open-btn d-none d-md-block"
                           >
                             <CartTwo />
                             <span style={{backgroundColor:"#990100",borderColor:"white"}} className="tp-header-action-badge">

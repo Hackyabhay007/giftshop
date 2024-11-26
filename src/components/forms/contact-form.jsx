@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { init, sendForm } from "emailjs-com";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import ErrorMsg from "../common/error-msg";
+import { useIsMobile } from "@/utils/isMobileUtil"; // Import the custom hook
 
 // initialize EmailJS with your user ID
 init("b233R9hwalgmVSVG4");
@@ -21,6 +22,8 @@ const schema = Yup.object().shape({
 });
 
 const ContactForm = () => {
+  const isMobile = useIsMobile(); // Check if the device is mobile
+
   const {
     register,
     handleSubmit,
@@ -45,7 +48,7 @@ const ContactForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} id="contact-form">
       <div className="tp-contact-input-wrapper">
-        {/* Your existing input fields */}
+        {/* Input fields */}
         <div className="tp-contact-input-box">
           <div className="tp-contact-input">
             <input
@@ -54,6 +57,7 @@ const ContactForm = () => {
               id="name"
               type="text"
               placeholder="Enter your Name"
+              className={isMobile ? "rounded" : ""} // Add rounded class only for mobile
             />
           </div>
           <div className="tp-contact-input-title">
@@ -61,6 +65,7 @@ const ContactForm = () => {
           </div>
           <ErrorMsg msg={errors.name?.message} />
         </div>
+
         <div className="tp-contact-input-box">
           <div className="tp-contact-input">
             <input
@@ -69,6 +74,7 @@ const ContactForm = () => {
               id="email"
               type="email"
               placeholder="Example@mail.com"
+              className={isMobile ? "rounded" : ""} // Add rounded class only for mobile
             />
           </div>
           <div className="tp-contact-input-title">
@@ -76,6 +82,7 @@ const ContactForm = () => {
           </div>
           <ErrorMsg msg={errors.email?.message} />
         </div>
+
         <div className="tp-contact-input-box">
           <div className="tp-contact-input">
             <input
@@ -84,6 +91,7 @@ const ContactForm = () => {
               id="subject"
               type="text"
               placeholder="Write your subject"
+              className={isMobile ? "rounded" : ""} // Add rounded class only for mobile
             />
           </div>
           <div className="tp-contact-input-title">
@@ -91,6 +99,7 @@ const ContactForm = () => {
           </div>
           <ErrorMsg msg={errors.subject?.message} />
         </div>
+
         <div className="tp-contact-input-box">
           <div className="tp-contact-input">
             <textarea
@@ -98,6 +107,7 @@ const ContactForm = () => {
               id="message"
               name="message"
               placeholder="Write your message here..."
+              className={isMobile ? "rounded" : ""} // Add rounded class only for mobile
             />
           </div>
           <div className="tp-contact-input-title">
@@ -106,22 +116,25 @@ const ContactForm = () => {
           <ErrorMsg msg={errors.message?.message} />
         </div>
       </div>
-      <div className="tp-contact-suggetions mb-20">
-        <div className="tp-contact-remeber">
+
+      <div className="tp-contact-suggestions mb-20">
+        <div className="tp-contact-remember">
           <input
             {...register("remember")}
             name="remember"
             id="remember"
             type="checkbox"
           />
-          <label htmlFor="remember">
+          <label htmlFor="remember" style={{color:isMobile ?"gray":"", fontSize:isMobile ?"12px":"14px", marginLeft:isMobile ?"":"10px"}}>
             Save my name, email, and website in this browser for the next time I
             comment.
           </label>
           <ErrorMsg msg={errors.remember?.message} />
         </div>
       </div>
-      <div className="">
+
+      {/* Submit button */}
+      <div>
         <button
           type="submit"
           style={{
@@ -129,7 +142,7 @@ const ContactForm = () => {
             color: "#FFFFFF",
             border: "none",
             padding: "10px 20px",
-            borderRadius: "5px",
+            borderRadius: isMobile ? "6px" : "5px", // Rounded corners for mobile
             transition: "background-color 0.3s",
           }}
           onMouseEnter={(e) => {

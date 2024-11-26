@@ -21,6 +21,9 @@ const ProductDetailsArea = ({ productItem }) => {
   const [activeImg, setActiveImg] = useState(images[0] || "");
   const dispatch = useDispatch();
 
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth <= 768; // Check for mobile viewport
+
   useEffect(() => {
     if (images.length > 0) {
       setActiveImg(images[0]);
@@ -64,7 +67,13 @@ const ProductDetailsArea = ({ productItem }) => {
       </div>
 
       {/* Related Products Section */}
-      <section className="tp-related-product pt-95 pb-50">
+      <section
+        className="tp-related-product"
+        style={{
+          paddingTop: isMobile ? "0px" : "95px", // Adjust padding for mobile
+          paddingBottom: isMobile ? "70px" : "50px", // Adjust padding for mobile
+        }}
+      >
         <div className="container">
           <div className="row">
             <div className="tp-section-title-wrapper-6 text-center mb-40">
@@ -74,14 +83,21 @@ const ProductDetailsArea = ({ productItem }) => {
               >
                 Next day Products
               </span>
-              <h3 className="tp-section-title-6">Related Products</h3>
+              <h3
+                className="tp-section-title-6"
+                style={{
+                  fontSize: isMobile ? "25px" : "", // Manage font size for mobile
+                }}
+              >
+                Related Products
+              </h3>
             </div>
           </div>
           <div className="row">
             {cat_id ? (
-              <RelatedProducts id={Number(cat_id)} /> // Ensure id is a string
+              <RelatedProducts id={Number(cat_id)} />
             ) : (
-              <p>No related products available.</p> // Fallback message if no related product
+              <p>No related products available.</p>
             )}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useIsMobile } from "@/utils/isMobileUtil"; // Import the custom hook
 import ProfileNavTab from "./profile-nav-tab";
 import ProfileShape from "./profile-shape";
 import NavProfileTab from "./nav-profile-tab";
@@ -7,8 +8,8 @@ import ChangePassword from "./change-password";
 import MyOrders from "./my-orders";
 
 const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
-  // State to track active tab
-  const [activeTab, setActiveTab] = useState("nav-profile");
+  const [activeTab, setActiveTab] = useState("nav-profile"); // State to track active tab
+  const isMobile = useIsMobile(); // Use the custom hook to check if the device is mobile
 
   // Handle tab change
   const handleTabChange = (tabId) => {
@@ -21,12 +22,18 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
 
   return (
     <>
-      <section className="profile__area pt-120 pb-120">
+      <section
+        className="profile__area"
+        style={{
+          paddingTop: isMobile ? "20px" : "120px", // Adjust padding-top for mobile
+          paddingBottom: isMobile ? "20px" : "120px", // Adjust padding-bottom for mobile
+        }}
+      >
         <div className="container">
           <div className="profile__inner p-relative">
             <ProfileShape />
             <div className="row">
-              <div className="col-xxl-4 col-lg-4">
+              <div className={`col-xxl-4 col-lg-4 ${isMobile ? "mb-4" : ""}`}>
                 <div className="profile__tab mr-40">
                   <ProfileNavTab 
                     activeTab={activeTab}
@@ -38,7 +45,9 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                 <div className="profile__tab-content">
                   <div className="tab-content" id="profile-tabContent">
                     <div
-                      className={`tab-pane fade ${activeTab === "nav-profile" ? "show active" : ""}`}
+                      className={`tab-pane fade ${
+                        activeTab === "nav-profile" ? "show active" : ""
+                      }`}
                       id="nav-profile"
                       role="tabpanel"
                       aria-labelledby="nav-profile-tab"
@@ -47,7 +56,9 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                     </div>
 
                     <div
-                      className={`tab-pane fade ${activeTab === "nav-information" ? "show active" : ""}`}
+                      className={`tab-pane fade ${
+                        activeTab === "nav-information" ? "show active" : ""
+                      }`}
                       id="nav-information"
                       role="tabpanel"
                       aria-labelledby="nav-information-tab"
@@ -56,7 +67,9 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                     </div>
 
                     <div
-                      className={`tab-pane fade ${activeTab === "nav-password" ? "show active" : ""}`}
+                      className={`tab-pane fade ${
+                        activeTab === "nav-password" ? "show active" : ""
+                      }`}
                       id="nav-password"
                       role="tabpanel"
                       aria-labelledby="nav-password-tab"
@@ -65,12 +78,14 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                     </div>
 
                     <div
-                      className={`tab-pane fade ${activeTab === "nav-order" ? "show active" : ""}`}
+                      className={`tab-pane fade ${
+                        activeTab === "nav-order" ? "show active" : ""
+                      }`}
                       id="nav-order"
                       role="tabpanel"
                       aria-labelledby="nav-order-tab"
                     >
-                      <MyOrders 
+                      <MyOrders
                         orderData={orderData}
                         currentPage={currentPage}
                         setCurrentPage={setCurrentPage}

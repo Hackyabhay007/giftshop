@@ -87,7 +87,7 @@ const HeaderMainRight = ({ setIsCanvasOpen }) => {
             onMouseEnter={() => setHoveredItem(true)}
             onMouseLeave={() => setHoveredItem(false)}
             style={{ color: hoveredItem ? "#000000" : "#fff" }}
-            className="tp-header-action-btn cartmini-open-btn"
+            className="tp-header-action-btn cartmini-open-btn d-none d-md-block"
           >
             <CartTwo />
             <span
