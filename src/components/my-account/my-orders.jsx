@@ -61,7 +61,7 @@ const MyOrders = ({ orderData, currentPage, setCurrentPage }) => {
   };
   
   return (
-    <div className="profile__ticket" style={{ maxWidth: "800px", margin: "4px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)", backgroundColor: "#f9f9f9" }}>
+    <div className="profile__ticket" style={{ maxWidth: "800px", margin: "4px auto", padding: "2px", border: "1px solid #ccc", borderRadius: "8px",  backgroundColor: "#f9f9f9" }}>
       {!sortedData?.length ? (
         <div
           style={{ height: "210px" }}
@@ -93,7 +93,7 @@ const MyOrders = ({ orderData, currentPage, setCurrentPage }) => {
                 const statusStyle = getStatusStyle(item.status);
                 return (
                   <tr key={item.id}>
-                    <td style={{ padding: "15px", borderBottom: "1px solid #ccc" }}>
+                    <td style={{ padding: "15px", borderBottom: "2px solid #ccc", borderStyle:"dashed" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                         <div>
                           <div style={{ fontWeight: "bold", fontSize: "16px" }}>Order #{item.order_id}</div>
