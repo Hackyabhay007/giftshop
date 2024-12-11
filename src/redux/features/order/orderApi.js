@@ -7,6 +7,7 @@ export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createRazorpayOrder: builder.mutation({
       query: (orderInfo) => {
+        console.log("order Api",orderInfo)
         const { accessToken, ...rest } = orderInfo;
         const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {

@@ -139,8 +139,10 @@ const useCheckoutSubmit = () => {
     try {
       if (data.payment === "online") {
         await handlePaymentWithRazorpay(orderInfo);
+        console.log("handlecoupon", orderInfo)
       } else if (data.payment === "cod") {
         const res = await saveOrder(orderInfo).unwrap();
+        console.log("handlecouponcod", orderInfo)
         if (res?.order_id) {
           localStorage.removeItem("cart_products");
           setOrderIdForModal(res.order_id);
@@ -160,6 +162,7 @@ const useCheckoutSubmit = () => {
 
   const handlePaymentWithRazorpay = async (orderInfo) => {
     try {
+      console.log("order info", orderInfo);
       console.log("Initiating Razorpay order with info:", orderInfo);
       const orderResponse = await createRazorpayOrder(orderInfo).unwrap();
       console.log("Received order response:", orderResponse);

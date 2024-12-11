@@ -75,11 +75,14 @@ function MobileFooter() {
           left: 0;
           right: 0;
           background-color: white;
-          box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.3);
           display: flex;
           justify-content: center;
           padding: 5px 0;
           z-index: 1000;
+          margin:15px 10px;
+          border-radius:50px;
+          border:1px solid #D3D3D3;
         }
 
         .mobile-footer-container {

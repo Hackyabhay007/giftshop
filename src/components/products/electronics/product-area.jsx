@@ -76,7 +76,7 @@ const ProductArea = ({ categories }) => {
   }
 
   return (
-    <section className="tp-product-area mt-40 pb-55">
+    <section className="tp-product-area mt-40 mb-40 pb-55">
       <div className="container">
         {/* Mobile Layout */}
         {isMobile ? (
