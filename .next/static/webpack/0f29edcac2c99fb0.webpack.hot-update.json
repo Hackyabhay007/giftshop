@@ -1,1 +1,0 @@
-{"c":["pages/checkout","webpack"],"r":["pages/cart"],"m":["./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=D%3A%5Csw%5Cgiftshop%5Csrc%5Cpages%5Ccart.jsx&page=%2Fcart!","./src/components/cart-wishlist/cart-area.jsx","./src/components/cart-wishlist/cart-checkout.jsx","./src/components/cart-wishlist/cart-item.jsx","./src/pages/cart.jsx"]}
