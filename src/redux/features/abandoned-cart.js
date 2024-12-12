@@ -1,175 +1,206 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-import { getLocalStorage, setLocalStorage } from '@/utils/localstorage';
-import { add_cart_product, clearCart } from '@/redux/features/cartSlice';
-import CartPopup from '@/components/Cart_pop/CartPopup';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
+import { getLocalStorage, setLocalStorage } from "@/utils/localstorage";
+import { add_cart_product, clearCart } from "@/redux/features/cartSlice";
+import CartPopup from "@/components/Cart_pop/CartPopup";
 
-const BASE_URL = 'https://apiv2.mysweetwishes.com/api';
+const BASE_URL = "https://apiv2.mysweetwishes.com/api";
 
 // Helper function to get the Authorization header
 const getAuthHeader = (accessToken) => {
-    return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+  return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 };
 
 // Save Cart API
-export const saveCart = async (cartItems, totalAmount, accessToken = null) => {
-    try {
-        let cartId = getLocalStorage('cart_id');
-        if (!cartId && !accessToken) {
-            cartId = `guest-${uuidv4()}`;
-            setLocalStorage('cart_id', cartId);
-        }
+export const saveCart = async (cartItems, totalAmount, accessToken) => {
+  try {
+    // Retrieve the cart ID from local storage
+    let cartId = getLocalStorage("cart_id");
 
-        const response = await axios.post(
-            `${BASE_URL}/cart/save`,
-            {
-                cart_id: cartId,
-                cart_items: cartItems,
-                total_amount: totalAmount,
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...getAuthHeader(accessToken),
-                },
-            }
-        );
-
-        if (response.data.status === 'success') {
-            setLocalStorage('cart_id', response.data.data.cart.cart_id || cartId);
-            setLocalStorage('cart_products', cartItems);
-            return response.data;
-        }
-    } catch (error) {
-        console.error('Error saving cart:', error.response?.data || error.message);
-        throw error;
+    // Generate a new guest cart ID if it doesn't exist
+    if (!cartId) {
+      cartId = `guest-${uuidv4()}`;
+      setLocalStorage("cart_id", cartId);
+      console.log("Generated new guest cart ID:", cartId);
+    } else {
+      console.log("Using existing cart ID:", cartId);
     }
+
+    // Debugging: Log the payload data
+    console.log("Cart Items:", cartItems);
+    console.log("Cart ID:", cartId);
+    console.log("Total Amount:", totalAmount);
+    console.log("Access Token:", accessToken);
+
+    // Send the cart save request to the API
+    const response = await axios.post(
+      `${BASE_URL}/cart/save`,
+      {
+        cart_items: cartItems, // List of cart items with product_id, quantity, and price
+        total_amount: totalAmount, // Total price of all items
+        cart_id: cartId, // Current cart ID
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeader(accessToken), // Include Authorization header if access token exists
+        },
+      }
+    );
+
+    // Check for success in the API response
+    if (response.data.status === "success") {
+      const updatedCartId = response.data.data.cart.cart_id || cartId;
+
+      // Update local storage with the new/updated cart ID and cart items
+      setLocalStorage("cart_id", updatedCartId);
+      setLocalStorage("cart_products", cartItems);
+
+      console.log("Cart successfully saved with ID:", updatedCartId);
+      return response.data;
+    } else {
+      console.error("Failed to save cart:", response.data.message);
+      throw new Error(response.data.message);
+    }
+  } catch (error) {
+    // Log the error message and server response if available
+    console.error("Error saving cart:", {
+      message: error.message,
+      response: error.response?.data,
+    });
+    throw error; // Rethrow the error for handling by the caller
+  }
 };
 
 // Get Cart API
-export const getCart = async (accessToken = null) => {
-    try {
-        const cartId = getLocalStorage('cart_id');
-        if (!cartId && !accessToken) {
-            return null;
-        }
-
-        const response = await axios.get(
-            `${BASE_URL}/cart/get`,
-            {
-                headers: {
-                    ...getAuthHeader(accessToken),
-                },
-                params: accessToken ? {} : { cart_id: cartId },
-            }
-        );
-
-        if (response.data.status === 'success') {
-            setLocalStorage('cart_products', response.data.data.cart.cart_items);
-            return response.data.data.cart;
-        }
-    } catch (error) {
-        console.error('Error fetching cart:', error.response?.data || error.message);
-        throw error;
+export const getCart = async (accessToken) => {
+  try {
+    const cartId = getLocalStorage("cart_id");
+    if (!cartId && !accessToken) {
+      return null;
     }
+
+    const response = await axios.get(`${BASE_URL}/cart/get`, {
+      headers: {
+        ...getAuthHeader(accessToken),
+      },
+      params: accessToken ? {} : { cart_id: cartId },
+    });
+
+    if (response.data.status === "success") {
+      setLocalStorage("cart_products", response.data.data.cart.cart_items);
+      return response.data.data.cart;
+    }
+  } catch (error) {
+    console.error(
+      "Error fetching cart:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 // Find Abandoned Cart API
 export const findAbandonedCart = async (cartId) => {
-    try {
-        const response = await axios.get(`${BASE_URL}/cart/find-abandoned`, {
-            params: { id: cartId },
-        });
+  try {
+    const response = await axios.get(`${BASE_URL}/cart/find-abandoned`, {
+      params: { id: cartId },
+    });
 
-        if (response.data.status === 'success') {
-            setLocalStorage('cart_products', response.data.data.cart.cart_items);
-            setLocalStorage('cart_id', response.data.data.cart.cart_id);
-            return response.data.data.cart;
-        }
-    } catch (error) {
-        console.error('Error finding abandoned cart:', error.response?.data || error.message);
-        throw error;
+    if (response.data.status === "success") {
+      setLocalStorage("cart_products", response.data.data.cart.cart_items);
+      setLocalStorage("cart_id", response.data.data.cart.cart_id);
+      return response.data.data.cart;
     }
+  } catch (error) {
+    console.error(
+      "Error finding abandoned cart:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 // Utility function to handle cart persistence on app open
-export const initializeCart = async (accessToken = null) => {
-    try {
-        const cart = await getCart(accessToken);
-        if (cart) {
-            setLocalStorage('cart_products', cart.cart_items);
-            setLocalStorage('cart_id', cart.cart_id || null);
-            return cart; // Return cart data for use in popup logic
-        }
-        return null;
-    } catch (error) {
-        console.error('Error initializing cart:', error);
-        return null;
+export const initializeCart = async (accessToken) => {
+  try {
+    const cart = await getCart(accessToken);
+    if (cart) {
+      setLocalStorage("cart_products", cart.cart_items);
+      setLocalStorage("cart_id", cart.cart_id || null);
+      return cart; // Return cart data for use in popup logic
     }
+    return null;
+  } catch (error) {
+    console.error("Error initializing cart:", error);
+    return null;
+  }
 };
 
 // Handle fetching cart by ID for /cart/:cartId route
 export const fetchCartById = async (cartId, dispatch) => {
-    try {
-        const cart = await findAbandonedCart(cartId);
-        if (cart) {
-            dispatch(clearCart());
-            cart.cart_items.forEach((item) => {
-                dispatch(add_cart_product(item));
-            });
-        }
-    } catch (error) {
-        console.error('Error fetching cart by ID:', error);
+  try {
+    const cart = await findAbandonedCart(cartId);
+
+    if (cart) {
+      dispatch(clearCart());
+      cart.cart_items.forEach((item) => {
+        dispatch(add_cart_product(item));
+      });
     }
+  } catch (error) {
+    console.error("Error fetching cart by ID:", error);
+  }
 };
 
 // Main Component to Trigger CartPopup
-const AbandonedCart = ({ accessToken }) => {
-    const [cart, setCart] = useState(null);
-    const [showCartPopup, setShowCartPopup] = useState(false);
+const AbandonedCart = () => {
+  const { accessToken } = useSelector((state) => state.auth); // Get accessToken from Redux
+  const [cart, setCart] = useState(null);
+  const [showCartPopup, setShowCartPopup] = useState(false);
 
-    useEffect(() => {
-        const fetchCart = async () => {
-            try {
-                const cartData = await initializeCart(accessToken);
-                if (cartData && cartData.cart_items.length > 0) {
-                    setCart(cartData);
-                    setShowCartPopup(true); // Show the popup if there are items in the cart
-                }
-            } catch (error) {
-                console.error('Error initializing cart:', error);
-            }
-        };
-
-        fetchCart();
-    }, [accessToken]);
-
-    const closeCartPopup = () => {
-        setShowCartPopup(false);
-    };
-    const navigateToCart = () => {
-        const cartId = getLocalStorage('cart_id');
-        if (cartId) {
-          history.push(`/cart/${cartId}`); // Navigate to the cart page with cartId
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const cartData = await initializeCart(accessToken);
+        if (cartData && cartData.cart_items.length > 0) {
+          setCart(cartData);
+          setShowCartPopup(true); // Show the popup if there are items in the cart
         }
-      };
-    
-    return (
-        <div>
-            {showCartPopup && (
-                <CartPopup cart={cart} onClose={closeCartPopup} />
-            )}
-        </div>
-    );
+      } catch (error) {
+        console.error("Error initializing cart:", error);
+      }
+    };
+
+    fetchCart();
+  }, [accessToken]);
+
+  const closeCartPopup = () => {
+    setShowCartPopup(false);
+  };
+
+  const navigateToCart = () => {
+    const cartId = getLocalStorage("cart_id");
+    if (cartId) {
+      history.push(`/cart/${cartId}`); // Navigate to the cart page with cartId
+    }
+  };
+
+  return (
+    <div>
+      {showCartPopup && <CartPopup cart={cart} onClose={closeCartPopup} />}
+    </div>
+  );
 };
 
 export default AbandonedCart;
 
 export const cartApi = {
-    saveCart,
-    getCart,
-    findAbandonedCart,
-    initializeCart,
-    fetchCartById,
+  saveCart,
+  getCart,
+  findAbandonedCart,
+  initializeCart,
+  fetchCartById,
 };
