@@ -1,26 +1,48 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { v4 as uuidv4 } from "uuid";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getLocalStorage, setLocalStorage } from "@/utils/localstorage";
-import { add_cart_product, clearCart } from "@/redux/features/cartSlice";
-import CartPopup from "@/components/Cart_pop/CartPopup";
+import { FaCartShopping } from "react-icons/fa6";
+import logo from "../../../public/assets/img/logo/applogo.png";
+import { MdRemoveShoppingCart } from "react-icons/md";
+import Image from "next/image";
+import {
+  openCartMini,
+  clearCart,
+  bulk_add_cart_product,
+  ViewCartClear,
+} from "@/redux/features/cartSlice";
+
+import Cookies from "js-cookie";
 
 const BASE_URL = "https://apiv2.mysweetwishes.com/api";
 
 // Helper function to get the Authorization header
-const getAuthHeader = (accessToken) => {
-  return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
-};
 
+const userInfo = Cookies.get("userInfo")
+  ? JSON.parse(Cookies.get("userInfo"))
+  : null;
+let accessToken = null;
+console.log("userinfo bbb", userInfo);
+if (userInfo !== null) {
+  accessToken = userInfo.accessToken;
+}
+console.log("access", accessToken);
 // Save Cart API
-export const saveCart = async (cartItems, totalAmount, accessToken) => {
+export const saveCart = async (cartItems) => {
+  let parsedCartItems = JSON.parse(cartItems);
+  const totalAmount = parsedCartItems.reduce((total, item) => {
+    return total + item.price * item.orderQuantity;
+  }, 0);
+
   try {
     // Retrieve the cart ID from local storage
     let cartId = getLocalStorage("cart_id");
-
+    console.log("accs", cartId);
     // Generate a new guest cart ID if it doesn't exist
-    if (!cartId) {
+
+    if (!cartId[0]) {
       cartId = `guest-${uuidv4()}`;
       setLocalStorage("cart_id", cartId);
       console.log("Generated new guest cart ID:", cartId);
@@ -28,70 +50,103 @@ export const saveCart = async (cartItems, totalAmount, accessToken) => {
       console.log("Using existing cart ID:", cartId);
     }
 
-    // Debugging: Log the payload data
-    console.log("Cart Items:", cartItems);
-    console.log("Cart ID:", cartId);
-    console.log("Total Amount:", totalAmount);
-    console.log("Access Token:", accessToken);
+    console.log("crtId", cartId);
+    const parsedPayload = parsedCartItems.map((item) => ({
+      product_id: item.product_id,
+      quantity: item.orderQuantity,
+      price: item.price,
+    }));
 
-    // Send the cart save request to the API
-    const response = await axios.post(
-      `${BASE_URL}/cart/save`,
-      {
-        cart_items: cartItems, // List of cart items with product_id, quantity, and price
-        total_amount: totalAmount, // Total price of all items
-        cart_id: cartId, // Current cart ID
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeader(accessToken), // Include Authorization header if access token exists
-        },
-      }
-    );
+    // Prepare the request payload
+    const payload = {
+      cart_id: cartId,
+      cart_items: parsedPayload, // List of cart items with product_id, quantity, and price
+      total_amount: totalAmount || 0, // Total price of all items
+      // Current cart ID
+    };
 
-    // Check for success in the API response
-    if (response.data.status === "success") {
-      const updatedCartId = response.data.data.cart.cart_id || cartId;
+    // Determine the Authorization header dynamically
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // Otherwise, use cart ID
+    };
 
+    const bodyContent = JSON.stringify(payload);
+
+    // Send the POST request using fetch
+    const response = await fetch(`${BASE_URL}/cart/save`, {
+      method: "POST",
+      headers: headers,
+      body: bodyContent, // Convert payload to JSON
+    });
+
+    // Check if the response is OK (status code 200-299)
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
+    // Parse the JSON response
+    const data = await response.json();
+
+    // Check if the API response indicates success
+    if (data.status === "success") {
       // Update local storage with the new/updated cart ID and cart items
-      setLocalStorage("cart_id", updatedCartId);
-      setLocalStorage("cart_products", cartItems);
 
-      console.log("Cart successfully saved with ID:", updatedCartId);
-      return response.data;
+      console.log("Cart successfully saved with ID:", data);
+      return data;
     } else {
-      console.error("Failed to save cart:", response.data.message);
-      throw new Error(response.data.message);
+      console.error("Failed to save cart:", data.message);
+      throw new Error(data.message);
     }
   } catch (error) {
     // Log the error message and server response if available
-    console.error("Error saving cart:", {
-      message: error.message,
-      response: error.response?.data,
-    });
+    console.error("Error saving cart:", error.message);
     throw error; // Rethrow the error for handling by the caller
   }
 };
 
 // Get Cart API
-export const getCart = async (accessToken) => {
+export const getCart = async () => {
   try {
-    const cartId = getLocalStorage("cart_id");
+    let cartId = getLocalStorage("cart_id");
     if (!cartId && !accessToken) {
       return null;
     }
 
-    const response = await axios.get(`${BASE_URL}/cart/get`, {
-      headers: {
-        ...getAuthHeader(accessToken),
-      },
-      params: accessToken ? {} : { cart_id: cartId },
+    console.log("cartId001", cartId);
+    console.log("accessTKN", accessToken);
+
+    if (!cartId) {
+      console.error("cart_id is required but not found in local storage");
+      return null;
+    }
+
+    console.log("cartId:", cartId);
+    console.log("accessToken:", accessToken);
+
+    const headers = accessToken
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      : {};
+
+    if (accessToken) {
+      cartId = accessToken;
+    }
+    console.log("ccaarr", cartId);
+    const response = await fetch(`${BASE_URL}/cart/get?cart_id=${cartId}`, {
+      method: "GET",
+      headers: headers,
     });
 
-    if (response.data.status === "success") {
-      setLocalStorage("cart_products", response.data.data.cart.cart_items);
-      return response.data.data.cart;
+    if (response.ok) {
+      const data = await response.json(); // Parse the JSON response body.
+      console.log("response log", data); // Log the fetched data for debugging.
+      return data; // Return the fetched cart data.
+    } else {
+      console.error("Failed to fetch cart: ", response.statusText);
+      return null; // Return null if the response is not OK.
     }
   } catch (error) {
     console.error(
@@ -103,17 +158,39 @@ export const getCart = async (accessToken) => {
 };
 
 // Find Abandoned Cart API
-export const findAbandonedCart = async (cartId) => {
+export const findAbandonedCart = async (dynamicId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/cart/find-abandoned`, {
-      params: { id: cartId },
-    });
+    // Get the cartId from the URL path parameters
+    // Extract the last part of the URL
 
-    if (response.data.status === "success") {
-      setLocalStorage("cart_products", response.data.data.cart.cart_items);
-      setLocalStorage("cart_id", response.data.data.cart.cart_id);
-      return response.data.data.cart;
+    if (!dynamicId) {
+      console.error("cartId is required but not found in the URL");
+      return null;
     }
+
+    // Log the extracted cartId
+    console.log("cartId from URL:", dynamicId);
+
+    // Assuming accessToken and userInfo are defined elsewhere in your code
+    if (accessToken && userInfo?.user?.id) {
+      // If accessToken is available, you can use the userInfo.user.id as cartId or modify as per your requirement
+      console.log("Using userId as cartId:", userInfo.user.id);
+      // Modify the URL call accordingly if necessary
+    }
+
+    // Make the API call to find the abandoned cart
+    const response = await fetch(
+      `${BASE_URL}/cart/find-abandoned?id=${dynamicId}`
+    );
+
+    if (!response.ok) {
+      // Handle HTTP errors
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json(); // Parse the JSON response
+    console.log("response data val", data.data); // Log the actual data
+    return data;
   } catch (error) {
     console.error(
       "Error finding abandoned cart:",
@@ -123,84 +200,166 @@ export const findAbandonedCart = async (cartId) => {
   }
 };
 
-// Utility function to handle cart persistence on app open
-export const initializeCart = async (accessToken) => {
-  try {
-    const cart = await getCart(accessToken);
-    if (cart) {
-      setLocalStorage("cart_products", cart.cart_items);
-      setLocalStorage("cart_id", cart.cart_id || null);
-      return cart; // Return cart data for use in popup logic
-    }
-    return null;
-  } catch (error) {
-    console.error("Error initializing cart:", error);
-    return null;
-  }
-};
-
-// Handle fetching cart by ID for /cart/:cartId route
-export const fetchCartById = async (cartId, dispatch) => {
-  try {
-    const cart = await findAbandonedCart(cartId);
-
-    if (cart) {
-      dispatch(clearCart());
-      cart.cart_items.forEach((item) => {
-        dispatch(add_cart_product(item));
-      });
-    }
-  } catch (error) {
-    console.error("Error fetching cart by ID:", error);
-  }
-};
-
 // Main Component to Trigger CartPopup
-const AbandonedCart = () => {
-  const { accessToken } = useSelector((state) => state.auth); // Get accessToken from Redux
-  const [cart, setCart] = useState(null);
-  const [showCartPopup, setShowCartPopup] = useState(false);
 
+const PopupCart = () => {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const dispatch = useDispatch();
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const cartData = await initializeCart(accessToken);
-        if (cartData && cartData.cart_items.length > 0) {
-          setCart(cartData);
-          setShowCartPopup(true); // Show the popup if there are items in the cart
-        }
-      } catch (error) {
-        console.error("Error initializing cart:", error);
+    const cartId = localStorage.getItem("cart_id");
+
+    if (cartId) {
+      const lastFetchTime = localStorage.getItem("lastFetchTime");
+      const currentTime = new Date().getTime();
+
+      // 3 hours in milliseconds
+      const threeHours = 3 * 60 * 60 * 1000;
+
+      if (!lastFetchTime || currentTime - lastFetchTime > threeHours) {
+        setPopupOpen(true);
+        localStorage.setItem("lastFetchTime", currentTime);
       }
-    };
+    }
+  }, []);
 
-    fetchCart();
-  }, [accessToken]);
-
-  const closeCartPopup = () => {
-    setShowCartPopup(false);
+  const handleDeny = () => {
+    localStorage.removeItem("cart_id");
+    setPopupOpen(false);
+    dispatch(ViewCartClear());
   };
 
-  const navigateToCart = () => {
-    const cartId = getLocalStorage("cart_id");
-    if (cartId) {
-      history.push(`/cart/${cartId}`); // Navigate to the cart page with cartId
+  const handleViewCart = async () => {
+    try {
+      dispatch(ViewCartClear());
+      let cart = await getCart();
+      console.log("Fetched cart:", cart); // Log the response
+
+      if (cart && cart.data && cart.data.cart && cart.data.cart.items) {
+        cart.data.cart.items.forEach((item) => {
+          console.log("Adding item to cart:", item.product);
+          dispatch(bulk_add_cart_product(item.product));
+        });
+      } else {
+        console.error("Cart data is invalid:", cart);
+      }
+
+      dispatch(openCartMini());
+      setPopupOpen(false);
+    } catch (error) {
+      console.error("Error during cart processing:", error);
     }
   };
 
   return (
-    <div>
-      {showCartPopup && <CartPopup cart={cart} onClose={closeCartPopup} />}
+    <div className="container mt-4">
+      {/* Popup */}
+      {popupOpen && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", zIndex: 1050 }}
+        >
+          <div
+            className="bg-white shadow-lg rounded p-4 text-center m-2  d-flex flex-column g-3"
+            style={{ maxWidth: "28rem", width: "100%", gap: "6px" }}
+          >
+            <div>
+              <Image
+                src={logo}
+                alt="logo"
+                width={60}
+                className="rounded-circle"
+              />
+            </div>
+
+            <h3 className="tp-section-title" style={{ fontSize: "1.5rem" }}>
+              Welcome Back to Sweet Wishes
+            </h3>
+            <p className="mb-4 text-muted" style={{ fontSize: "1rem" }}>
+              You have items in your cart. Would you like to complete your
+              previous transaction?
+            </p>
+            <div className="d-flex justify-content-between">
+              <button
+                onClick={handleViewCart}
+                className="btn"
+                style={{
+                  backgroundColor: "transparent",
+                  display: "flex",
+
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10%",
+                  color: "#990100",
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  border: "2px solid #990100",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  transition:
+                    "background-color 0.3s, color 0.3s, transform 0.3s",
+                  maxWidth: "50%", // Ensure button doesn't overflow on small screens
+                  minWidth: "50%", // Maintain a minimum width on larger screens
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#990100";
+                  e.currentTarget.style.color = "white";
+                  e.currentTarget.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#990100";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                <FaCartShopping /> View Cart
+              </button>
+              <button
+                className="btn"
+                style={{
+                  backgroundColor: "transparent",
+                  display: "flex",
+
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10%",
+                  color: "#000",
+                  padding: "10px 10px",
+                  borderRadius: "5px",
+                  border: "2px solid #000",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  transition:
+                    "background-color 0.3s, color 0.3s, transform 0.3s",
+                  maxWidth: "45%",
+                  minWidth: "45%", // Ensure button doesn't overflow on small screens
+                  // Maintain a minimum width on larger screens
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#000";
+                  e.currentTarget.style.color = "white";
+                  e.currentTarget.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#000";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+                onClick={handleDeny}
+              >
+                <MdRemoveShoppingCart /> Deny
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default AbandonedCart;
+export default PopupCart;
 
 export const cartApi = {
   saveCart,
   getCart,
   findAbandonedCart,
-  initializeCart,
-  fetchCartById,
 };

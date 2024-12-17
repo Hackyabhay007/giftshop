@@ -10,6 +10,7 @@ import {
 } from "@/redux/features/cartSlice";
 
 const CartItem = ({ product }) => {
+  console.log("prde", product);
   const { name, price, orderQuantity = 0, product_id } = product || {};
   const dispatch = useDispatch();
   const [hover, setHover] = useState(false);
@@ -69,8 +70,12 @@ const CartItem = ({ product }) => {
             </Link>
           </h4>
           <div className="tp-cart-price-wrapper d-flex justify-content-between align-items-center mb-2">
-            <span className="tp-cart-price">₹{parseFloat(price).toFixed(2)}</span>
-            <span className="tp-cart-total">₹{parseFloat(price * orderQuantity).toFixed(2)}</span>
+            <span className="tp-cart-price">
+              ₹{parseFloat(price).toFixed(2)}
+            </span>
+            <span className="tp-cart-total">
+              ₹{parseFloat(price * orderQuantity).toFixed(2)}
+            </span>
           </div>
           <div className="d-flex justify-content-between align-items-center">
             <QuantityControl />

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getLocalStorage, setLocalStorage } from "@/utils/localstorage";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { saveCart, getCart } from "./abandoned-cart";
+import { saveCart } from "./abandoned-cart";
 const initialState = {
   cart_products: [],
   orderQuantity: 1,
@@ -14,9 +14,6 @@ export const cartSlice = createSlice({
   reducers: {
     add_cart_product: (state, { payload }) => {
       // Find the product in the cart by 'product_id'
-      console.log("cartSlice",payload);
-      console.log("cartSlice cartitm");
-
       const existingProduct = state.cart_products.find(
         (item) => item.product_id === payload.product_id
       );
@@ -40,7 +37,6 @@ export const cartSlice = createSlice({
           if (
             existingProduct.orderQuantity + state.orderQuantity <=
             payload.stock_quantity
-            
           ) {
             existingProduct.orderQuantity += state.orderQuantity;
             notifySuccess(
@@ -48,7 +44,6 @@ export const cartSlice = createSlice({
             );
           } else {
             notifyError("No more quantity available for this product!");
-            console.log("cartSlice3");
             state.orderQuantity = 1; // Reset orderQuantity to 1 after the error
           }
         } else {
@@ -61,34 +56,11 @@ export const cartSlice = createSlice({
           notifySuccess(`${state.orderQuantity} ${payload.name} added to cart`);
         }
       }
-      const totalAmount = state.cart_products.reduce((total, item) => {
-        return total + (item.price * item.orderQuantity);
-      }, 0);
-    
+
       // Update cart in local storage
       setLocalStorage("cart_products", state.cart_products);
-    
-      // Check if cart_products is not empty
-      if (state.cart_products.length === 0) {
-        console.error("No items in the cart");
-        return;
-      }
-      console.log("cartSlice check2",payload); 
-      // Save cart with updated items and total amount
-      const cartItems = state.cart_products.map((item) => ({
-        product_id: item.product_id,
-        quantity: item.orderQuantity,
-        price: item.price,
-    }));
-console.log("payCart",cartItems);
-console.log("totalAmount",totalAmount);
 
-
-    const accessToken = getLocalStorage("access_token"); // Retrieve access token
-    console.log("accessToken",accessToken);
-    // Save cart with updated items and total amount
-    saveCart(cartItems, totalAmount, accessToken);
-      console.log("cartSlice check3",payload);  
+      saveCart(localStorage.getItem("cart_products"));
       // Reset orderQuantity after adding the product
       state.orderQuantity = 1;
     },
@@ -106,7 +78,6 @@ console.log("totalAmount",totalAmount);
       state.cart_products = state.cart_products.map((item) => {
         if (item.product_id === payload.product_id && item.orderQuantity > 1) {
           item.orderQuantity -= 1;
-          console.log("cartSlice2");
         }
         return item;
       });
@@ -123,8 +94,6 @@ console.log("totalAmount",totalAmount);
 
     get_cart_products: (state) => {
       state.cart_products = getLocalStorage("cart_products") || [];
-      console.log("get_cart_slice", state.cart_products);
-      
     },
 
     initialOrderQuantity: (state) => {
@@ -140,6 +109,58 @@ console.log("totalAmount",totalAmount);
         setLocalStorage("cart_products", state.cart_products);
         notifySuccess("Cart cleared successfully.");
       }
+    },
+
+    ViewCartClear: (state) => {
+      state.cart_products = [];
+      setLocalStorage("cart_products", state.cart_products);
+    },
+    bulk_add_cart_product: (state, { payload }) => {
+      // Find the product in the cart by 'product_id'
+      const existingProduct = state.cart_products.find(
+        (item) => item.product_id === payload.product_id
+      );
+
+      // Check if the available stock is only 1
+      if (payload.stock_quantity === 1) {
+        if (existingProduct) {
+          notifyError("Only one quantity available for this product!");
+        } else {
+          const newItem = {
+            ...payload,
+            orderQuantity: 1, // Only one quantity is allowed
+          };
+          state.cart_products.push(newItem);
+        }
+      } else {
+        // If stock is greater than 1, proceed with existing logic
+        if (existingProduct) {
+          // Check if there is enough stock to add more of the product
+          if (
+            existingProduct.orderQuantity + state.orderQuantity <=
+            payload.stock_quantity
+          ) {
+            existingProduct.orderQuantity += state.orderQuantity;
+          } else {
+            notifyError("No more quantity available for this product!");
+            state.orderQuantity = 1; // Reset orderQuantity to 1 after the error
+          }
+        } else {
+          // Add new product to cart
+          const newItem = {
+            ...payload,
+            orderQuantity: state.orderQuantity,
+          };
+          state.cart_products.push(newItem);
+        }
+      }
+
+      // Update cart in local storage
+      setLocalStorage("cart_products", state.cart_products);
+
+      saveCart(localStorage.getItem("cart_products"));
+      // Reset orderQuantity after adding the product
+      state.orderQuantity = 1;
     },
 
     openCartMini: (state) => {
@@ -163,6 +184,8 @@ export const {
   clearCart,
   closeCartMini,
   openCartMini,
+  ViewCartClear,
+  bulk_add_cart_product,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
