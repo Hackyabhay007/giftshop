@@ -16,6 +16,7 @@ import { useIsMobile } from "@/utils/isMobileUtil";
 import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
 import { CartTwo, Menu, Phone, ShippingCar } from "@/svg";
 import AppInstallButton from "@/components/AppInstallButton";
+import CartPopup from "@/components/Cart_pop/CartPopup";
 
 const Header = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -95,6 +96,7 @@ const Header = () => {
                   <div className="main-menu menu-style-1">
                     <nav className="tp-main-menu-content">
                       <Menus />
+                      <CartPopup />
                     </nav>
                   </div>
                 </div>

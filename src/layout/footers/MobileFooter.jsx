@@ -11,7 +11,7 @@ function MobileFooter() {
   return (
     <>
       <div className="mobile-footer">
-        <div className="mobile-footer-container">
+        <div className="mobile-footer-container p-1 ">
           {/* Home */}
           <Link href="/" className="mobile-footer-item">
             <img
@@ -55,11 +55,7 @@ function MobileFooter() {
               alt="Cart"
               className="icon"
             />
-            {quantity > 0 && (
-              <span className="cart-badge">
-                {quantity}
-              </span>
-            )}
+            {quantity > 0 && <span className="cart-badge">{quantity}</span>}
           </button>
         </div>
       </div>
@@ -75,11 +71,14 @@ function MobileFooter() {
           left: 0;
           right: 0;
           background-color: white;
-          box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.3);
           display: flex;
           justify-content: center;
           padding: 5px 0;
           z-index: 1000;
+          margin: 15px 10px;
+          border-radius: 50px;
+          border: 1px solid #d3d3d3;
         }
 
         .mobile-footer-container {
@@ -100,7 +99,7 @@ function MobileFooter() {
           width: 40px;
           height: 40px;
           transition: transform 0.3s;
-          padding:7px;
+          padding: 7px;
         }
 
         .mobile-footer-item:hover .icon {

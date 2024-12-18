@@ -41,9 +41,8 @@ const useCheckoutSubmit = () => {
     setValue,
     setError,
     watch,
-    reset
+    reset,
   } = useForm();
-
 
   const handleCouponCode = async (event) => {
     event.preventDefault();
@@ -57,11 +56,13 @@ const useCheckoutSubmit = () => {
     setCouponInfo(couponCode);
     try {
       const response = await matchCoupon({ couponCode }).unwrap();
-
+      console.log("resp", response);
       if (response.valid) {
         if (total >= response.min_price) {
           setCouponApplyMsg(
-            `Coupon applied successfully! Discount: ₹${response.discount}`
+            `Coupon applied successfully! Discount: ${parseFloat(
+              parseFloat(response.discount).toFixed(2)
+            )}%`
           );
           setDiscountAmount(parseFloat(response.discount));
         } else {
@@ -100,9 +101,9 @@ const useCheckoutSubmit = () => {
   const submitHandler = async (data) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-  
+
     dispatch(set_shipping(data));
-  
+
     const products = cart_products
       .map((product) => ({
         product_id: product.product_id,
@@ -112,13 +113,13 @@ const useCheckoutSubmit = () => {
       .filter(
         (product) => product.product_id && product.quantity && product.price
       );
-  
+
     if (products.length === 0) {
       notifyError("No valid products in cart.");
       setIsSubmitting(false);
       return;
     }
-  
+
     const orderInfo = {
       products,
       email: data.email,
@@ -135,12 +136,14 @@ const useCheckoutSubmit = () => {
       last_name: data.lastName,
       accessToken,
     };
-  
+
     try {
       if (data.payment === "online") {
         await handlePaymentWithRazorpay(orderInfo);
+        console.log("handlecoupon", orderInfo);
       } else if (data.payment === "cod") {
         const res = await saveOrder(orderInfo).unwrap();
+        console.log("handlecouponcod", orderInfo);
         if (res?.order_id) {
           localStorage.removeItem("cart_products");
           setOrderIdForModal(res.order_id);
@@ -160,6 +163,7 @@ const useCheckoutSubmit = () => {
 
   const handlePaymentWithRazorpay = async (orderInfo) => {
     try {
+      console.log("order info", orderInfo);
       console.log("Initiating Razorpay order with info:", orderInfo);
       const orderResponse = await createRazorpayOrder(orderInfo).unwrap();
       console.log("Received order response:", orderResponse);
@@ -230,7 +234,9 @@ const useCheckoutSubmit = () => {
       }
     } catch (error) {
       console.error("Payment verification error:", error);
-      notifyError("Payment verification request failed. Please contact support.");
+      notifyError(
+        "Payment verification request failed. Please contact support."
+      );
     }
   };
 

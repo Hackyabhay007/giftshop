@@ -46,12 +46,12 @@ const ProductItem = ({ product, style_2 = false }) => {
     <div
       className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}`}
       style={{
-        height: isMobile ? "300px" : "auto", // Fixed height for mobile cards
+        minHeight: isMobile ? "300px" : "auto", // Fixed height for mobile cards
         borderRadius: isMobile ? "12px" : "0", // Rounded corners in mobile view
         boxShadow: isMobile
           ? "0px 4px 10px rgba(0, 0, 0, 0.1)" // Shadow for mobile view
           : "none",
-        overflow: "hidden",
+        overflow: "auto",
       }}
     >
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
@@ -69,7 +69,6 @@ const ProductItem = ({ product, style_2 = false }) => {
               src={images[0]}
               alt={name}
               layout="fill" // Use fill layout
-
               style={{
                 position: "absolute",
                 top: 0,
@@ -151,10 +150,13 @@ const ProductItem = ({ product, style_2 = false }) => {
           /> */}
         </div>
         <div className="tp-product-price-wrapper-2">
-          <span className="tp-product-price-2 new-price"  style={{
+          <span
+            className="tp-product-price-2 new-price fs-5"
+            style={{
               color: isMobile ? "gray" : "black", // Gray color for mobile price
               fontSize: isMobile ? "12px" : "inherit", // Smaller price font size for mobile
-            }}>
+            }}
+          >
             ₹{Number(price).toFixed(2)}
           </span>
         </div>

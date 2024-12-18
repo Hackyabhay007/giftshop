@@ -2,7 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/404": "pages/404.js",
-  "/order/[id]": "pages/order/[id].js",
-  "/profile": "pages/profile.js"
+  "/checkout": "pages/checkout.js",
+  "/": "pages/index.js",
+  "/coupon": "pages/coupon.js",
+  "/cart": "pages/cart.js"
 }

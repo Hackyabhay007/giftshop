@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useGetUserQuery } from '@/redux/features/auth/authApi';
+import { useGetUserQuery } from "@/redux/features/auth/authApi";
 // internal
-import { EmailTwo, UserThree } from '@/svg';
+import { EmailTwo, UserThree } from "@/svg";
 
 const ProfileInfo = () => {
   const dispatch = useDispatch();
@@ -26,11 +26,12 @@ const ProfileInfo = () => {
       style={{
         backgroundColor: "#ffffff", // White background for the card
         borderRadius: "16px", // Rounded corners for the card
-        // boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Subtle shadow
+        // boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         border: "1px solid #e0e0e0", // Light border
         padding: "24px", // Inner padding
-        maxWidth: "600px", // Max width for the card
-        margin: "0 auto", // Center align the card
+        maxWidth: "600px",
+        overflow: "auto", // Max width for the card
+        margin: "0 ", // Center align the card
       }}
     >
       <h3

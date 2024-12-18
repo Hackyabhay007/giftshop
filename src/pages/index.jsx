@@ -12,6 +12,7 @@ import InstagramArea from "@/components/instagram/instagram-area";
 import Footer from "@/layout/footers/footer";
 import { useIsMobile } from "@/utils/isMobileUtil";
 import MobileFooter from "@/layout/footers/MobileFooter";
+import PopupCart from "@/redux/features/abandoned-cart";
 
 export default function Home() {
   const isMobile = useIsMobile();
@@ -19,7 +20,8 @@ export default function Home() {
   const seoConfig = {
     pageTitle: "My Sweet Wishes - Unique Personalized Gifts",
     category: "home",
-    description: "Discover a magical world of unique gifts at My Sweet Wishes. From adorable teddies to personalized cards and surprise boxes, find the perfect gift for every occasion.",
+    description:
+      "Discover a magical world of unique gifts at My Sweet Wishes. From adorable teddies to personalized cards and surprise boxes, find the perfect gift for every occasion.",
     keywords: [
       "gift shop",
       "unique gifts",
@@ -38,7 +40,8 @@ export default function Home() {
       "@type": "WebSite",
       name: "My Sweet Wishes",
       url: "https://mysweetwishes.com",
-      description: "Your one-stop destination for unique and personalized gifts",
+      description:
+        "Your one-stop destination for unique and personalized gifts",
       potentialAction: {
         "@type": "SearchAction",
         target: "https://mysweetwishes.com/search?q={search_term_string}",
@@ -59,10 +62,11 @@ export default function Home() {
         structuredData={seoConfig.structuredData}
       />
       <Header />
+      <PopupCart />
       {/* Pass isMobile prop to CategorySection */}
       <CategorySection isMobile={isMobile} />
-      <HomeHeroSlider isMobile={isMobile}  />
-      
+      <HomeHeroSlider isMobile={isMobile} />
+
       {/* <ProductArea categories="Trending" isMobile={isMobile} />
       <ProductArea categories="Featured" isMobile={isMobile} /> */}
       {!isMobile ? (
@@ -72,17 +76,14 @@ export default function Home() {
           <ProductBanner />
           <BlogArea />
           <InstagramArea />
-          
         </>
       ) : (
         <>
-        <ProductArea categories="Trending" isMobile={isMobile} /> 
-       
+          <ProductArea categories="Trending" isMobile={isMobile} />
         </>
       )}
-      
-      <Footer/> 
-      
+
+      <Footer />
     </Wrapper>
   );
 }

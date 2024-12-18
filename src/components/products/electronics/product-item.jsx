@@ -84,7 +84,7 @@ const ProductItem = ({ product, offer_style = false }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
+ 
   return (
     <div
       className={`
@@ -194,8 +194,8 @@ const ProductItem = ({ product, offer_style = false }) => {
                 fontSize: "14px",
                 textTransform: "uppercase",
                 transition: "color 0.3s",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
+                whiteSpace: isMobile ? "normal" : "nowrap",
+                textOverflow: isMobile ? "unset" : "ellipsis",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#990100")}
               onMouseLeave={(e) => (e.target.style.color = "")}

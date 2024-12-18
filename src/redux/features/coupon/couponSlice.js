@@ -10,23 +10,25 @@ export const couponSlice = createSlice({
   reducers: {
     set_coupon: (state, { payload }) => {
       state.coupon_info = payload;
-      
-      localStorage.setItem(
-        "couponInfo",
-        JSON.stringify(payload)
-      );
+      localStorage.setItem("couponInfo", JSON.stringify(payload));
     },
-    get_coupons: (state, { payload }) => {
-      const data = localStorage.getItem('couponInfo');
-      if (data) {
-        state.coupon_info = JSON.parse(data);
-      } else {
-        state.coupon_info = undefined;
-      }
-      
+    get_coupons: (state) => {
+      const data = localStorage.getItem("couponInfo");
+      state.coupon_info = data ? JSON.parse(data) : undefined;
+    },
+    clear_coupon: (state) => {
+      state.coupon_info = undefined;
+      localStorage.removeItem("couponInfo");
     },
   },
 });
 
-export const { set_coupon,get_coupons } = couponSlice.actions;
+export const { set_coupon, get_coupons, clear_coupon } = couponSlice.actions;
+export const loadCouponFromStorage = () => (dispatch) => {
+  const data = localStorage.getItem("couponInfo");
+  if (data) {
+    dispatch(set_coupon(JSON.parse(data)));
+  }
+};
+
 export default couponSlice.reducer;

@@ -69,25 +69,36 @@ import useCheckoutSubmit from "@/hooks/use-checkout-submit";
   };
 
   const onSubmit = async (data) => {
-    if (selectedAddress) {
-      data = { ...data, ...selectedAddress };
-    }
     try {
-      await submitHandler(data);
+      if (selectedAddress) {
+        data = { ...data, ...selectedAddress };
+      }
+  
+      const couponInfo = JSON.parse(localStorage.getItem("couponInfo")); // Fetch coupon info from localStorage
+      const discountedTotal = cartTotal - discountAmount;
+  
+      const orderData = {
+        ...data,
+        totalAmount: discountedTotal,
+        couponInfo,
+      };
+  
+      await submitHandler(orderData);
     } catch (error) {
       if (error.response && error.response.status === 422) {
         const { errors } = error.response.data;
         Object.entries(errors).forEach(([field, messages]) => {
           setError(field, {
             type: "manual",
-            message: messages[0]
+            message: messages[0],
           });
         });
       } else {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
       }
     }
   };
+  
 
   return (
     <>

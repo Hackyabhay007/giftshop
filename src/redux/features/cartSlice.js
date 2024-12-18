@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getLocalStorage, setLocalStorage } from "@/utils/localstorage";
 import { notifyError, notifySuccess } from "@/utils/toast";
-
+import { saveCart } from "./abandoned-cart";
 const initialState = {
   cart_products: [],
   orderQuantity: 1,
@@ -60,6 +60,7 @@ export const cartSlice = createSlice({
       // Update cart in local storage
       setLocalStorage("cart_products", state.cart_products);
 
+      saveCart(localStorage.getItem("cart_products"));
       // Reset orderQuantity after adding the product
       state.orderQuantity = 1;
     },
@@ -110,6 +111,58 @@ export const cartSlice = createSlice({
       }
     },
 
+    ViewCartClear: (state) => {
+      state.cart_products = [];
+      setLocalStorage("cart_products", state.cart_products);
+    },
+    bulk_add_cart_product: (state, { payload }) => {
+      // Find the product in the cart by 'product_id'
+      const existingProduct = state.cart_products.find(
+        (item) => item.product_id === payload.product_id
+      );
+
+      // Check if the available stock is only 1
+      if (payload.stock_quantity === 1) {
+        if (existingProduct) {
+          notifyError("Only one quantity available for this product!");
+        } else {
+          const newItem = {
+            ...payload,
+            orderQuantity: 1, // Only one quantity is allowed
+          };
+          state.cart_products.push(newItem);
+        }
+      } else {
+        // If stock is greater than 1, proceed with existing logic
+        if (existingProduct) {
+          // Check if there is enough stock to add more of the product
+          if (
+            existingProduct.orderQuantity + state.orderQuantity <=
+            payload.stock_quantity
+          ) {
+            existingProduct.orderQuantity += state.orderQuantity;
+          } else {
+            notifyError("No more quantity available for this product!");
+            state.orderQuantity = 1; // Reset orderQuantity to 1 after the error
+          }
+        } else {
+          // Add new product to cart
+          const newItem = {
+            ...payload,
+            orderQuantity: state.orderQuantity,
+          };
+          state.cart_products.push(newItem);
+        }
+      }
+
+      // Update cart in local storage
+      setLocalStorage("cart_products", state.cart_products);
+
+      saveCart(localStorage.getItem("cart_products"));
+      // Reset orderQuantity after adding the product
+      state.orderQuantity = 1;
+    },
+
     openCartMini: (state) => {
       state.cartMiniOpen = true;
     },
@@ -131,6 +184,8 @@ export const {
   clearCart,
   closeCartMini,
   openCartMini,
+  ViewCartClear,
+  bulk_add_cart_product,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
