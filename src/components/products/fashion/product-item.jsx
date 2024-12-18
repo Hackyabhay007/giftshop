@@ -151,7 +151,7 @@ const ProductItem = ({ product, style_2 = false }) => {
         </div>
         <div className="tp-product-price-wrapper-2">
           <span
-            className="tp-product-price-2 new-price"
+            className="tp-product-price-2 new-price fs-5"
             style={{
               color: isMobile ? "gray" : "black", // Gray color for mobile price
               fontSize: isMobile ? "12px" : "inherit", // Smaller price font size for mobile

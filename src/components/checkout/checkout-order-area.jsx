@@ -45,13 +45,20 @@ const CheckoutOrderArea = ({ register, errors, cartTotal, discountAmount }) => {
           <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
             <span style={{ color: "#990100" }}>
-              ₹{Number(discountAmount).toFixed(2)}
+              ₹
+              {(Number(cartTotal + discountAmount).toFixed(2) *
+                Number(discountAmount).toFixed(2)) /
+                100}
             </span>
           </li>
           <li className="tp-order-info-list-total">
             <span>Total</span>
             <span style={{ color: "#990100" }}>
-              ₹{Number(cartTotal).toFixed(2)}
+              ₹
+              {Number(cartTotal).toFixed(2) -
+                (Number(cartTotal + discountAmount).toFixed(2) *
+                  Number(discountAmount).toFixed(2)) /
+                  100}
             </span>
           </li>
         </ul>
@@ -60,7 +67,9 @@ const CheckoutOrderArea = ({ register, errors, cartTotal, discountAmount }) => {
       <div className="tp-checkout-payment">
         <div className="tp-checkout-payment-item">
           <input
-            {...register("payment", { required: "Payment Option is required!" })}
+            {...register("payment", {
+              required: "Payment Option is required!",
+            })}
             type="radio"
             id="cod"
             value="cod"
@@ -69,13 +78,15 @@ const CheckoutOrderArea = ({ register, errors, cartTotal, discountAmount }) => {
         </div>
         <div className="tp-checkout-payment-item">
           <input
-            {...register("payment", { required: "Payment Option is required!" })}
+            {...register("payment", {
+              required: "Payment Option is required!",
+            })}
             type="radio"
             id="online"
             value="online"
           />
           <label htmlFor="online">Pay Online (Razorpay)</label>
-          </div>
+        </div>
         <ErrorMsg msg={errors?.payment?.message} />
       </div>
 
