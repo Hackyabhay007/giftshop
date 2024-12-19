@@ -2,7 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/order/[id]": "pages/order/[id].js",
-  "/coupon": "pages/coupon.js",
-  "/": "pages/index.js"
+  "/": "pages/index.js",
+  "/checkout": "pages/checkout.js",
+  "/shop": "pages/shop.js"
 }
