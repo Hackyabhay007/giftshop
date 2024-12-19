@@ -98,6 +98,50 @@ const useCheckoutSubmit = () => {
     }
   }, [shipping_info, setValue]);
 
+  const handlePaymentWithRazorpay = async (orderInfo) => {
+    try {
+      console.log("order info", orderInfo);
+      console.log("Initiating Razorpay order with info:", orderInfo);
+      const orderResponse = await createRazorpayOrder(orderInfo).unwrap();
+      console.log("Received order response:", orderResponse);
+
+      if (!orderResponse || orderResponse.status !== "success") {
+        console.error("Invalid order response:", orderResponse);
+        throw new Error("Failed to initiate payment: Invalid server response");
+      }
+
+      const options = {
+        key: "rzp_live_2sTBLvpxef5qxP",
+        amount: orderResponse.amount,
+        currency: "INR",
+        name: "MySweetWishes",
+        description: "Order Payment",
+        order_id: orderResponse.razorpay_order_id,
+        handler: async (response) => {
+          await verifyAndSaveOrder(response, orderInfo);
+        },
+        prefill: {
+          name: `${orderInfo.first_name} ${orderInfo.last_name}`,
+          email: orderInfo.email,
+          contact: orderInfo.phone_number,
+        },
+        notes: {
+          address: orderInfo.address,
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Error in handlePaymentWithRazorpay:", error);
+      notifyError(`Failed to initiate payment: ${error.message}`);
+      throw error;
+    }
+  };
+
   const submitHandler = async (data) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -158,50 +202,6 @@ const useCheckoutSubmit = () => {
       notifyError("There was an error placing your order. Please try again.");
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handlePaymentWithRazorpay = async (orderInfo) => {
-    try {
-      console.log("order info", orderInfo);
-      console.log("Initiating Razorpay order with info:", orderInfo);
-      const orderResponse = await createRazorpayOrder(orderInfo).unwrap();
-      console.log("Received order response:", orderResponse);
-
-      if (!orderResponse || orderResponse.status !== "success") {
-        console.error("Invalid order response:", orderResponse);
-        throw new Error("Failed to initiate payment: Invalid server response");
-      }
-
-      const options = {
-        key: "rzp_live_2sTBLvpxef5qxP",
-        amount: orderResponse.amount,
-        currency: "INR",
-        name: "MySweetWishes",
-        description: "Order Payment",
-        order_id: orderResponse.razorpay_order_id,
-        handler: async (response) => {
-          await verifyAndSaveOrder(response, orderInfo);
-        },
-        prefill: {
-          name: `${orderInfo.first_name} ${orderInfo.last_name}`,
-          email: orderInfo.email,
-          contact: orderInfo.phone_number,
-        },
-        notes: {
-          address: orderInfo.address,
-        },
-        theme: {
-          color: "#F37254",
-        },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error("Error in handlePaymentWithRazorpay:", error);
-      notifyError(`Failed to initiate payment: ${error.message}`);
-      throw error;
     }
   };
 

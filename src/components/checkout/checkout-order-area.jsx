@@ -16,6 +16,10 @@ const CheckoutOrderArea = ({ register, errors, cartTotal, discountAmount }) => {
     transition: "background-color 0.3s ease",
   };
 
+  const appliedDiscount =
+    (Number(cartTotal + discountAmount).toFixed(2) *
+      Number(discountAmount).toFixed(2)) /
+    100;
   return (
     <div className="tp-checkout-place white-bg">
       <h3 className="tp-checkout-place-title">Your Order</h3>
@@ -44,21 +48,12 @@ const CheckoutOrderArea = ({ register, errors, cartTotal, discountAmount }) => {
           </li>
           <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
-            <span style={{ color: "#990100" }}>
-              ₹
-              {(Number(cartTotal + discountAmount).toFixed(2) *
-                Number(discountAmount).toFixed(2)) /
-                100}
-            </span>
+            <span style={{ color: "#990100" }}>₹{appliedDiscount}</span>
           </li>
           <li className="tp-order-info-list-total">
             <span>Total</span>
             <span style={{ color: "#990100" }}>
-              ₹
-              {Number(cartTotal).toFixed(2) -
-                (Number(cartTotal + discountAmount).toFixed(2) *
-                  Number(discountAmount).toFixed(2)) /
-                  100}
+              ₹{Number(cartTotal + discountAmount).toFixed(2) - appliedDiscount}
             </span>
           </li>
         </ul>
