@@ -1,65 +1,69 @@
 import React, { useState, useEffect } from "react";
 import ErrorMsg from "../common/error-msg";
-import CustomDropdown from './custom-drop-down';
+import CustomDropdown from "./custom-drop-down";
 
 const stateCityData = {
   // States
   "Andhra Pradesh": () => import("./states/Andhra Pradesh.json"),
   "Arunachal Pradesh": () => import("./states/Arunachal Pradesh.json"),
-  "Assam": () => import("./states/Assam.json"),
-  "Bihar": () => import("./states/Bihar.json"),
-  "Chhattisgarh": () => import("./states/Chhattisgarh.json"),
-  "Goa": () => import("./states/Goa.json"),
-  "Gujarat": () => import("./states/Gujarat.json"),
-  "Haryana": () => import("./states/Haryana.json"),
+  Assam: () => import("./states/Assam.json"),
+  Bihar: () => import("./states/Bihar.json"),
+  Chhattisgarh: () => import("./states/Chhattisgarh.json"),
+  Goa: () => import("./states/Goa.json"),
+  Gujarat: () => import("./states/Gujarat.json"),
+  Haryana: () => import("./states/Haryana.json"),
   "Himachal Pradesh": () => import("./states/Himachal Pradesh.json"),
   "Jammu & Kashmir": () => import("./states/Jammu & Kashmir.json"),
-  "Jharkhand": () => import("./states/Jharkhand.json"),
-  "Karnataka": () => import("./states/Karnataka.json"),
-  "Kerala": () => import("./states/Kerala.json"),
+  Jharkhand: () => import("./states/Jharkhand.json"),
+  Karnataka: () => import("./states/Karnataka.json"),
+  Kerala: () => import("./states/Kerala.json"),
   "Madhya Pradesh": () => import("./states/MadhyaPradesh.json"),
-  "Maharashtra": () => import("./states/Maharashtra.json"),
-  "Manipur": () => import("./states/Manipur.json"),
-  "Meghalaya": () => import("./states/Meghalaya.json"),
-  "Mizoram": () => import("./states/Mizoram.json"),
-  "Nagaland": () => import("./states/Nagaland.json"),
-  "Odisha": () => import("./states/Odisha.json"),
-  "Punjab": () => import("./states/Punjab.json"),
-  "Rajasthan": () => import("./states/Rajasthan.json"),
-  "Sikkim": () => import("./states/Sikkim.json"),
+  Maharashtra: () => import("./states/Maharashtra.json"),
+  Manipur: () => import("./states/Manipur.json"),
+  Meghalaya: () => import("./states/Meghalaya.json"),
+  Mizoram: () => import("./states/Mizoram.json"),
+  Nagaland: () => import("./states/Nagaland.json"),
+  Odisha: () => import("./states/Odisha.json"),
+  Punjab: () => import("./states/Punjab.json"),
+  Rajasthan: () => import("./states/Rajasthan.json"),
+  Sikkim: () => import("./states/Sikkim.json"),
   "Tamil Nadu": () => import("./states/Tamil Nadu.json"),
-  "Telangana": () => import("./states/Telangana.json"),
-  "Tripura": () => import("./states/Tripura.json"),
+  Telangana: () => import("./states/Telangana.json"),
+  Tripura: () => import("./states/Tripura.json"),
   "Uttar Pradesh": () => import("./states/Uttar Pradesh.json"),
-  "Uttarakhand": () => import("./states/Uttarakhand.json"),
+  Uttarakhand: () => import("./states/Uttarakhand.json"),
   "West Bengal": () => import("./states/West Bengal.json"),
 
   // Union Territories
-  "Andaman & Nicobar Islands": () => import("./states/Andaman & Nicobar Islands.json"),
-  "Chandigarh": () => import("./states/Chandigarh.json"),
+  "Andaman & Nicobar Islands": () =>
+    import("./states/Andaman & Nicobar Islands.json"),
+  Chandigarh: () => import("./states/Chandigarh.json"),
   "Dadra & Nagar Haveli": () => import("./states/Dadra & Nagar Haveli.json"),
   "Daman & Diu": () => import("./states/Daman & Diu.json"),
-  "Delhi": () => import("./states/Delhi.json"),
-  "Lakshadweep": () => import("./states/Lakshadweep.json"),
-  "Puducherry": () => import("./states/Puducherry.json")
+  Delhi: () => import("./states/Delhi.json"),
+  Lakshadweep: () => import("./states/Lakshadweep.json"),
+  Puducherry: () => import("./states/Puducherry.json"),
 };
 
-
-const CheckoutBillingArea = ({ 
-  register, 
-  errors, 
-  setError, 
-  watch, 
-  user, 
-  selectedAddress, 
+const CheckoutBillingArea = ({
+  register,
+  errors,
+  setError,
+  watch,
+  user,
+  selectedAddress,
   setSelectedAddress,
   setValue, // Add this prop from react-hook-form
-  reset    // Add this prop from react-hook-form
+  reset, // Add this prop from react-hook-form
 }) => {
   const [addresses, setAddresses] = useState([]);
-  const [selectedState, setSelectedState] = useState(selectedAddress?.state || "");
+  const [selectedState, setSelectedState] = useState(
+    selectedAddress?.state || ""
+  );
   const [districts, setDistricts] = useState([]);
-  const [selectedDistrict, setSelectedDistrict] = useState(selectedAddress?.city || "");
+  const [selectedDistrict, setSelectedDistrict] = useState(
+    selectedAddress?.city || ""
+  );
   const [subDistricts, setSubDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
 
@@ -67,16 +71,16 @@ const CheckoutBillingArea = ({
   useEffect(() => {
     if (user || selectedAddress) {
       const initialData = {
-        firstName: selectedAddress?.firstName || user?.firstName || '',
-        lastName: selectedAddress?.lastName || user?.lastName || '',
-        address: selectedAddress?.address || '',
-        state: selectedAddress?.state || '',
-        city: selectedAddress?.city || '',
-        subDistrict: selectedAddress?.subDistrict || '',
-        village: selectedAddress?.village || '',
-        zipCode: selectedAddress?.zipCode || '',
-        contactNo: selectedAddress?.contactNo || '',
-        email: selectedAddress?.email || user?.email || ''
+        firstName: selectedAddress?.firstName || user?.firstName || "",
+        lastName: selectedAddress?.lastName || user?.lastName || "",
+        address: selectedAddress?.address || "",
+        state: selectedAddress?.state || "",
+        city: selectedAddress?.city || "",
+        subDistrict: selectedAddress?.subDistrict || "",
+        village: selectedAddress?.village || "",
+        zipCode: selectedAddress?.zipCode || "",
+        contactNo: selectedAddress?.contactNo || "",
+        email: selectedAddress?.email || user?.email || "",
       };
 
       Object.entries(initialData).forEach(([field, value]) => {
@@ -94,11 +98,11 @@ const CheckoutBillingArea = ({
 
   const handleStateChange = async (state) => {
     setSelectedState(state);
-    setValue('state', state);
-    setValue('city', '');
-    setValue('subDistrict', '');
-    setValue('village', '');
-    
+    setValue("state", state);
+    setValue("city", "");
+    setValue("subDistrict", "");
+    setValue("village", "");
+
     if (stateCityData[state]) {
       try {
         const data = await stateCityData[state]();
@@ -118,36 +122,42 @@ const CheckoutBillingArea = ({
 
   const handleDistrictChange = (district) => {
     setSelectedDistrict(district);
-    setValue('city', district);
-    setValue('subDistrict', '');
-    setValue('village', '');
-    
-    const selectedDistrictData = districts.find(d => d.district === district);
-    setSubDistricts(selectedDistrictData ? selectedDistrictData.subDistricts : []);
+    setValue("city", district);
+    setValue("subDistrict", "");
+    setValue("village", "");
+
+    const selectedDistrictData = districts.find((d) => d.district === district);
+    setSubDistricts(
+      selectedDistrictData ? selectedDistrictData.subDistricts : []
+    );
     setVillages([]);
   };
 
   const handleSubDistrictChange = (subDistrict) => {
-    setValue('subDistrict', subDistrict);
-    setValue('village', '');
-    
-    const selectedSubDistrictData = subDistricts.find(sd => sd.subDistrict === subDistrict);
-    setVillages(selectedSubDistrictData ? selectedSubDistrictData.villages : []);
+    setValue("subDistrict", subDistrict);
+    setValue("village", "");
+
+    const selectedSubDistrictData = subDistricts.find(
+      (sd) => sd.subDistrict === subDistrict
+    );
+    setVillages(
+      selectedSubDistrictData ? selectedSubDistrictData.villages : []
+    );
   };
 
   const handleClearForm = () => {
     // Reset all form fields
     reset({
-      firstName: '',
-      lastName: '',
-      address: '',
-      state: '',
-      city: '',
-      subDistrict: '',
-      village: '',
-      zipCode: '',
-      contactNo: '',
-      email: ''
+      firstName: "",
+      lastName: "",
+      address: "",
+      state: "",
+      city: "",
+      subDistrict: "",
+      village: "",
+      zipCode: "",
+      contactNo: "",
+      email: "",
     });
 
     // Reset all state variables
@@ -163,7 +173,7 @@ const CheckoutBillingArea = ({
     <div className="tp-checkout-bill-area">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 className="tp-checkout-bill-title">Billing Details</h3>
-        <button 
+        <button
           type="button"
           onClick={handleClearForm}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
@@ -178,14 +188,16 @@ const CheckoutBillingArea = ({
             {/* First Name */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>First Name <span className="text-red-500">*</span></label>
+                <label>
+                  First Name <span className="text-red-500">*</span>
+                </label>
                 <input
-                  {...register("firstName", { 
+                  {...register("firstName", {
                     required: "First Name is required!",
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
-                      message: "Please enter a valid name"
-                    }
+                      message: "Please enter a valid name",
+                    },
                   })}
                   type="text"
                   placeholder="First Name"
@@ -199,14 +211,16 @@ const CheckoutBillingArea = ({
             {/* Last Name */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>Last Name <span className="text-red-500">*</span></label>
+                <label>
+                  Last Name <span className="text-red-500">*</span>
+                </label>
                 <input
-                  {...register("lastName", { 
+                  {...register("lastName", {
                     required: "Last Name is required!",
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
-                      message: "Please enter a valid name"
-                    }
+                      message: "Please enter a valid name",
+                    },
                   })}
                   type="text"
                   placeholder="Last Name"
@@ -220,14 +234,16 @@ const CheckoutBillingArea = ({
             {/* Street Address */}
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>Street address <span className="text-red-500">*</span></label>
+                <label>
+                  Street address <span className="text-red-500">*</span>
+                </label>
                 <input
-                  {...register("address", { 
+                  {...register("address", {
                     required: "Address is required!",
                     minLength: {
                       value: 10,
-                      message: "Address must be at least 10 characters"
-                    }
+                      message: "Address must be at least 10 characters",
+                    },
                   })}
                   type="text"
                   placeholder="House number and street name"
@@ -255,7 +271,7 @@ const CheckoutBillingArea = ({
             {/* City Dropdown */}
             <div className="col-md-6">
               <CustomDropdown
-                options={districts.map(d => d.district)}
+                options={districts.map((d) => d.district)}
                 label="City"
                 required={true}
                 onChange={(value) => handleDistrictChange(value)}
@@ -271,7 +287,7 @@ const CheckoutBillingArea = ({
             {selectedDistrict && (
               <div className="col-md-6">
                 <CustomDropdown
-                  options={subDistricts.map(sd => sd.subDistrict)}
+                  options={subDistricts.map((sd) => sd.subDistrict)}
                   label="Sub-District"
                   onChange={(value) => handleSubDistrictChange(value)}
                   register={register}
@@ -288,7 +304,7 @@ const CheckoutBillingArea = ({
                 <CustomDropdown
                   options={villages}
                   label="Village (Optional)"
-                  onChange={(value) => setValue('village', value)}
+                  onChange={(value) => setValue("village", value)}
                   register={register}
                   name="village"
                   value={selectedAddress?.village}
@@ -300,14 +316,16 @@ const CheckoutBillingArea = ({
             {/* Zip Code */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>Postcode ZIP <span className="text-red-500">*</span></label>
+                <label>
+                  Postcode ZIP <span className="text-red-500">*</span>
+                </label>
                 <input
-                  {...register("zipCode", { 
+                  {...register("zipCode", {
                     required: "Zip Code is required!",
                     pattern: {
                       value: /^\d{6}$/,
-                      message: "Please enter a valid 6-digit zip code"
-                    }
+                      message: "Please enter a valid 6-digit zip code",
+                    },
                   })}
                   type="text"
                   placeholder="Postcode ZIP"
@@ -321,14 +339,16 @@ const CheckoutBillingArea = ({
             {/* Phone */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>Phone <span className="text-red-500">*</span></label>
+                <label>
+                  Phone <span className="text-red-500">*</span>
+                </label>
                 <input
-                  {...register("contactNo", { 
+                  {...register("contactNo", {
                     required: "Contact Number is required!",
                     pattern: {
                       value: /^[0-9]{10}$/,
-                      message: "Please enter a valid 10-digit phone number"
-                    }
+                      message: "Please enter a valid 10-digit phone number",
+                    },
                   })}
                   type="tel"
                   placeholder="Phone"
@@ -342,14 +362,16 @@ const CheckoutBillingArea = ({
             {/* Email */}
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>Email address <span className="text-red-500">*</span></label>
+                <label>
+                  Email address <span className="text-red-500">*</span>
+                </label>
                 <input
-                  {...register("email", { 
+                  {...register("email", {
                     required: "Email is required!",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Please enter a valid email address"
-                    }
+                      message: "Please enter a valid email address",
+                    },
                   })}
                   type="email"
                   placeholder="Email"
@@ -367,8 +389,6 @@ const CheckoutBillingArea = ({
       </div>
     </div>
   );
-  
 };
 
 export default CheckoutBillingArea;
-

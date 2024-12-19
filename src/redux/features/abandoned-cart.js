@@ -24,11 +24,11 @@ const userInfo = Cookies.get("userInfo")
   ? JSON.parse(Cookies.get("userInfo"))
   : null;
 let accessToken = null;
-console.log("userinfo bbb", userInfo);
+
 if (userInfo !== null) {
   accessToken = userInfo.accessToken;
 }
-console.log("access", accessToken);
+
 // Save Cart API
 export const saveCart = async (cartItems) => {
   let parsedCartItems = JSON.parse(cartItems);
@@ -39,18 +39,16 @@ export const saveCart = async (cartItems) => {
   try {
     // Retrieve the cart ID from local storage
     let cartId = getLocalStorage("cart_id");
-    console.log("accs", cartId);
+
     // Generate a new guest cart ID if it doesn't exist
 
     if (!cartId[0]) {
       cartId = `guest-${uuidv4()}`;
       setLocalStorage("cart_id", cartId);
-      console.log("Generated new guest cart ID:", cartId);
     } else {
       console.log("Using existing cart ID:", cartId);
     }
 
-    console.log("crtId", cartId);
     const parsedPayload = parsedCartItems.map((item) => ({
       product_id: item.product_id,
       quantity: item.orderQuantity,
@@ -114,16 +112,10 @@ export const getCart = async () => {
       return null;
     }
 
-    console.log("cartId001", cartId);
-    console.log("accessTKN", accessToken);
-
     if (!cartId) {
       console.error("cart_id is required but not found in local storage");
       return null;
     }
-
-    console.log("cartId:", cartId);
-    console.log("accessToken:", accessToken);
 
     const headers = accessToken
       ? {
@@ -134,7 +126,7 @@ export const getCart = async () => {
     if (accessToken) {
       cartId = accessToken;
     }
-    console.log("ccaarr", cartId);
+
     const response = await fetch(`${BASE_URL}/cart/get?cart_id=${cartId}`, {
       method: "GET",
       headers: headers,
@@ -142,7 +134,7 @@ export const getCart = async () => {
 
     if (response.ok) {
       const data = await response.json(); // Parse the JSON response body.
-      console.log("response log", data); // Log the fetched data for debugging.
+
       return data; // Return the fetched cart data.
     } else {
       console.error("Failed to fetch cart: ", response.statusText);
@@ -169,7 +161,6 @@ export const findAbandonedCart = async (dynamicId) => {
     }
 
     // Log the extracted cartId
-    console.log("cartId from URL:", dynamicId);
 
     // Assuming accessToken and userInfo are defined elsewhere in your code
     if (accessToken && userInfo?.user?.id) {
@@ -189,7 +180,7 @@ export const findAbandonedCart = async (dynamicId) => {
     }
 
     const data = await response.json(); // Parse the JSON response
-    console.log("response data val", data.data); // Log the actual data
+
     return data;
   } catch (error) {
     console.error(
@@ -232,11 +223,9 @@ const PopupCart = () => {
     try {
       dispatch(ViewCartClear());
       let cart = await getCart();
-      console.log("Fetched cart:", cart); // Log the response
 
       if (cart && cart.data && cart.data.cart && cart.data.cart.items) {
         cart.data.cart.items.forEach((item) => {
-          console.log("Adding item to cart:", item.product);
           dispatch(bulk_add_cart_product(item.product));
         });
       } else {
