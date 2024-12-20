@@ -20,7 +20,9 @@ const customStyles = {
 };
 
 const ProductModal = () => {
-  const { productItem, isModalOpen } = useSelector((state) => state.productModal);
+  const { productItem, isModalOpen } = useSelector(
+    (state) => state.productModal
+  );
   const { images = [], status } = productItem || {}; // Ensure images is an array
   const [activeImg, setActiveImg] = useState(images[0]); // Set the first image as default
   const [loading, setLoading] = useState(false);
@@ -43,19 +45,25 @@ const ProductModal = () => {
     <ReactModal
       isOpen={isModalOpen}
       onRequestClose={() => dispatch(handleModalClose())}
-      style={customStyles}
       contentLabel="Product Modal"
+      style={{ position: "relative" }}
     >
-      <div className="tp-product-modal">
+      {" "}
+      <button
+        onClick={() => dispatch(handleModalClose())}
+        type="button"
+        className="fs-3"
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "15px",
+          zIndex: "999",
+        }}
+      >
+        <i className="fa-regular fa-xmark"></i>
+      </button>
+      <div className="tp-product-modal d-flex justify-content-center ">
         <div className="tp-product-modal-content d-lg-flex">
-          <button
-            onClick={() => dispatch(handleModalClose())}
-            type="button"
-            className="tp-product-modal-close-btn"
-          >
-            <i className="fa-regular fa-xmark"></i>
-          </button>
-
           {/* product-details-thumb-wrapper start */}
           <DetailsThumbWrapper
             activeImg={activeImg} // Use active image
@@ -82,4 +90,3 @@ const ProductModal = () => {
 };
 
 export default ProductModal;
-

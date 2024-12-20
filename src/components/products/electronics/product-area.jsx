@@ -10,7 +10,12 @@ const ProductArea = ({ categories }) => {
   const isMobile = useIsMobile(); // Check if the device is mobile
   const [activeTab, setActiveTab] = useState("Trending");
   const [sortOption, setSortOption] = useState("none");
-  const { data: products, isError, isLoading, refetch } = useGetProductTypeQuery(activeTab);
+  const {
+    data: products,
+    isError,
+    isLoading,
+    refetch,
+  } = useGetProductTypeQuery(activeTab);
 
   useEffect(() => {
     refetch(); // Refetch products when activeTab changes
@@ -50,17 +55,18 @@ const ProductArea = ({ categories }) => {
       content = <ErrorMsg msg="No products found in this category!" />;
     } else {
       // Limit to 4 products on mobile
-      const displayedProducts = isMobile ? filteredProducts.slice(0, 4) : filteredProducts;
+      const displayedProducts = isMobile
+        ? filteredProducts.slice(0, 4)
+        : filteredProducts;
       content = displayedProducts.map((prd) => (
         <div
           key={prd.id}
-          className={`col-xl-3 col-lg-3 col-sm-6 ${isMobile ? 'col-6 ' : ''}`} // Added gap-4 for mobile
+          className={`col-xl-3 col-lg-3 col-sm-6 ${isMobile ? "col-6 " : ""}`} // Added gap-4 for mobile
           style={{
             borderRadius: isMobile ? "0px" : "", // Apply radius for mobile only
             boxShadow: isMobile ? "0px 0px 0px rgba(0, 0, 0, 0)" : "", // Apply shadow for mobile only
             height: isMobile ? "auto" : "", // Optional: You can set a fixed height for mobile if needed
             marginBottom: isMobile ? "20px" : "", // Adding margin for mobile
-           
           }}
         >
           <ProductItem
@@ -83,7 +89,9 @@ const ProductArea = ({ categories }) => {
           <>
             <div className="mb-4 text-center">
               <button
-                className={`btn ${activeTab === "Trending" ? "bg-white shadow" : ""}`}
+                className={`btn ${
+                  activeTab === "Trending" ? "bg-white shadow" : ""
+                }`}
                 style={{
                   borderRadius: "999px",
                   marginRight: "10px",
@@ -95,7 +103,9 @@ const ProductArea = ({ categories }) => {
                 Trending
               </button>
               <button
-                className={`btn ${activeTab === "Featured" ? "bg-white shadow" : ""}`}
+                className={`btn ${
+                  activeTab === "Featured" ? "bg-white shadow" : ""
+                }`}
                 style={{
                   borderRadius: "999px",
                   padding: "10px 20px",
@@ -114,7 +124,7 @@ const ProductArea = ({ categories }) => {
             <div className="row align-items-start">
               <div className="col-xl-4 col-lg-5 col-md-5">
                 <div className="tp-section-title-wrapper mb-40">
-                  <h3 className="tp-section-title text-20">{categories} Products</h3>
+                  <h3 className="fs-1 text-20">{categories} Products</h3>
                 </div>
               </div>
               <div className="col-xl-8 text-md-end text-sm-start mb-3 mb-md-0 col-lg-7 col-md-7">
@@ -150,14 +160,14 @@ const ProductArea = ({ categories }) => {
               style={{
                 backgroundColor: "transparent",
                 color: "#990100",
-                padding: isMobile ?"5px 10px":"10px 20px",
+                padding: isMobile ? "5px 10px" : "10px 20px",
                 borderRadius: "5px",
                 border: "2px solid #990100",
                 cursor: "pointer",
-                fontSize:isMobile ? "12px":"16px",
+                fontSize: isMobile ? "12px" : "16px",
                 transition: "background-color 0.3s, color 0.3s, transform 0.3s",
                 maxWidth: "50%%",
-                minWidth:  isMobile ? "100px" : "",
+                minWidth: isMobile ? "100px" : "",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#990100";

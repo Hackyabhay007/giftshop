@@ -24,7 +24,9 @@ const DetailsThumbWrapper = ({
       >
         {/* Main Image */}
         <div
-          className={`tab-content m-img ${isMobile ? "order-0 w-full" : "order-1 w-full"}`}
+          className={`tab-content m-img ${
+            isMobile ? "order-0 w-full" : "order-1 w-full"
+          }`}
           style={{
             maxWidth: isMobile ? "100%" : "600px",
             margin: isMobile ? "" : "0 auto", // Remove margin in mobile
@@ -42,8 +44,10 @@ const DetailsThumbWrapper = ({
                 style={{
                   borderRadius: "8px",
                   width: isMobile ? "100%" : "100%",
-                  height: "auto",
-                  boxShadow: isMobile ? "1px 5px 20px rgba(0, 0, 0, 0.1)" : "none",
+                  maxHeight: "440px",
+                  boxShadow: isMobile
+                    ? "1px 5px 20px rgba(0, 0, 0, 0.1)"
+                    : "none",
                 }}
               />
               <div className="tp-product-badge">
@@ -72,9 +76,7 @@ const DetailsThumbWrapper = ({
 
         {/* Thumbnails */}
         <nav
-          className={`${
-            isMobile ? "order-1 w-full mt-4" : "order-0 w-1/4"
-          }`}
+          className={`${isMobile ? "order-1 w-full mt-4" : "order-0 w-1/4"}`}
           style={{
             maxHeight: isMobile ? "auto" : "800px",
             overflowY: isMobile ? "visible" : "auto",
@@ -100,8 +102,6 @@ const DetailsThumbWrapper = ({
                   style={{
                     width: "100%",
                     height: "auto",
-                   
-                   
                   }}
                 >
                   <Image

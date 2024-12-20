@@ -84,7 +84,7 @@ const ProductItem = ({ product, offer_style = false }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
- 
+
   return (
     <div
       className={`
@@ -92,10 +92,7 @@ const ProductItem = ({ product, offer_style = false }) => {
         tp-product-item transition-3 
         ${isMobile ? "m-0" : ""}  // Adding mobile-specific margin
       `}
-      style={{ height: isMobile ? "auto" : "unset",
-          
-        
-       }} // Full height for mobile cards
+      style={{ height: isMobile ? "auto" : "unset", zIndex: "3" }} // Full height for mobile cards
     >
       <div
         style={{
@@ -104,8 +101,6 @@ const ProductItem = ({ product, offer_style = false }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          
-          
         }} // Flexbox centering
         className="tp-product-thumb p-relative fix"
       >
@@ -118,7 +113,7 @@ const ProductItem = ({ product, offer_style = false }) => {
             className="w-full h-auto"
             style={{
               objectFit: "contain",
-              maxWidth:isMobile ? "100px" : "100%", 
+              maxWidth: isMobile ? "100px" : "100%",
               maxHeight: "100%",
             }} // Keep the image contained within its container
           />
@@ -155,7 +150,7 @@ const ProductItem = ({ product, offer_style = false }) => {
                   className={`tp-product-action-btn  tp-product-add-cart-btn`}
                 >
                   <Cart />
-                   <span className="tp-product-tooltip">View Cart</span>
+                  <span className="tp-product-tooltip">View Cart</span>
                 </button>
               </Link>
             ) : (
