@@ -64,6 +64,7 @@ const CustomDropdown = ({
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsOpen(true)}
           disabled={disabled}
+          autoComplete="new-input"
           style={styles.input}
         />
         {searchTerm && (
