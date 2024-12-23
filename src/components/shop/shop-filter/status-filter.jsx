@@ -17,7 +17,7 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
       : [...currentStatuses, status.toLowerCase()];
 
     router.push({
-      pathname: `/${shop_right ? 'shop-right-sidebar' : 'shop'}`,
+      pathname: `/${shop_right ? "shop-right-sidebar" : "shop"}`,
       query: {
         ...router.query,
         status: updatedStatuses.join(",") || undefined,
@@ -38,7 +38,9 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
                 <input
                   id={s}
                   type="checkbox"
-                  checked={router.query.status?.includes(s.toLowerCase()) || false}
+                  checked={
+                    router.query.status?.includes(s.toLowerCase()) || false
+                  }
                   readOnly
                 />
                 <label onClick={() => handleStatusRoute(s)} htmlFor={s}>
@@ -54,5 +56,3 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
 };
 
 export default StatusFilter;
-
-

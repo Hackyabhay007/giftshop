@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -81,6 +80,7 @@ const ResetArea = () => {
                     <div className="tp-login-input">
                       <input
                         {...register("email")}
+                        value={localStorage.getItem("setPassEmail")}
                         id="email"
                         type="email"
                         placeholder="Email"
@@ -94,6 +94,7 @@ const ResetArea = () => {
                     <div className="tp-login-input">
                       <input
                         {...register("otp")}
+                        value={localStorage.getItem("setOtpValue")}
                         id="otp"
                         type="text"
                         placeholder="OTP"

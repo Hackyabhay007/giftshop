@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Pagination from "@/ui/Pagination";
 import ProductItem from "../products/fashion/product-item";
 import CategoryFilter from "./shop-filter/category-filter";
-import StatusFilter from "./shop-filter/status-filter";
+// import StatusFilter from "./shop-filter/status-filter";
 import ResetButton from "./shop-filter/reset-button";
 import ShopTopLeft from "./shop-top-left";
 import ShopTopRight from "./shop-top-right";
@@ -79,7 +79,7 @@ const ShopArea = ({ all_products, products, otherProps, resetCategory }) => {
             <div className="col-xl-3 col-lg-4">
               {/* Sidebar for Desktop */}
               <div className="tp-shop-sidebar mr-10">
-                <StatusFilter setCurrPage={setCurrPage} />
+                {/* <StatusFilter setCurrPage={setCurrPage} /> */}
                 <CategoryFilter setCurrPage={setCurrPage} />
                 <ResetButton resetCategory={resetCategory} />
               </div>

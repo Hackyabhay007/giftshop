@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import ForgotForm from "../forms/forgot-form";
 import LoginShapes from "../login-register/login-shapes";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 
 const VerifyArea = () => {
   const router = useRouter();
-
+  const [otpValue, setOtpValue] = useState("");
   // Validation schema
   const schema = Yup.object().shape({
     email: Yup.string().required().email(),
@@ -28,6 +28,7 @@ const VerifyArea = () => {
   });
 
   const [verifyEmail] = useConfirmForgotPasswordMutation();
+  localStorage.setItem("setOtpValue", otpValue);
 
   const onSubmit = async (data) => {
     try {
@@ -56,7 +57,9 @@ const VerifyArea = () => {
             <div className="tp-login-wrapper">
               <div className="tp-login-top text-center mb-30">
                 <h3 className="tp-login-title">Verify Otp</h3>
-                <p>Enter your email address and otp to request password reset.</p>
+                <p>
+                  Enter your email address and otp to request password reset.
+                </p>
               </div>
               <div className="tp-login-option">
                 {/* form start */}
@@ -68,6 +71,7 @@ const VerifyArea = () => {
                     <div className="tp-login-input">
                       <input
                         {...register("email")}
+                        value={localStorage.getItem("setPassEmail")}
                         id="email"
                         type="email"
                         placeholder="Enter your email"
@@ -79,7 +83,12 @@ const VerifyArea = () => {
                   <div className="tp-login-input-box">
                     <div className="tp-login-input">
                       <input
-                        {...register("otp")}
+                        {...register("otp", {
+                          onChange: (e) => {
+                            setOtpValue(e.target.value);
+                            // Additional logic here if needed
+                          },
+                        })}
                         id="otp"
                         type="text"
                         placeholder="Enter OTP"

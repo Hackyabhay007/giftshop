@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -10,12 +10,14 @@ import emailjs from "emailjs-com"; // Import EmailJS
 
 const EmailForm = () => {
   const router = useRouter();
-
+  const [forgetPassEmail, setForgetPassEmail] = useState("");
   // Validation schema
   const schema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Invalid email"),
   });
 
+  localStorage.setItem("setPassEmail", forgetPassEmail);
+  console.log("forgetpassEmail", localStorage.getItem("setPassEmail"));
   const {
     register,
     handleSubmit,
@@ -30,8 +32,8 @@ const EmailForm = () => {
   const sendOtpEmail = (email, otp) => {
     const templateParams = {
       to_email: email, // User's email (recipient address)
-      otp: otp,        // OTP generated
-      company_name: "MYSWEETWISHES",  // Optional: Company name for the email
+      otp: otp, // OTP generated
+      company_name: "MYSWEETWISHES", // Optional: Company name for the email
     };
 
     // Ensure that all fields are populated correctly
@@ -41,17 +43,17 @@ const EmailForm = () => {
 
     // EmailJS send function
     return emailjs.send(
-      "service_azzz72y",    // Replace with your EmailJS service ID
-      "template_6n3saf2",   // Replace with your EmailJS template ID
+      "service_azzz72y", // Replace with your EmailJS service ID
+      "template_6n3saf2", // Replace with your EmailJS template ID
       templateParams,
-      "b233R9hwalgmVSVG4"   // Replace with your EmailJS public ID
+      "b233R9hwalgmVSVG4" // Replace with your EmailJS public ID
     );
   };
 
   const onSubmit = async (data) => {
     try {
       const response = await resetPassword({ email: data.email }).unwrap();
-      
+
       // Assuming the OTP is in the response
       const otp = response?.otp;
 
@@ -71,7 +73,12 @@ const EmailForm = () => {
       <div className="tp-login-input-box">
         <div className="tp-login-input">
           <input
-            {...register("email")}
+            {...register("email", {
+              onChange: (e) => {
+                setForgetPassEmail(e.target.value);
+                // Additional logic here if needed
+              },
+            })}
             id="email"
             type="email"
             placeholder="Enter your email"

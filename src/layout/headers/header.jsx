@@ -77,7 +77,7 @@ const Header = () => {
           {/* header main start */}
           <div className="tp-header-main  tp-header-sticky">
             <div className="container">
-              <div className="row align-items-center">
+              <div className="row align-items-center justify-content-end">
                 <div className="col-xl-3  col-lg-4 col-md-3 col-6">
                   <div className="logo">
                     <Image
@@ -121,7 +121,7 @@ const Header = () => {
         <div className="container">
           <div className="tp-mega-menu-wrapper p-relative">
             <div className="row align-items-center">
-              <div className="col-xl-3 col-lg-3 col-md-3 col-6">
+              <div className="col-xl-2 col-lg-3 col-md-3 col-6">
                 <div className="logo">
                   <Link href="/">
                     <Image
@@ -143,38 +143,8 @@ const Header = () => {
                   </nav>
                 </div>
               </div>
-              <div className="col-xl-2 col-lg-2 col-md-3 col-6">
-                <div className="tp-header-action d-flex align-items-center justify-content-end ml-50">
-                  <div className="tp-header-action-item d-none d-lg-block"></div>
-
-                  <div className="tp-header-action-item d-none d-md-block">
-                    <button
-                      onClick={() => dispatch(openCartMini())}
-                      type="button"
-                      className="tp-header-action-btn cartmini-open-btn"
-                    >
-                      <CartTwo />
-                      <span
-                        style={{
-                          backgroundColor: "#990100",
-                          borderColor: "white",
-                        }}
-                        className="tp-header-action-badge"
-                      >
-                        {quantity}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="tp-header-action-item d-lg-none">
-                    <button
-                      onClick={() => setIsCanvasOpen(true)}
-                      type="button"
-                      className="tp-header-action-btn tp-offcanvas-open-btn"
-                    >
-                      <Menu />
-                    </button>
-                  </div>
-                </div>
+              <div className="col-xl-3 col-lg-2 col-md-3 col-6">
+                <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
               </div>
             </div>
           </div>

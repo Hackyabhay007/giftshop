@@ -54,7 +54,7 @@ const NavProfileTab = ({ orderData }) => {
             <div className="profile__main-inner d-flex flex-wrap align-items-center">
               <div className="profile__main-content">
                 <h4 className="profile__main-title">
-                  Welcome Mr. {userInfo?.user?.name}
+                  Welcome {userInfo?.user?.name}
                 </h4>
               </div>
             </div>
