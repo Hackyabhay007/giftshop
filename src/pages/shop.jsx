@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import Head from 'next/head';
+import Head from "next/head";
 import SEO from "@/components/seo";
 import Wrapper from "@/layout/wrapper";
 import HeaderTwo from "@/layout/headers/header-2";
@@ -36,6 +36,13 @@ const ShopPage = ({ query }) => {
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
 
+  useEffect(() => {
+    let reset = localStorage.getItem("defaultFilterval");
+
+    if (reset === "true") {
+      setSelectValue("Default Sorting");
+    }
+  });
   // Reset category filter
   const resetCategory = () => {
     setCategoryId(null);
@@ -107,33 +114,33 @@ const ShopPage = ({ query }) => {
       `${categoryName} gifts`,
       "personalized presents",
       "unique gift ideas",
-      "gift store"
+      "gift store",
     ],
-    canonicalUrl: `/shop/${categoryId || ''}`,
+    canonicalUrl: `/shop/${categoryId || ""}`,
     structured_data: {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      "name": `Shop ${categoryName} | My Sweet Wishes`,
-      "description": `Explore our extensive collection of ${categoryName}. Find the perfect gift with our carefully curated selection of high-quality products.`,
-      "mainEntity": {
+      name: `Shop ${categoryName} | My Sweet Wishes`,
+      description: `Explore our extensive collection of ${categoryName}. Find the perfect gift with our carefully curated selection of high-quality products.`,
+      mainEntity: {
         "@type": "ItemList",
-        "itemListElement": product_items.map((product, index) => ({
+        itemListElement: product_items.map((product, index) => ({
           "@type": "ListItem",
-          "position": index + 1,
-          "item": {
+          position: index + 1,
+          item: {
             "@type": "Product",
-            "name": product.name,
-            "image": product.image,
-            "offers": {
+            name: product.name,
+            image: product.image,
+            offers: {
               "@type": "Offer",
-              "priceCurrency": "INR",
-              "price": product.price,
-              "availability": product.inStock ? "InStock" : "OutOfStock"
-            }
-          }
-        }))
-      }
-    }
+              priceCurrency: "INR",
+              price: product.price,
+              availability: product.inStock ? "InStock" : "OutOfStock",
+            },
+          },
+        })),
+      },
+    },
   };
 
   return (
@@ -143,13 +150,16 @@ const ShopPage = ({ query }) => {
         {/* Primary Meta Tags */}
         <title>{seoConfig.pageTitle}</title>
         <meta name="description" content={seoConfig.description} />
-        <meta name="keywords" content={seoConfig.keywords.join(', ')} />
+        <meta name="keywords" content={seoConfig.keywords.join(", ")} />
 
         {/* Open Graph Tags */}
         <meta property="og:title" content={seoConfig.pageTitle} />
         <meta property="og:description" content={seoConfig.description} />
         <meta property="og:type" content="product.group" />
-        <meta property="og:url" content={`https://mysweetwishes.com${seoConfig.canonicalUrl}`} />
+        <meta
+          property="og:url"
+          content={`https://mysweetwishes.com${seoConfig.canonicalUrl}`}
+        />
 
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -157,16 +167,16 @@ const ShopPage = ({ query }) => {
         <meta name="twitter:description" content={seoConfig.description} />
 
         {/* Canonical URL */}
-        <link 
-          rel="canonical" 
-          href={`https://mysweetwishes.com${seoConfig.canonicalUrl}`} 
+        <link
+          rel="canonical"
+          href={`https://mysweetwishes.com${seoConfig.canonicalUrl}`}
         />
 
         {/* Structured Data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ 
-            __html: JSON.stringify(seoConfig.structured_data) 
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(seoConfig.structured_data),
           }}
         />
       </Head>

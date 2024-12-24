@@ -5,8 +5,12 @@ const ResetButton = ({ resetCategory, shop_right = false }) => {
   const router = useRouter();
 
   const handleReset = () => {
+    localStorage.setItem("defaultFilterval", "true");
+    setTimeout(() => {
+      localStorage.removeItem("defaultFilterval");
+    }, 1000);
     // Clear the category state (resetCategory) and push to the base route
-    resetCategory(); 
+    resetCategory();
     router.push(`/${shop_right ? "shop-right-sidebar" : "shop"}`);
   };
 

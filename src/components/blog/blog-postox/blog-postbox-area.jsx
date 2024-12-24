@@ -11,7 +11,11 @@ const BlogPostboxArea = () => {
   const [currPage, setCurrPage] = useState(1);
   const countOfPage = 4; // Number of items per page
   const isMobile = useIsMobile(); // Detect if the screen is mobile
-  const { data: blogData = {}, isLoading, isError } = useFetchBlogsQuery(currPage); // Fetching blog data
+  const {
+    data: blogData = {},
+    isLoading,
+    isError,
+  } = useFetchBlogsQuery(currPage); // Fetching blog data
 
   // Handle loading and error states
   let content = null;
@@ -45,7 +49,9 @@ const BlogPostboxArea = () => {
 
   return (
     <section
-      className={`tp-postbox-area ${isMobile ? "pt-40 pb-20" : "pt-120 pb-120"}`}
+      className={`tp-postbox-area ${
+        isMobile ? "pt-40 pb-20" : "pt-120 pb-120"
+      }`}
     >
       <div className="container">
         <div className="row">
@@ -82,7 +88,7 @@ const BlogPostboxArea = () => {
             </div>
           </div>
           <div className="col-xl-3 col-lg-4">
-            <BlogSidebar latestBlog={latestBlog} /> Pass latest blog as prop
+            <BlogSidebar latestBlog={latestBlog} />
           </div>
         </div>
       </div>
@@ -93,7 +99,7 @@ const BlogPostboxArea = () => {
           padding: 0px;
           margin-bottom: 24px;
           border-radius: 12px;
-          overflow:hidden;
+          overflow: hidden;
         }
       `}</style>
     </section>
