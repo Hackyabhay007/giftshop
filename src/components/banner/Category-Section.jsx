@@ -21,7 +21,7 @@ const desktopCategories = [
   { id: 27, label: "THE TEDDY MADDY", icon: logo2 },
   { id: 28, label: "THE HAPPY CARDS", icon: logo3 },
   { id: 32, label: "THE WALL PAINTINGS", icon: logo4 },
-  { id: 30, label: "DIWALI GIFTS", icon: logo5 },
+  { id: 30, label: "THE FLOWER POT", icon: logo5 },
   { id: 31, label: "Personalised", icon: logo6 },
 ];
 
@@ -30,7 +30,7 @@ const mobileCategories = [
   { id: 27, label: "THE TEDDY MADDY", icon: mlogo2 },
   { id: 28, label: "THE HAPPY CARDS", icon: mlogo3 },
   { id: 32, label: "THE WALL PAINTINGS", icon: mlogo4 },
-  { id: 30, label: "DIWALI GIFTS", icon: mlogo5 },
+  { id: 30, label: "THE FLOWER POT", icon: mlogo5 },
   { id: 31, label: "Personalised", icon: mlogo6 },
 ];
 
@@ -49,9 +49,8 @@ export default function CategorySection() {
         <h2
           style={{
             padding: "0 10px", // Top padding
-            paddingTop:"22px",
+            paddingTop: "22px",
             fontSize: "22px",
-            
           }}
         >
           Categories

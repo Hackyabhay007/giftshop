@@ -54,7 +54,7 @@ const ProductItem = ({ product, style_2 = false }) => {
         overflow: "auto",
       }}
     >
-      <div className="tp-product-thumb-2 p-relative z-index-1 fix">
+      <div className="tp-product-thumb-2 p-relative z-index-2 fix">
         <Link href={`/product-details/${product_id}`}>
           <div
             style={{
