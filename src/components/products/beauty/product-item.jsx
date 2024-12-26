@@ -61,7 +61,10 @@ const ProductItem = ({
 
   return (
     <div
-      className={`tp-product-item-3 mb-50 ${primary_style ? "tp-product-style-primary" : ""} ${prdCenter ? "text-center" : ""}`}  style={{
+      className={`tp-product-item-3 mb-50 ${
+        primary_style ? "tp-product-style-primary" : ""
+      } ${prdCenter ? "text-center" : ""}`}
+      style={{
         width: isMobile ? "90%" : "100%", // Smaller width for mobile
         margin: isMobile ? "10px" : "0",
         borderRadius: isMobile ? "4px" : "0",
@@ -70,20 +73,25 @@ const ProductItem = ({
       }}
     >
       {/* Responsive container */}
-      <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1 flex items-center justify-center"
+      <div
+        className="tp-product-thumb-3 mb-15 fix p-relative z-index-1 flex items-center justify-center"
         style={{
-          height: isMobile ? "150px" : "300px", // Adjust height for mobile
-         
+          minHeight: isMobile ? "200px" : "300px",
+          maxHeight: isMobile ? "330px" : "300px", // Adjust height for mobile
         }}
       >
-        <Link href={`/product-details/${product_id}`}  className={`relative w-full h-full flex items-center justify-center ${
-              isMobile ? "p-2" : ""
-            }`} >
+        <Link
+          href={`/product-details/${product_id}`}
+          className={`relative w-full h-full flex items-center justify-center ${
+            isMobile ? "" : ""
+          }`}
+        >
           {/* Responsive Image */}
           <div className="relative w-full h-full flex items-center justify-center">
             <Image
               src={images[0]}
               alt="product image"
+              layout="responsive"
               width={282}
               height={320}
               className={`object-contain mx-auto ${isMobile ? "rounded" : ""}`}
@@ -103,7 +111,9 @@ const ProductItem = ({
             {isAddedToCart ? (
               <Link
                 href="/cart"
-                className={`tp-product-action-btn-3 ${isAddedToCart ? "active" : ""} tp-product-add-cart-btn text-center`}
+                className={`tp-product-action-btn-3 ${
+                  isAddedToCart ? "active" : ""
+                } tp-product-add-cart-btn text-center`}
               >
                 <Cart />
                 <span className="tp-product-tooltip">View Cart</span>
@@ -112,7 +122,9 @@ const ProductItem = ({
               <button
                 type="button"
                 onClick={() => handleAddProduct(products)}
-                className={`tp-product-action-btn-3 ${isAddedToCart ? "active" : ""} tp-product-add-cart-btn`}
+                className={`tp-product-action-btn-3 ${
+                  isAddedToCart ? "active" : ""
+                } tp-product-add-cart-btn`}
                 disabled={status === "out-of-stock"}
               >
                 <Cart />
@@ -130,7 +142,7 @@ const ProductItem = ({
         </div>
 
         <div className="tp-product-add-cart-btn-large-wrapper">
-          {!isAddedToCart ? (
+          {isAddedToCart ? (
             <Link
               href="/cart"
               style={buttonStyle}
@@ -171,7 +183,9 @@ const ProductItem = ({
           className="tp-product-price-wrapper-3"
           style={{ fontSize: isMobile ? "10px" : "14px" }}
         >
-          <span className="tp-product-price-3">₹{Number(price).toFixed(2)}</span>
+          <span className="tp-product-price-3">
+            ₹{Number(price).toFixed(2)}
+          </span>
         </div>
         {isMobile && (
           <div

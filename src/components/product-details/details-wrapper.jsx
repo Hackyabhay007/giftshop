@@ -128,7 +128,9 @@ const DetailsWrapper = ({
 
       <div
         className={`tp-product-details-action-wrapper ${
-          isMobile ? "d-flex flex-row justify-content-between gap-3 pt-20 pb-70" : ""
+          isMobile
+            ? "d-flex flex-row justify-content-between gap-3 pt-20 pb-70"
+            : ""
         }`}
       >
         <div
@@ -142,30 +144,37 @@ const DetailsWrapper = ({
               isMobile ? "w-100" : "mb-15 w-100"
             }`}
           >
-            <button
-              onClick={() => handleAddProduct(productItem)}
-              disabled={stock_quantity <= 0}
-              className={`tp-product-details-add-to-cart-btn ${
-                stock_quantity <= 0 ? "disabled" : ""
-              }`}
-              style={{
-                ...(isMobile
-                  ? {
-                      backgroundColor: "#fff", // White background for mobile
-                      color: stock_quantity > 0 ? "#990100" : "#cccccc", // Red text if in stock, gray otherwise
-                      border: `2px solid ${stock_quantity > 0 ? "#990100" : "#cccccc"}`, // Red border if in stock
-                    }
-                  : {
-                      backgroundColor: stock_quantity > 0 ? "#990100" : "#cccccc", // Red background for desktop
-                      color: "#fff", // White text for desktop
-                      cursor: stock_quantity > 0 ? "pointer" : "not-allowed", // Pointer cursor for in-stock
-                    }),
-                padding: "10px 15px", // Ensure consistent padding
-                width: "100%", // Full width for button
-              }}
-            >
-              {stock_quantity > 0 ? "Add To Cart" : "Out of Stock"}
-            </button>
+            {stock_quantity > 0 ? (
+              <button
+                onClick={() => handleAddProduct(productItem)}
+                disabled={stock_quantity <= 0}
+                className={`tp-product-details-add-to-cart-btn ${
+                  stock_quantity <= 0 ? "disabled" : ""
+                }`}
+                style={{
+                  ...(isMobile
+                    ? {
+                        backgroundColor: "#fff", // White background for mobile
+                        color: stock_quantity > 0 ? "#990100" : "#cccccc", // Red text if in stock, gray otherwise
+                        border: `2px solid ${
+                          stock_quantity > 0 ? "#990100" : "#cccccc"
+                        }`, // Red border if in stock
+                      }
+                    : {
+                        backgroundColor:
+                          stock_quantity > 0 ? "#990100" : "#cccccc", // Red background for desktop
+                        color: "#fff", // White text for desktop
+                        cursor: stock_quantity > 0 ? "pointer" : "not-allowed", // Pointer cursor for in-stock
+                      }),
+                  padding: "10px 15px", // Ensure consistent padding
+                  width: "100%", // Full width for button
+                }}
+              >
+                Add To Cart
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
 
@@ -183,7 +192,9 @@ const DetailsWrapper = ({
                 ...buttonStyle,
                 padding: "10px 15px", // Ensure consistent padding
                 width: "100%", // Full width for button
-                border: `2px solid ${stock_quantity > 0 ? "#990100" : "#cccccc"}`, 
+                border: `2px solid ${
+                  stock_quantity > 0 ? "#990100" : "#cccccc"
+                }`,
               }}
               onMouseEnter={() => setIsHovered(true)} // Set hover state to true
               onMouseLeave={() => setIsHovered(false)} // Set hover state to false

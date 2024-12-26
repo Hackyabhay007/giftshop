@@ -42,8 +42,9 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
             </div>
             <div className="col-xxl-8 col-lg-8">
               <div className="profile__tab-content">
-                <div className="tab-content" id="profile-tabContent">
+                <div className="tab-content " id="profile-tabContent">
                   <div
+                    style={{ minHeight: "70vh" }}
                     className={`tab-pane fade ${
                       activeTab === "nav-profile" ? "show active" : ""
                     }`}
@@ -55,6 +56,7 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                   </div>
 
                   <div
+                    style={{ minHeight: "60vh" }}
                     className={`tab-pane fade ${
                       activeTab === "nav-information" ? "show active" : ""
                     }`}
@@ -66,7 +68,8 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                   </div>
 
                   <div
-                    className={`tab-pane fade ${
+                    style={{ minHeight: "70vh" }}
+                    className={`tab-pane fade  ${
                       activeTab === "nav-password" ? "show active" : ""
                     }`}
                     id="nav-password"
@@ -77,6 +80,7 @@ const ProfileArea = ({ orderData, currentPage, setCurrentPage }) => {
                   </div>
 
                   <div
+                    style={{ minHeight: "70vh" }}
                     className={`tab-pane fade ${
                       activeTab === "nav-order" ? "show active" : ""
                     }`}

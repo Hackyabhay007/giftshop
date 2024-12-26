@@ -44,16 +44,18 @@ const ChangePassword = () => {
       if (result?.error) {
         notifyError(result?.error?.data?.message || "Password change failed!");
       } else {
-        notifySuccess(result?.data?.message || "Password changed successfully!");
+        notifySuccess(
+          result?.data?.message || "Password changed successfully!"
+        );
       }
     });
     reset();
   };
 
   return (
-    <div className="profile__password">
+    <div className="profile__password ">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
+        <div className="col">
           <div className="col-xxl-12">
             <div className="tp-profile-input-box">
               <div className="tp-contact-input">
