@@ -5,7 +5,7 @@ export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Get available offer coupons
     getOfferCoupons: builder.query({
-      query: () => `http://apiv2.mysweetwishes.com/api/coupons/available`,
+      query: () => `https://apiv2.mysweetwishes.com/api/coupons/available`,
       providesTags: ["Coupon"],
       keepUnusedDataFor: 600,
     }),
@@ -18,13 +18,15 @@ export const authApi = apiSlice.injectEndpoints({
           code: couponCode,
         };
 
+   
+
         return {
-          url: `http://apiv2.mysweetwishes.com/api/coupons/match`,
+          url: `https://apiv2.mysweetwishes.com/api/coupons/match`,
           method: "POST", // Ensuring it's a POST request
           body: payload, // Sending the payload in the body
           headers: {
-            "Content-Type": "application/json", // Specify content type
-            Authorization: `Bearer ${accessToken}`, // Include the access token
+            'Content-Type': 'application/json', // Specify content type
+            'Authorization': `Bearer ${accessToken}`, // Include the access token
           },
         };
       },
