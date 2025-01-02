@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const NEXT_PUBLIC_API_BASE_URL = 'https://apiv2.mysweetwishes.com/api/';
+const NEXT_PUBLIC_API_BASE_URL = "http://apiv2.mysweetwishes.com/api/";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -9,8 +9,7 @@ export const apiSlice = createApi({
     baseUrl: NEXT_PUBLIC_API_BASE_URL,
     prepareHeaders: async (headers) => {
       try {
-        const userInfo = Cookies.get('cookies');
-        
+        const userInfo = Cookies.get("cookies");
 
         if (userInfo) {
           const user = JSON.parse(userInfo);
@@ -18,9 +17,7 @@ export const apiSlice = createApi({
             headers.set("Authorization", `Bearer ${user.accessToken}`);
           }
         }
-      } catch (error) {
-       
-      }
+      } catch (error) {}
       return headers;
     },
   }),
@@ -28,32 +25,32 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     // Fetch Hero Slider data
     getHeroSliderData: builder.query({
-      query: () => 'hero-sections',  // API endpoint for hero slider
-      providesTags: ['HeroSections'],
+      query: () => "hero-sections", // API endpoint for hero slider
+      providesTags: ["HeroSections"],
     }),
 
     // Other example endpoints
     getProducts: builder.query({
-      query: () => '/products',
-      providesTags: ['Products'],
+      query: () => "/products",
+      providesTags: ["Products"],
     }),
 
     getUserOrders: builder.query({
-      query: () => '/user/orders',
-      providesTags: ['UserOrders'],
+      query: () => "/user/orders",
+      providesTags: ["UserOrders"],
     }),
 
     getProductById: builder.query({
       query: (id) => `/products/${id}`,
-      providesTags: ['Product'],
+      providesTags: ["Product"],
     }),
   }),
 });
 
 // Export hooks for the endpoints
-export const { 
-  useGetHeroSliderDataQuery, 
-  useGetProductsQuery, 
-  useGetUserOrdersQuery, 
-  useGetProductByIdQuery 
+export const {
+  useGetHeroSliderDataQuery,
+  useGetProductsQuery,
+  useGetUserOrdersQuery,
+  useGetProductByIdQuery,
 } = apiSlice;

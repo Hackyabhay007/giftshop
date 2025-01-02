@@ -1,17 +1,17 @@
 import { apiSlice } from "../../api/apiSlice";
 import { set_client_secret } from "./orderSlice";
-import { v4 as uuidv4 } from 'uuid';  // Import UUID for generating unique idempotency keys
+import { v4 as uuidv4 } from "uuid"; // Import UUID for generating unique idempotency keys
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     createRazorpayOrder: builder.mutation({
       query: (orderInfo) => {
-        console.log("order Api",orderInfo)
+        console.log("order Api", orderInfo);
         const { accessToken, ...rest } = orderInfo;
         const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {
-          url: "https://apiv2.mysweetwishes.com/api/initiate-order",
+          url: "http://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
           body: rest,
           headers: {
@@ -38,7 +38,7 @@ export const authApi = apiSlice.injectEndpoints({
         const { accessToken, ...rest } = data;
         const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {
-          url: "https://apiv2.mysweetwishes.com/api/initiate-order",
+          url: "http://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
           body: rest,
           headers: {
@@ -65,7 +65,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     getUserOrders: builder.query({
       query: ({ accessToken, page = 1 }) => ({
-        url: `https://apiv2.mysweetwishes.com/api/user/orders?page=${page}`,
+        url: `http://apiv2.mysweetwishes.com/api/user/orders?page=${page}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -73,11 +73,10 @@ export const authApi = apiSlice.injectEndpoints({
       providesTags: ["UserOrders"],
       keepUnusedDataFor: 600,
     }),
-    
 
     getUserOrderById: builder.query({
       query: ({ id, accessToken }) => ({
-        url: `https://apiv2.mysweetwishes.com/api/orders/${id}`,
+        url: `http://apiv2.mysweetwishes.com/api/orders/${id}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -88,7 +87,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     cancelOrder: builder.mutation({
       query: ({ order_id, accessToken }) => ({
-        url: "https://apiv2.mysweetwishes.com/api/cancel-order",
+        url: "http://apiv2.mysweetwishes.com/api/cancel-order",
         method: "POST",
         body: { order_id },
         headers: {
@@ -101,12 +100,14 @@ export const authApi = apiSlice.injectEndpoints({
 
     trackOrder: builder.query({
       query: ({ orderId, accessToken }) => ({
-        url: `https://apiv2.mysweetwishes.com/api/orders/${orderId}/track`,
+        url: `http://apiv2.mysweetwishes.com/api/orders/${orderId}/track`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       }),
-      providesTags: (result, error, arg) => [{ type: "OrderTrack", id: arg.orderId }],
+      providesTags: (result, error, arg) => [
+        { type: "OrderTrack", id: arg.orderId },
+      ],
       keepUnusedDataFor: 600,
     }),
   }),

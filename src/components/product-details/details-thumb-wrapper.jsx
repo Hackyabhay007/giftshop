@@ -44,7 +44,7 @@ const DetailsThumbWrapper = ({
                 style={{
                   borderRadius: "8px",
                   width: isMobile ? "100%" : "100%",
-                  maxHeight: "440px",
+
                   boxShadow: isMobile
                     ? "1px 5px 20px rgba(0, 0, 0, 0.1)"
                     : "none",
