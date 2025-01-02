@@ -2,7 +2,7 @@ import { apiSlice } from "@/redux/api/apiSlice";
 import { userLoggedIn } from "./authSlice";
 import Cookies from "js-cookie";
 
-const BASE_URL = "https://apiv2.mysweetwishes.com/api/";
+const BASE_URL = "http://apiv2.mysweetwishes.com/api/";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -107,7 +107,7 @@ export const authApi = apiSlice.injectEndpoints({
       query: ({ data }) => {
         const token = Cookies.get("userInfo")
           ? JSON.parse(Cookies.get("userInfo")).accessToken
-          : "";   
+          : "";
         return {
           url: `${BASE_URL}reset-password`,
           method: "POST", // Change to POST or PUT based on your API requirements
@@ -119,7 +119,6 @@ export const authApi = apiSlice.injectEndpoints({
         };
       },
     }),
-    
 
     //reset pass
     resetPassword: builder.mutation({
@@ -139,24 +138,23 @@ export const authApi = apiSlice.injectEndpoints({
         };
       },
     }),
-//verify
+    //verify
     confirmForgotPassword: builder.mutation({
       query: (data) => {
-          const token = Cookies.get("userInfo")
-              ? JSON.parse(Cookies.get("userInfo")).accessToken
-              : "";
-  
-          return {
-              url: `${BASE_URL}verify-otp`,
-              method: "POST",
-              body: data,
-              headers: {
-                  Authorization: `Bearer ${token}`, // Include the token in the headers if needed
-              },
-          };
+        const token = Cookies.get("userInfo")
+          ? JSON.parse(Cookies.get("userInfo")).accessToken
+          : "";
+
+        return {
+          url: `${BASE_URL}verify-otp`,
+          method: "POST",
+          body: data,
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers if needed
+          },
+        };
       },
-  }),
-  
+    }),
 
     //change password
     changePassword: builder.mutation({

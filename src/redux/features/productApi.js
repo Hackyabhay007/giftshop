@@ -1,48 +1,47 @@
 import { apiSlice } from "../api/apiSlice";
 
+const BaseUrl = "http://apiv2.mysweetwishes.com/api/products";
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: () => `https://apiv2.mysweetwishes.com/api/products`,
-      providesTags:['Products']
+      query: () => `${BaseUrl}`,
+      providesTags: ["Products"],
     }),
     getProductType: builder.query({
-      query: (type) => `https://apiv2.mysweetwishes.com/api/products/category/${type}`, 
-      providesTags: ['ProductType'],
+      query: (type) => `${BaseUrl}/category/${type}`,
+      providesTags: ["ProductType"],
     }),
-    
+
     getOfferProducts: builder.query({
-      query: (type) => `https://apiv2.mysweetwishes.com/api/products/offer?type=${type}`,
-      providesTags:['OfferProducts']
+      query: (type) => `${BaseUrl}/offer?type=${type}`,
+      providesTags: ["OfferProducts"],
     }),
     getPopularProductByType: builder.query({
-      query: (type) => `https://apiv2.mysweetwishes.com/api/products/popular/${type}`,
-      providesTags:['PopularProducts']
+      query: (type) => `${BaseUrl}/popular/${type}`,
+      providesTags: ["PopularProducts"],
     }),
     getTopRatedProducts: builder.query({
-      query: () => `https://apiv2.mysweetwishes.com/api/products/top-rated`,
-      providesTags:['TopRatedProducts']
+      query: () => `${BaseUrl}/top-rated`,
+      providesTags: ["TopRatedProducts"],
     }),
     // get single product
     getProduct: builder.query({
-      query: (id) => `https://apiv2.mysweetwishes.com/api/products/${id}`,
+      query: (id) => `${BaseUrl}/${id}`,
       providesTags: (result, error, arg) => [{ type: "Product", id: arg }],
       invalidatesTags: (result, error, arg) => [
-        { type: "RelatedProducts", id:arg },
+        { type: "RelatedProducts", id: arg },
       ],
     }),
     //get related products
     getRelatedProducts: builder.query({
       query: (id) => {
-        return `https://apiv2.mysweetwishes.com/api/products/category/${id}`;
+        return `${BaseUrl}/category/${id}`;
       },
       providesTags: (result, error, arg) => [
-        { type: 'products', id: Number(arg) }, // Ensure arg is a number for the tag
+        { type: "products", id: Number(arg) }, // Ensure arg is a number for the tag
       ],
     }),
-    
-    
   }),
 });
 
@@ -53,5 +52,5 @@ export const {
   useGetPopularProductByTypeQuery,
   useGetTopRatedProductsQuery,
   useGetProductQuery,
- useGetRelatedProductsQuery,
+  useGetRelatedProductsQuery,
 } = productApi;
