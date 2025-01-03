@@ -2,7 +2,7 @@ import { apiSlice } from "@/redux/api/apiSlice";
 import { userLoggedIn } from "./authSlice";
 import Cookies from "js-cookie";
 
-const BASE_URL = "https://apiv2.mysweetwishes.com/api/";
+const BASE_URL = "http://apiv2.mysweetwishes.com/api/";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,

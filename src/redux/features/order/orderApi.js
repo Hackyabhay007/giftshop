@@ -11,7 +11,7 @@ export const authApi = apiSlice.injectEndpoints({
         const { accessToken, ...rest } = orderInfo;
         const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {
-          url: "https://apiv2.mysweetwishes.com/api/initiate-order",
+          url: "http://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
           body: rest,
           headers: {
@@ -38,7 +38,7 @@ export const authApi = apiSlice.injectEndpoints({
         const { accessToken, ...rest } = data;
         const idempotencyKey = uuidv4(); // Generate a new UUID as idempotency key
         return {
-          url: "https://apiv2.mysweetwishes.com/api/initiate-order",
+          url: "http://apiv2.mysweetwishes.com/api/initiate-order",
           method: "POST",
           body: rest,
           headers: {
@@ -65,7 +65,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     getUserOrders: builder.query({
       query: ({ accessToken, page = 1 }) => ({
-        url: `https://apiv2.mysweetwishes.com/api/user/orders?page=${page}`,
+        url: `http://apiv2.mysweetwishes.com/api/user/orders?page=${page}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -77,7 +77,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     getUserOrderById: builder.query({
       query: ({ id, accessToken }) => ({
-        url: `https://apiv2.mysweetwishes.com/api/orders/${id}`,
+        url: `http://apiv2.mysweetwishes.com/api/orders/${id}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -88,7 +88,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     cancelOrder: builder.mutation({
       query: ({ order_id, accessToken }) => ({
-        url: "https://apiv2.mysweetwishes.com/api/cancel-order",
+        url: "http://apiv2.mysweetwishes.com/api/cancel-order",
         method: "POST",
         body: { order_id },
         headers: {
@@ -101,7 +101,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     trackOrder: builder.query({
       query: ({ orderId, accessToken }) => ({
-        url: `https://apiv2.mysweetwishes.com/api/orders/${orderId}/track`,
+        url: `http://apiv2.mysweetwishes.com/api/orders/${orderId}/track`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

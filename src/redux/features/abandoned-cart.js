@@ -16,7 +16,7 @@ import {
 
 import Cookies from "js-cookie";
 
-const BASE_URL = "https://apiv2.mysweetwishes.com/api";
+const BASE_URL = "http://apiv2.mysweetwishes.com/api";
 
 // Helper function to get the Authorization header
 

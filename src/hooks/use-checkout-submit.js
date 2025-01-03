@@ -208,7 +208,7 @@ const useCheckoutSubmit = () => {
   const verifyAndSaveOrder = async (response, orderInfo) => {
     try {
       const verifyResponse = await fetch(
-        "https://apiv2.mysweetwishes.com/api/verifypayment",
+        "http://apiv2.mysweetwishes.com/api/verifypayment",
         {
           method: "POST",
           headers: {

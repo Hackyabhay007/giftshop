@@ -249,7 +249,7 @@ export default function App({ Component, pageProps }) {
         {/* iOS Specific Tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        
+        <meta name="mobile-web-app-capable" content="yes"></meta>
         {/* SEO and Additional Meta */}
         <meta name="description" content="My Sweet Wishes - Personalized Gift Shopping" />
         <title>My Sweet Wishes</title>
