@@ -6,7 +6,7 @@ import { getLocalStorage, setLocalStorage } from "@/utils/localstorage";
 import { add_cart_product, clearCart } from "@/redux/features/cartSlice";
 import CartPopup from "@/components/Cart_pop/CartPopup";
 import { useRouter } from "next/router";
-const BASE_URL = "http://apiv2.mysweetwishes.com/api";
+const BASE_URL = "https://apiv2.mysweetwishes.com/api";
 
 const router = useRouter();
 
