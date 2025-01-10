@@ -13,7 +13,7 @@ import Footer from "@/layout/footers/footer";
 import { useIsMobile } from "@/utils/isMobileUtil";
 import MobileFooter from "@/layout/footers/MobileFooter";
 import PopupCart from "@/redux/features/abandoned-cart";
-
+import Features from "@/components/featureBanner";
 export default function Home() {
   const isMobile = useIsMobile();
 
@@ -82,7 +82,7 @@ export default function Home() {
           <ProductArea categories="Trending" isMobile={isMobile} />
         </>
       )}
-
+      <Features />
       <Footer />
     </Wrapper>
   );

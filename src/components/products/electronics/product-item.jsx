@@ -95,11 +95,72 @@ const ProductItem = ({ product, offer_style = false }) => {
       `}
       style={{ height: isMobile ? "auto" : "unset", zIndex: "3" }} // Full height for mobile cards
     >
+      <style jsx>{`
+        .tp-product-action {
+        }
+        .tp-product-action-btn {
+          background-color: white;
+          border: 1px solid white;
+          color: black;
+          transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tp-product-action-btn:hover {
+          background-color: #990100;
+          border-color: #990100;
+          color: white;
+        }
+        .tp-product-tooltip-2 {
+          position: absolute; /* Position relative to its parent */
+          background-color: rgba(0, 0, 0, 0.75); /* Dark background */
+          color: #fff; /* White text */
+          padding: 0px 5px; /* Space inside the tooltip */
+          border-radius: 4px; /* Rounded corners */
+          font-size: 12px; /* Small text size */
+          white-space: nowrap; /* Prevent text wrapping */
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+          visibility: hidden; /* Hide by default */
+          opacity: 0; /* Invisible by default */
+          transition: opacity 0.2s ease-in-out; /* Smooth fade effect */
+          z-index: 10; /* Ensure it appears on top */
+          top: -50px; /* Position above the button */
+          left: 50%; /* Center horizontally */
+          transform: translateX(-50%); /* Adjust for centering */
+        }
+
+        .tp-product-action-btn:hover .tp-product-tooltip-2 {
+          visibility: visible; /* Show on hover */
+          opacity: 1; /* Make it visible */
+        }
+        .tp-product-action-item-2 {
+          display: block;
+        }
+        .onHoverShow {
+          display: none;
+          position: absolute; /* Make it position-relative to its parent */
+          bottom: 8px; /* Position 10px from the bottom */
+          left: 50%; /* Center horizontally */
+          transform: translateX(-50%); /* Adjust for centering */
+          z-index: 5; /* Ensure it appears above other elements */
+        }
+
+        @media (max-width: 1024px) {
+          .onHoverShow {
+            display: flex; /* Visible on smaller screens */
+          }
+        }
+
+        .tp-product-item:hover .onHoverShow {
+          display: flex; /* Visible when the parent card is hovered */
+        }
+      `}</style>
       <div
         style={{
           overflow: "hidden",
-          height: isMobile ? "100px" : "320px", // Set height of image for mobile
+          minHeight: isMobile ? "170px" : "300px",
+          padding: isMobile ? "5px" : "10px", // Set height of image for mobile
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
         }} // Flexbox centering
@@ -128,49 +189,9 @@ const ProductItem = ({ product, offer_style = false }) => {
         </div>
 
         {/* Product action buttons */}
-        <div className="tp-product-action">
-          <style jsx>{`
-            .tp-product-action-btn {
-              background-color: white;
-              border: 1px solid white;
-              color: black;
-              transition: background-color 0.3s ease, border-color 0.3s ease;
-            }
-
-            .tp-product-action-btn:hover {
-              background-color: #990100;
-              border-color: #990100;
-              color: white;
-            }
-            .tp-product-tooltip-2 {
-              position: absolute; /* Position relative to its parent */
-              background-color: rgba(0, 0, 0, 0.75); /* Dark background */
-              color: #fff; /* White text */
-              padding: 0px 5px; /* Space inside the tooltip */
-              border-radius: 4px; /* Rounded corners */
-              font-size: 12px; /* Small text size */
-              white-space: nowrap; /* Prevent text wrapping */
-              box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-              visibility: hidden; /* Hide by default */
-              opacity: 0; /* Invisible by default */
-              transition: opacity 0.2s ease-in-out; /* Smooth fade effect */
-              z-index: 10; /* Ensure it appears on top */
-              top: -50px; /* Position above the button */
-              left: 50%; /* Center horizontally */
-              transform: translateX(-50%); /* Adjust for centering */
-            }
-
-            .tp-product-action-btn:hover .tp-product-tooltip-2 {
-              visibility: visible; /* Show on hover */
-              opacity: 1; /* Make it visible */
-            }
-            .tp-product-action-item-2 {
-              display: block;
-            }
-          `}</style>
-
+        <div className="onHoverShow">
           <div
-            className="tp-product-action-item-2  "
+            className=""
             style={{
               display: "flex",
               justifyContent: "center",
