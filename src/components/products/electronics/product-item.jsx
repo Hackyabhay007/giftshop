@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BsCartCheckFill } from "react-icons/bs";
 import { Rating } from "react-simple-star-rating";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
@@ -89,7 +90,7 @@ const ProductItem = ({ product, offer_style = false }) => {
     <div
       className={`
         ${offer_style ? "tp-product-offer-item" : "mb-25"} 
-        tp-product-item transition-3 
+        tp-product-item border-0 transition-3 
         ${isMobile ? "m-0" : ""}  // Adding mobile-specific margin
       `}
       style={{ height: isMobile ? "auto" : "unset", zIndex: "3" }} // Full height for mobile cards
@@ -102,7 +103,7 @@ const ProductItem = ({ product, offer_style = false }) => {
           justifyContent: "center",
           alignItems: "center",
         }} // Flexbox centering
-        className="tp-product-thumb p-relative fix"
+        className=" p-relative fix"
       >
         <Link href={`/product-details/${product_id}`}>
           <Image
@@ -141,20 +142,60 @@ const ProductItem = ({ product, offer_style = false }) => {
               border-color: #990100;
               color: white;
             }
+            .tp-product-tooltip-2 {
+              position: absolute; /* Position relative to its parent */
+              background-color: rgba(0, 0, 0, 0.75); /* Dark background */
+              color: #fff; /* White text */
+              padding: 0px 5px; /* Space inside the tooltip */
+              border-radius: 4px; /* Rounded corners */
+              font-size: 12px; /* Small text size */
+              white-space: nowrap; /* Prevent text wrapping */
+              box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+              visibility: hidden; /* Hide by default */
+              opacity: 0; /* Invisible by default */
+              transition: opacity 0.2s ease-in-out; /* Smooth fade effect */
+              z-index: 10; /* Ensure it appears on top */
+              top: -50px; /* Position above the button */
+              left: 50%; /* Center horizontally */
+              transform: translateX(-50%); /* Adjust for centering */
+            }
+
+            .tp-product-action-btn:hover .tp-product-tooltip-2 {
+              visibility: visible; /* Show on hover */
+              opacity: 1; /* Make it visible */
+            }
+            .tp-product-action-item-2 {
+              display: block;
+            }
           `}</style>
 
-          <div className="tp-product-action-item d-flex flex-column">
+          <div
+            className="tp-product-action-item-2  "
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)", // Larger blur and spread for a pronounced shadow
+              width: "100%",
+              borderRadius: "20px", // Smooth corners
+
+              backgroundColor: "#fff", // Background color to make the shadow more noticeable
+              transition: "box-shadow 0.3s ease-in-out", // Smooth hover effect
+            }}
+          >
             {isAddedToCart ? (
               <Link href="/cart">
                 <button
+                  style={{ borderRadius: "20px" }}
                   className={`tp-product-action-btn  tp-product-add-cart-btn`}
                 >
-                  <Cart />
-                  <span className="tp-product-tooltip">View Cart</span>
+                  <BsCartCheckFill />
+                  <span className="tp-product-tooltip-2">View Cart</span>
                 </button>
               </Link>
             ) : (
               <button
+                style={{ borderRadius: "20px" }}
                 onClick={handleAddProduct}
                 type="button"
                 className={`tp-product-action-btn ${
@@ -163,24 +204,41 @@ const ProductItem = ({ product, offer_style = false }) => {
                 disabled={stock_quantity === "out-of-stock"}
               >
                 <Cart />
-                <span className="tp-product-tooltip">Add to Cart</span>
+                <span className="tp-product-tooltip-2">Add to Cart</span>
               </button>
             )}
 
             <button
+              style={{ borderRadius: "20px" }}
               onClick={() => dispatch(handleProductModal(product))}
               type="button"
               className="tp-product-action-btn tp-product-quick-view-btn"
             >
               <QuickView />
-              <span className="tp-product-tooltip">Quick View</span>
+              <span className="tp-product-tooltip-2">Quick View</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Product content */}
-      <div className="tp-product-content">
+      <div
+        className="tp-product-content "
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div className="tp-product-price-wrapper">
+          <span
+            className="tp-product-price new-price "
+            style={{ color: "#990100" }}
+          >
+            ₹ {parseFloat(price).toFixed(2)}{" "}
+          </span>
+        </div>
         <h3 className="tp-product-title">
           <Link href={`/product-details/${id}`}>
             <span
@@ -200,14 +258,6 @@ const ProductItem = ({ product, offer_style = false }) => {
           </Link>
         </h3>
 
-        <div className="tp-product-price-wrapper">
-          <span
-            className="tp-product-price new-price "
-            style={{ color: "#990100" }}
-          >
-            ₹ {parseFloat(price).toFixed(2)}
-          </span>
-        </div>
         <div className="tp-product-stock-status">
           <span>In Stock: {stock_quantity}</span>
         </div>
