@@ -5,6 +5,7 @@ import ErrorMsg from "@/components/common/error-msg";
 import HomePrdLoader from "@/components/loader/home/home-prd-loader";
 import Link from "next/link";
 import { useIsMobile } from "@/utils/isMobileUtil";
+import Promotions from "@/components/promotions";
 
 const ProductArea = ({ categories }) => {
   const isMobile = useIsMobile(); // Check if the device is mobile
@@ -87,6 +88,7 @@ const ProductArea = ({ categories }) => {
         {/* Mobile Layout */}
         {isMobile ? (
           <>
+            <Promotions />
             <div className="mb-4 text-center">
               <button
                 className={`btn ${

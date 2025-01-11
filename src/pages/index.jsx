@@ -14,6 +14,8 @@ import { useIsMobile } from "@/utils/isMobileUtil";
 import MobileFooter from "@/layout/footers/MobileFooter";
 import PopupCart from "@/redux/features/abandoned-cart";
 import Features from "@/components/featureBanner";
+import Promotions from "@/components/promotions";
+import GiftSection from "@/components/GiftSection";
 export default function Home() {
   const isMobile = useIsMobile();
 
@@ -62,16 +64,19 @@ export default function Home() {
         structuredData={seoConfig.structuredData}
       />
       <Header />
+      <GiftSection />
       <PopupCart />
       {/* Pass isMobile prop to CategorySection */}
       <CategorySection isMobile={isMobile} />
-      <HomeHeroSlider isMobile={isMobile} />
+      {/* 
+      <HomeHeroSlider isMobile={isMobile} /> */}
 
       {/* <ProductArea categories="Trending" isMobile={isMobile} />
       <ProductArea categories="Featured" isMobile={isMobile} /> */}
       {!isMobile ? (
         <>
           <ProductArea categories="Trending" />
+          <Promotions />
           <ProductArea categories="Featured" />
           <ProductBanner />
           <BlogArea />

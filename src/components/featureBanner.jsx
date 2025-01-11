@@ -13,10 +13,21 @@ const Features = () => {
         minWidth: "95vw",
       }}
     >
+      <style jsx>{`
+        .border-lg {
+          border-right: none; /* Default for small devices */
+          border-width: 2px;
+        }
+        @media (min-width: 992px) {
+          .border-lg {
+            border-right: dotted !important; /* Dotted border for large devices */
+          }
+        }
+      `}</style>
       <div className="row text-center">
         {/* Feature 1 */}
         <div className="col-md-4">
-          <div className="p-4" style={{ borderRight: "dotted" }}>
+          <div className="p-4 border-lg ">
             <div className="mb-3">
               <FaGift size={50} className="text-primary" />
             </div>
@@ -27,7 +38,7 @@ const Features = () => {
 
         {/* Feature 2 */}
         <div className="col-md-4">
-          <div className="p-4 " style={{ borderRight: "dotted" }}>
+          <div className="p-4 border-lg ">
             <div className="mb-3">
               <FaThumbsUp size={50} className="text-warning" />
             </div>
