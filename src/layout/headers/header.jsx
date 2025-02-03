@@ -127,87 +127,118 @@ const Header = () => {
 
           {/* header main start */}
           <div className="tp-header-main tp-header-sticky">
-  <div className="container">
-    <div className="row align-items-center justify-content-between">
-      
-      {/* Mobile Menu Icon (Burger) */}
-      <div className="col-6 d-flex d-lg-none">
-        <button
-          onClick={() => setIsCanvasOpen(true)}
-          className="mobile-menu-icon"
-          style={{ background: "none", border: "none", cursor: "pointer" }}
-        >
-          {/* <Menu /> */}
-        </button>
-      </div>
-
-      {/* Desktop Menu */}
-      <div className="col-xl-6 col-lg-6 col-md-8 col-6 d-flex justify-content-start d-none d-lg-block">
-        <div className="main-menu menu-style-1">
-          <nav className="tp-main-menu-content d-flex align-items-center">
-            <Menus />
-            <CartPopup />
-          </nav>
-        </div>
-      </div>
-
-      {/* Header Options (Cart, Search, Profile, etc.) */}
-      <div className="col-xl-3 col-lg-2 col-md-8 col-6 d-flex justify-content-end">
-        <SearchBar/>
-        <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
-      </div>
-    </div>
-  </div>
-</div>
-
-        </div>
-      </header>
-
-      {/* sticky header start */}
-      <div
-        style={{ backgroundColor: "#FFFFFF" }}
-        id="header-sticky-2"
-        className={`tp-header-sticky-area p-2 ${
-          sticky ? "header-sticky-2" : ""
-        }`}
-      >
-        <div className="container">
-          <div className="tp-mega-menu-wrapper p-relative">
-            <div className="row align-items-center">
-              <div className="col-xl-2 col-lg-3 col-md-3 col-6">
-                <div className="logo">
-                  <Link href="/">
+            <div className="container">
+              <div className="row align-items-center justify-content-between">
+                {/* Mobile Menu Icon (Burger) */}
+                <div className="col-6 d-flex d-lg-none">
+                  <div className="logo">
                     <Image
                       src={logo}
                       alt="logo"
                       style={{
-                        width: isMobile ? "50px" : "70px", // Apply 50px width on mobile, 100px on desktop
-                        height: isMobile ? "50px" : "70px", // Apply 50px height on mobile, 100px on desktop
+                        width: isMobile ? "50px" : "70px",
+                        height: isMobile ? "50px" : "70px",
                         objectFit: "cover",
                         backgroundColor: "#8B0000",
                         borderRadius: "100%",
                       }}
                     />
-                  </Link>
+                  </div>
+                  <button
+                    onClick={() => setIsCanvasOpen(true)}
+                    className="mobile-menu-icon"
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {/* <Menu /> */}
+                  </button>
                 </div>
-              </div>
-              <div className="col-xl-7 col-lg-7  d-flex align-items-center justify-content-end pl-12 col-lg-6 col-md-6 d-none d-md-block">
-                <div className="tp-header-sticky-menu main-menu menu-style-1 d-none d-lg-block">
-                  <nav id="mobile-menu">
-                    <Menus />
-                    <SearchBar/>
-                  </nav>
+
+                {/* Desktop Menu */}
+                <div className="col-xl-6 col-lg-6 col-md-8 col-6 d-flex justify-content-start d-none d-lg-block">
+                  <div className="main-menu menu-style-1">
+                    <nav className="tp-main-menu-content d-flex align-items-center">
+                      <Menus />
+                      <CartPopup />
+                    </nav>
+                  </div>
                 </div>
-              </div>
-              <div className="col-xl-3 col-lg-2 col-md-3 col-6">
-                
-                <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+
+                {/* Header Options (Cart, Search, Profile, etc.) */}
+                <div className="col-xl-3 col-lg-2 col-md-8 col-6 d-flex justify-content-end">
+                  <SearchBar />
+                  <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </header>
+
+     
+      {/* sticky header start */}
+      <div
+  style={{ backgroundColor: "#FFFFFF" }}
+  id="header-sticky-2"
+  className={`tp-header-sticky-area p-3 ${sticky ? "header-sticky-2" : ""}`}
+>
+  <div className="container">
+    <div className="tp-mega-menu-wrapper p-relative">
+      <div className="row align-items-center">
+        {/* Column 1: Logo (Left Side) */}
+        <div className="col-xl-2 col-lg-2 col-md-3 col-6">
+          <div className="logo">
+            <Link href="/">
+              <Image
+                src={logo}
+                alt="logo"
+                style={{
+                  width: isMobile ? "50px" : "70px",
+                  height: isMobile ? "50px" : "70px",
+                  objectFit: "cover",
+                  backgroundColor: "#8B0000",
+                  borderRadius: "100%",
+                }}
+              />
+            </Link>
+          </div>
+        </div>
+
+        {/* Column 2: Menu (Only on Desktop) */}
+        <div className="col-xl-6 col-lg-6 col-md-6 d-none d-md-block">
+          <div className="tp-header-sticky-menu main-menu menu-style-1 d-flex align-items-center">
+            <nav id="mobile-menu">
+              <Menus />
+            </nav>
+          </div>
+        </div>
+
+        {/* Column 2 & 3: SearchBar + Header Icons (Mobile: Placed Together on Right) */}
+        <div className="col-6 d-flex justify-content-end d-md-none">
+          <SearchBar />
+          <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+        </div>
+
+        {/* Column 3: SearchBar (Only on Desktop) */}
+        <div className="col-xl-2 col-lg-2 col-md-3 d-none d-md-block">
+          <SearchBar />
+        </div>
+
+        {/* Column 4: Header Icons (Only on Desktop) */}
+        <div className="col-xl-2 col-lg-2 col-md-3 d-none d-md-block text-end">
+          <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+        </div>
       </div>
+    </div>
+  </div>
+</div>
+
       {/* sticky header end */}
+
+     
 
       {/* cart mini sidebar start */}
       <CartMiniSidebar />

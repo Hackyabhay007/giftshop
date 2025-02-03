@@ -20,24 +20,22 @@ const SearchResults = ({ data, query, onClose }) => {
       <button className="close-btn" onClick={onClose}>
         ✖
       </button>
-      {data?.length > 0 ?(
+      {data?.length > 0 ? (
         <ul className="search-results">
           {data.map((product) => (
             <li key={product.id} className="search-item">
               {/* Wrap product in Link */}
               <Link href={`/product-details/${product.id}`} passHref>
-               
-                  <img src={product.images?.[0]} alt={product.name} />
-                  <div>
-                    <p className="product-name">{product.name}</p>
-                    <p className="product-price">₹{product.price}</p>
-                  </div>
-                
+                <img src={product.images?.[0]} alt={product.name} />
+                <div>
+                  <p className="product-name">{product.name}</p>
+                  <p className="product-price">₹{product.price}</p>
+                </div>
               </Link>
             </li>
           ))}
         </ul>
-      ): (
+      ) : (
         query.length >= 3 && <p className="no-results">No products found</p>
       )}
       <style jsx>{`
@@ -54,8 +52,8 @@ const SearchResults = ({ data, query, onClose }) => {
           border-radius: 8px;
           padding: 20px;
           overflow-y: auto;
-          max-height:${isMobile ? "50%" : "55%"};
-           box-shadow: -100px 10px 2000px 1000px rgba(0, 0, 0, 0.33);
+          max-height: ${isMobile ? "50%" : "55%"};
+          box-shadow: -100px 10px 2000px 1000px rgba(0, 0, 0, 0.33);
         }
         .popup-results::-webkit-scrollbar {
           display: none;
@@ -70,9 +68,12 @@ const SearchResults = ({ data, query, onClose }) => {
           border: none;
           font-size: 24px;
           cursor: pointer;
-          position: absolute;
-          top: 10px;
-          right: 20px;
+          position: sticky;
+          top: 0px;
+          right: 10px;
+          float: right;
+          margin-bottom: 10px;
+          z-index: 1000;
         }
         .search-results {
           list-style: none;
@@ -180,9 +181,9 @@ const SearchBar = () => {
           align-items: center;
           position: relative;
           background: white;
-          padding: 8px;
+          padding: ${isMobile ? "10px" : "8px"};
           border-radius: 5px;
-          width: 300px;
+          width: 320px;
           max-width: ${isMobile ? "100%" : "350px"};
           box-shadow: none;
         }
