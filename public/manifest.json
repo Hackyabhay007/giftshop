@@ -1,0 +1,27 @@
+{
+  "name": "My Sweet Wishes",
+  "short_name": "SweetWishes",
+  "description": "Personalized Gift Shopping Experience",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#990100",
+  "theme_color": "#990100",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+     "src": "/assets/img/logo/applogo.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/logo/applogo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+     "src": "/assets/img/logo/applogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
