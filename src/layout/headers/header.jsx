@@ -169,12 +169,16 @@ const Header = () => {
 
                 {/* Header Options (Cart, Search, Profile, etc.) */}
                 <div className="col-xl-3 col-lg-2 col-md-8 col-6 d-flex justify-content-end align-items-center">
-                  <SearchBar />
-                  <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+                  <div className="mobile-actions-wrap">
+                    <SearchBar />
+                    <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+                  </div>
                   <style jsx>{`
-                    @media (max-width: 991px) {
-                      position: relative;
-                      padding-right: 40px;
+                    .mobile-actions-wrap {
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      margin-right: 10px;
                     }
                   `}</style>
                 </div>

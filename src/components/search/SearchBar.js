@@ -236,7 +236,7 @@ const SearchBar = () => {
         onClick={() => setIsOpen(true)}
       >
         <div className="search-display">
-          <Image src={searchIcon} alt="Search" width={20} height={20} />
+          <Image src={searchIcon} alt="Search" width={isMobile ? 24 : 20} height={isMobile ? 24 : 20} />
           <span className="search-text d-none d-lg-inline">Search products...</span>
         </div>
       </button>
@@ -262,15 +262,20 @@ const SearchBar = () => {
       <style jsx>{`
         .search-wrapper {
           position: relative;
-          margin-right: ${isMobile ? '8px' : '20px'};
+          margin-right: ${isMobile ? '15px' : '20px'};
         }
         .search-trigger {
           background: none;
           border: none;
           cursor: pointer;
-          padding: 8px 12px;
+          padding: ${isMobile ? '10px' : '8px 12px'};
           border-radius: 6px;
           transition: all 0.2s;
+          min-width: ${isMobile ? '40px' : 'auto'};
+          min-height: ${isMobile ? '40px' : 'auto'};
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .search-display {
           display: flex;
@@ -304,10 +309,20 @@ const SearchBar = () => {
         }
         @media (max-width: 991px) {
           .search-wrapper {
-            position: ${isMobile ? 'absolute' : 'relative'};
-            right: ${isMobile ? '50px' : 'auto'};
-            top: 50%;
-            transform: ${isMobile ? 'translateY(-50%)' : 'none'};
+            position: relative;
+            right: auto;
+            top: auto;
+            transform: none;
+            margin: 0 5px;
+          }
+          .search-trigger {
+            background: ${isMobile ? 'rgba(168, 94, 114, 0.08)' : 'none'};
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+          }
+          .search-trigger:active {
+            transform: scale(0.95);
           }
         }
         .search-input-wrapper {
