@@ -40,12 +40,12 @@ const menu_data = [
   //   title: 'About Us',
   //   link: '/aboutus',
   // },
-  {
-    id: 7,
-    single_link: true,
-    title: 'Contact Us',
-    link: '/contactus',
-  },
+  // {
+  //   id: 7,
+  //   single_link: true,
+  //   title: 'Contact Us',
+  //   link: '/contactus',
+  // },
   {
     id: 7,
     single_link: true,

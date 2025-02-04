@@ -93,11 +93,49 @@ const SearchOverlay = ({ isOpen, onClose, children }) => (
   </div>
 );
 
+const NoResults = () => (
+  <div className="no-results">
+    <div className="no-results-content">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8" />
+        <path d="M21 21l-4.35-4.35" />
+      </svg>
+      <h3>No Products Found</h3>
+      <p>We couldn't find any products matching your search.</p>
+    </div>
+    <style jsx>{`
+      .no-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+      }
+      .no-results-content {
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      .no-results svg {
+        color: #A85E72;
+        opacity: 0.5;
+        margin-bottom: 20px;
+      }
+      .no-results h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+      .no-results p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    `}</style>
+  </div>
+);
+
 const SearchResults = ({ data, isLoading, error, query }) => {
   if (isLoading) return <LoadingSpinner />;
   if (error) return <p className="search-error">Error fetching results</p>;
   if (!data?.length && query.length >= 3) {
-    return <p className="search-no-results">No products found</p>;
+    return <NoResults />;
   }
   
   return (

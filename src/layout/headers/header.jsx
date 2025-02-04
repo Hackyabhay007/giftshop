@@ -74,14 +74,15 @@ const Header = () => {
 
             {/* Actions for mobile */}
             <div className="d-flex d-lg-none align-items-center gap-3">
+              <SearchBar iconOnly={true} />
+              <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
               <button 
-                className="mobile-menu-btn"
+                className="mobile-menu-btn ms-1"
                 onClick={() => setIsCanvasOpen(true)}
+                aria-label="Menu"
               >
                 <Menu />
               </button>
-              <SearchBar iconOnly={true} />
-              <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
             </div>
 
             {/* Desktop Menu */}
@@ -130,6 +131,7 @@ const Header = () => {
           justify-content: center;
           cursor: pointer;
           transition: all 0.2s ease;
+          margin-left: 8px;
         }
 
         .mobile-menu-btn:hover {
