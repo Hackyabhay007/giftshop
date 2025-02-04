@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useSearchProductsQuery } from "@/redux/api/apiSlice";
 import searchIcon from "public/assets/img/search/search.svg";
 import Link from "next/link";
+import { useIsMobile } from "@/utils/isMobileUtil";
 
 // Debounce utility
 const debounce = (func, wait) => {
@@ -212,6 +213,7 @@ const SearchResults = ({ data, isLoading, error, query }) => {
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
   
   const debouncedSearch = useCallback(
     debounce((value) => setSearchTerm(value), 400),
@@ -233,7 +235,10 @@ const SearchBar = () => {
         className="search-trigger"
         onClick={() => setIsOpen(true)}
       >
-        <Image src={searchIcon} alt="Search" width={20} height={20} />
+        <div className="search-display">
+          <Image src={searchIcon} alt="Search" width={20} height={20} />
+          <span className="search-text d-none d-lg-inline">Search products...</span>
+        </div>
       </button>
 
       <SearchOverlay isOpen={isOpen} onClose={handleClose}>
@@ -257,12 +262,53 @@ const SearchBar = () => {
       <style jsx>{`
         .search-wrapper {
           position: relative;
+          margin-right: ${isMobile ? '8px' : '20px'};
         }
         .search-trigger {
           background: none;
           border: none;
           cursor: pointer;
-          padding: 8px;
+          padding: 8px 12px;
+          border-radius: 6px;
+          transition: all 0.2s;
+        }
+        .search-display {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-width: ${isMobile ? 'auto' : '200px'};
+          position: relative;
+        }
+        .search-text {
+          color: #666;
+          font-size: 14px;
+        }
+        .search-display::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: #ddd;
+          opacity: 0.8;
+          display: none;
+        }
+        @media (min-width: 992px) {
+          .search-trigger:hover {
+            background: rgba(168, 94, 114, 0.05);
+          }
+          .search-display::after {
+            display: block;
+          }
+        }
+        @media (max-width: 991px) {
+          .search-wrapper {
+            position: ${isMobile ? 'absolute' : 'relative'};
+            right: ${isMobile ? '50px' : 'auto'};
+            top: 50%;
+            transform: ${isMobile ? 'translateY(-50%)' : 'none'};
+          }
         }
         .search-input-wrapper {
           display: flex;

@@ -168,9 +168,15 @@ const Header = () => {
                 </div>
 
                 {/* Header Options (Cart, Search, Profile, etc.) */}
-                <div className="col-xl-3 col-lg-2 col-md-8 col-6 d-flex justify-content-end">
+                <div className="col-xl-3 col-lg-2 col-md-8 col-6 d-flex justify-content-end align-items-center">
                   <SearchBar />
                   <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+                  <style jsx>{`
+                    @media (max-width: 991px) {
+                      position: relative;
+                      padding-right: 40px;
+                    }
+                  `}</style>
                 </div>
               </div>
             </div>
@@ -223,7 +229,7 @@ const Header = () => {
         </div>
 
         {/* Column 3: SearchBar (Only on Desktop) */}
-        <div className="col-xl-2 col-lg-2 col-md-3 d-none d-md-block">
+        <div className="col-xl-2 col-lg-2 mt-18 col-md-3 d-none d-md-block">
           <SearchBar />
         </div>
 
