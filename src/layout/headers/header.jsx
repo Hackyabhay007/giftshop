@@ -27,273 +27,93 @@ const Header = () => {
   const { sticky } = useSticky();
   const dispatch = useDispatch();
   const isMobile = useIsMobile();
+
   return (
-    <>
-      <header>
-        <div
-          style={{ backgroundColor: "#FFFFFF" }}
-          className="tp-header-area p-relative z-index-11"
-        >
-          {/* header top start  */}
-          <div
-            className="tp-header-top red-bg p-relative z-index-1 d-none d-md-block"
-            style={{
-              backgroundColor: "#FFFFFF",
-              borderBottom: "2px dashed rgb(168, 94, 114)",
-              paddingBottom: "10px",
-            }}
-          >
-            <div className="container">
-              <div
-                className="row align-items-center"
-                style={{ padding: "20px 0" }}
-              >
-                {/* Logo Column */}
-                <div
-                  className="col-3 d-flex align-items-center"
-                  style={{
-                    borderRight: "4px dotted #ddd",
-                    paddingRight: "15px",
-                  }}
-                >
-                  <div className="logo">
-                    <Image
-                      src={logo}
-                      alt="logo"
-                      style={{
-                        width: isMobile ? "50px" : "70px",
-                        height: isMobile ? "50px" : "70px",
-                        objectFit: "cover",
-                        backgroundColor: "#8B0000",
-                        borderRadius: "100%",
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {/* Free Shipping Column */}
-                <div
-                  className="col-3 d-flex align-items-center"
-                  style={{ borderRight: "4px dotted #ddd", padding: "0 15px" }}
-                >
-                  <div className="tp-header-welcome d-flex align-items-center">
-                    <span>
-                      <ShippingCar />
-                    </span>
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        color: "#000000",
-                        marginLeft: "10px",
-                        marginBottom: "0",
-                      }}
-                    >
-                      FREE Express Shipping On Orders Rs500
-                    </p>
-                  </div>
-                </div>
-
-                {/* Phone Number Column */}
-                <div
-                  className="col-3 d-flex align-items-center justify-content-center"
-                  style={{ borderRight: "4px dotted #ddd", padding: "10px" }}
-                >
-                  <p
-                    style={{
-                      fontSize: "14px",
-                      color: "#000000",
-                      marginBottom: "0",
-                    }}
-                  >
-                    <span style={{ marginRight: "5px" }}>
-                      <Phone />
-                    </span>
-                    <a href="tel:999-606-10-15">(+91) 9996061015</a>
-                  </p>
-                </div>
-
-                {/* Header Top Right Column */}
-                <div
-                  className="col-3 d-flex align-items-center justify-content-end"
-                  style={{ paddingLeft: "15px" }}
-                >
-                  <div className="tp-header-top-right">
-                    <HeaderTopRight />
-                  </div>
-                </div>
+    <header className="position-relative bg-white">
+      {/* Top Bar */}
+      <div className="d-none d-lg-block border-bottom border-2" 
+           style={{ borderColor: "#A85E72 !important", borderStyle: "dashed !important" }}>
+        <div className="container py-2">
+          <div className="row align-items-center">
+            <div className="col-4">
+              <div className="d-flex align-items-center">
+                <ShippingCar />
+                <span className="ms-2">FREE Express Shipping On Orders Rs500+</span>
               </div>
             </div>
-          </div>
-
-          {/* header main start */}
-          <div className="tp-header-main tp-header-sticky">
-            <div className="container">
-              <div className="row align-items-center justify-content-between">
-                {/* Mobile Menu Icon (Burger) */}
-                <div className="col-6 d-flex d-lg-none">
-                  <div className="logo">
-                    <Image
-                      src={logo}
-                      alt="logo"
-                      style={{
-                        width: isMobile ? "50px" : "70px",
-                        height: isMobile ? "50px" : "70px",
-                        objectFit: "cover",
-                        backgroundColor: "#8B0000",
-                        borderRadius: "100%",
-                      }}
-                    />
-                  </div>
-                  <button
-                    onClick={() => setIsCanvasOpen(true)}
-                    className="mobile-menu-icon"
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {/* <Menu /> */}
-                  </button>
-                </div>
-
-                {/* Desktop Menu */}
-                <div className="col-xl-6 col-lg-6 col-md-8 col-6 d-flex justify-content-start d-none d-lg-block">
-                  <div className="main-menu menu-style-1">
-                    <nav className="tp-main-menu-content d-flex align-items-center">
-                      <Menus />
-                      <CartPopup />
-                    </nav>
-                  </div>
-                </div>
-
-                {/* Header Options (Cart, Search, Profile, etc.) */}
-                <div className="col-xl-3 col-lg-2 col-md-8 col-6 d-flex justify-content-end align-items-center">
-                  <div className="mobile-actions-wrap">
-                    <SearchBar />
-                    <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
-                    <style jsx>{`
-                      .mobile-actions-wrap {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-end;
-                        gap: 5px;
-                        margin-left: auto;
-                        padding-right: 0;
-                        width: 100%;
-                      }
-                      @media (max-width: 991px) {
-                        .mobile-actions-wrap {
-                          padding-right: 8px;
-                          justify-content: flex-end;
-                        }
-                      }
-                    `}</style>
-                  </div>
-                </div>
+            <div className="col-4 text-center">
+              <div className="d-flex align-items-center justify-content-center">
+                <Phone />
+                <a href="tel:999-606-10-15" className="ms-2">+91 9996061015</a>
               </div>
+            </div>
+            <div className="col-4 text-end">
+              <HeaderTopRight />
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-     
-      {/* sticky header start */}
-      <div
-  style={{ backgroundColor: "#FFFFFF" }}
-  id="header-sticky-2"
-  className={`tp-header-sticky-area p-3 ${sticky ? "header-sticky-2" : ""}`}
->
-  <div className="container">
-    <div className="tp-mega-menu-wrapper p-relative">
-      <div className="row align-items-center">
-        {/* Column 1: Logo (Left Side) */}
-        <div className="col-xl-2 col-lg-2 col-md-2 col-6">
-          <div className="logo">
-            <Link href="/">
-              <Image
-                src={logo}
-                alt="logo"
+      {/* Main Navigation */}
+      <nav className={`navbar navbar-expand-lg bg-white ${sticky ? 'fixed-top shadow-sm' : ''}`}>
+        <div className="container py-2">
+          <div className="d-flex align-items-center justify-content-between w-100">
+            {/* Logo */}
+            <Link href="/" className="navbar-brand p-0">
+              <Image 
+                src={logo} 
+                alt="logo" 
+                className="rounded-circle"
                 style={{
                   width: isMobile ? "50px" : "70px",
                   height: isMobile ? "50px" : "70px",
-                  objectFit: "cover",
-                  backgroundColor: "#8B0000",
-                  borderRadius: "100%",
+                  backgroundColor: "#8B0000"
                 }}
               />
             </Link>
-          </div>
-        </div>
 
-        {/* Column 2: Menu (Only on Desktop) */}
-        <div className="col-xl-5 col-lg-5 col-md-5 d-none d-md-block">
-          <div className="tp-header-sticky-menu main-menu menu-style-1 d-flex align-items-center">
-            <nav id="mobile-menu">
+            {/* Desktop Menu */}
+            <div className="d-none d-lg-flex flex-grow-1 justify-content-center px-4">
               <Menus />
-            </nav>
+            </div>
+
+            {/* Actions */}
+            <div className="d-flex align-items-center gap-3">
+              <SearchBar iconOnly={isMobile} />
+              <div className="d-none d-lg-block border-start h-75 mx-2"></div>
+              <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+              <button 
+                className="d-lg-none btn p-1"
+                onClick={() => setIsCanvasOpen(true)}
+              >
+                <Menu />
+              </button>
+            </div>
           </div>
         </div>
+      </nav>
 
-        {/* Column 2 & 3: SearchBar + Header Icons (Mobile: Placed Together on Right) */}
-        <div className="col-6 d-flex justify-content-end d-md-none">
-          <div className="mobile-actions-sticky">
-            <SearchBar placeholder="What are you looking for?" />
-            <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
-          </div>
-          <style jsx>{`
-            .mobile-actions-sticky {
-              display: flex;
-              align-items: center;
-              gap: 8px;
-              padding-right: 10px;
-              margin-left: auto;
-              width: 100%;
-              justify-content: flex-end;
-            }
-          `}</style>
-        </div>
-
-        {/* Column 3: SearchBar (Only on Desktop) */}
-        <div className="col-xl-3 col-lg-3 col-md-3 d-none d-md-block">
-          <div className="sticky-search-wrap">
-            <SearchBar placeholder="Search products..." />
-            <style jsx>{`
-              .sticky-search-wrap {
-                padding: 0 10px;
-                display: flex;
-                justify-content: center;
-                width: 100%;
-              }
-            `}</style>
-          </div>
-        </div>
-
-        {/* Column 4: Header Icons (Only on Desktop) */}
-        <div className="col-xl-2 col-lg-2 col-md-2 d-none d-md-block text-end">
-          <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-      {/* sticky header end */}
-
-     
-
-      {/* cart mini sidebar start */}
+      {/* Mobile Menu & Other Components */}
       <CartMiniSidebar />
-      {/* cart mini sidebar end */}
-
-      {/* off canvas start */}
       <OffCanvas
         isOffCanvasOpen={isOffCanvasOpen}
         setIsCanvasOpen={setIsCanvasOpen}
         categoryType="electronics"
       />
-      {/* off canvas end */}
-    </>
+
+      <style jsx>{`
+        .navbar {
+          transition: all 0.3s ease;
+        }
+        .fixed-top {
+          animation: slideDown 0.35s ease-out;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-100%); }
+          to { transform: translateY(0); }
+        }
+      `}</style>
+    </header>
   );
 };
 

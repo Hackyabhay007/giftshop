@@ -210,7 +210,7 @@ const SearchResults = ({ data, isLoading, error, query }) => {
   );
 };
 
-const SearchBar = ({ placeholder = "Search products..." }) => {
+const SearchBar = ({ iconOnly = false }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
@@ -230,17 +230,22 @@ const SearchBar = ({ placeholder = "Search products..." }) => {
   };
 
   return (
-    <div className="search-wrapper">
+    <div className="position-relative">
       <button 
-        className="search-trigger"
+        className={`btn d-flex align-items-center ${iconOnly ? 'p-2 rounded-circle' : 'px-3 py-2 rounded-pill'}`}
         onClick={() => setIsOpen(true)}
+        style={{
+          background: iconOnly ? 'rgba(168, 94, 114, 0.08)' : '#f8f8f8',
+          minWidth: iconOnly ? '40px' : '180px',
+          height: '40px'
+        }}
       >
-        <div className="search-display">
-          <Image src={searchIcon} alt="Search" width={20} height={20} />
-          <span className={`search-text ${isMobile ? 'd-none d-sm-inline' : 'd-none d-lg-inline'}`}>
-            {placeholder}
+        <Image src={searchIcon} alt="Search" width={22} height={22} />
+        {!iconOnly && (
+          <span className="ms-2 d-none d-lg-block text-body-secondary">
+            Search products
           </span>
-        </div>
+        )}
       </button>
 
       <SearchOverlay isOpen={isOpen} onClose={handleClose}>
@@ -264,61 +269,39 @@ const SearchBar = ({ placeholder = "Search products..." }) => {
       <style jsx>{`
         .search-wrapper {
           position: relative;
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          max-width: ${isMobile ? '160px' : '280px'};
         }
-        .search-trigger {
-          background: #f5f5f5;
-          border: none;
-          cursor: pointer;
-          padding: 8px 15px;
-          border-radius: 20px;
-          transition: all 0.2s;
-          width: 100%;
-          min-height: 38px;
-          display: flex;
-          align-items: center;
-        }
-        .search-display {
+
+        .search-button {
           display: flex;
           align-items: center;
           gap: 10px;
-          min-width: ${isMobile ? '100px' : '200px'};
-          position: relative;
+          height: 40px;
+          padding: ${iconOnly ? '0' : '0 16px'};
+          min-width: ${iconOnly ? '40px' : '180px'};
+          border: none;
+          border-radius: ${iconOnly ? '50%' : '20px'};
+          background: ${iconOnly ? 'rgba(168, 94, 114, 0.08)' : '#f8f8f8'};
           color: #666;
-        }
-        .search-text {
           font-size: 14px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          cursor: pointer;
+          transition: all 0.2s ease;
         }
-        
+
+        .search-button:hover {
+          background: ${iconOnly ? 'rgba(168, 94, 114, 0.12)' : '#f2f2f2'};
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
         @media (max-width: 991px) {
-          .search-wrapper {
-            flex: 0 0 auto;
-            margin-right: 5px;
-          }
-          .search-trigger {
-            background: #f5f5f5;
-            border: 1px solid #eee;
-          }
-          .search-trigger:active {
-            background: #f0f0f0;
-          }
-        }
-        
-        @media (max-width: 374px) {
-          .search-trigger {
-            width: 38px;
+          .search-button {
+            min-width: 40px;
+            padding: 0;
             border-radius: 50%;
-            padding: 8px;
             justify-content: center;
           }
-          .search-display {
-            min-width: auto;
+          .search-button span {
+            display: none;
           }
         }
 
