@@ -53,12 +53,13 @@ const SearchOverlay = ({ isOpen, onClose, children }) => (
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: 100vh;
         background: rgba(255, 255, 255, 0.98);
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
+        overflow: hidden;
       }
       .search-overlay.active {
         opacity: 1;
@@ -68,6 +69,7 @@ const SearchOverlay = ({ isOpen, onClose, children }) => (
         position: fixed;
         top: 20px;
         right: 20px;
+        z-index: 1001;
       }
       .search-close-btn {
         background: none;
@@ -78,9 +80,13 @@ const SearchOverlay = ({ isOpen, onClose, children }) => (
         color: #333;
       }
       .search-overlay-content {
-        max-width: 800px;
-        margin: 80px auto 0;
-        padding: 0 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 20px 20px;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
     `}</style>
   </div>
@@ -94,54 +100,109 @@ const SearchResults = ({ data, isLoading, error, query }) => {
   }
   
   return (
-    <div className="search-results-container">
-      {data?.map((product) => (
-        <Link 
-          href={`/product-details/${product.id}`} 
-          key={product.id}
-          className="search-result-item"
-        >
-          <div className="search-result-image">
-            <img src={product.images?.[0]} alt={product.name} />
-          </div>
-          <div className="search-result-info">
-            <h3>{product.name}</h3>
-            <p>₹{product.price}</p>
-          </div>
-        </Link>
-      ))}
+    <div className="search-results-wrapper">
+      <div className="search-results-grid">
+        {data?.map((product) => (
+          <Link 
+            href={`/product-details/${product.product_id}`} 
+            key={product.id}
+            className="search-result-card"
+          >
+            <div className="card-image">
+              <img src={product.images?.[0]} alt={product.name} />
+            </div>
+            <div className="card-content">
+              <h3>{product.name}</h3>
+              <p className="price">₹{product.price}</p>
+              {product.description && (
+                <p className="description">{product.description.slice(0, 60)}...</p>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
       <style jsx>{`
-        .search-results-container {
-          margin-top: 20px;
+        .search-results-wrapper {
+          flex: 1;
+          overflow: hidden;
+          padding: 20px 0;
         }
-        .search-result-item {
+        .search-results-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 20px;
+          height: calc(100vh - 180px);
+          overflow-y: auto;
+          padding: 10px;
+          scroll-behavior: smooth;
+        }
+        .search-result-card {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          overflow: hidden;
+          transition: transform 0.2s, box-shadow 0.2s;
           display: flex;
-          align-items: center;
-          padding: 15px;
-          border-bottom: 1px solid #eee;
-          transition: background 0.2s ease;
+          flex-direction: column;
+          text-decoration: none;
         }
-        .search-result-item:hover {
-          background: #f9f9f9;
+        .search-result-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
-        .search-result-image img {
-          width: 60px;
-          height: 60px;
+        .card-image {
+          aspect-ratio: 1;
+          overflow: hidden;
+        }
+        .card-image img {
+          width: 100%;
+          height: 100%;
           object-fit: cover;
-          border-radius: 8px;
+          transition: transform 0.3s;
         }
-        .search-result-info {
-          margin-left: 15px;
+        .search-result-card:hover .card-image img {
+          transform: scale(1.05);
         }
-        .search-result-info h3 {
+        .card-content {
+          padding: 15px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .card-content h3 {
           font-size: 16px;
-          margin: 0 0 5px 0;
           color: #333;
-        }
-        .search-result-info p {
-          font-size: 14px;
-          color: #A85E72;
           margin: 0;
+          line-height: 1.4;
+        }
+        .price {
+          font-size: 18px;
+          color: #A85E72;
+          font-weight: 600;
+          margin: 0;
+        }
+        .description {
+          font-size: 14px;
+          color: #666;
+          margin: 0;
+          line-height: 1.4;
+        }
+        
+        /* Custom Scrollbar */
+        .search-results-grid::-webkit-scrollbar {
+          width: 8px;
+        }
+        .search-results-grid::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 4px;
+        }
+        .search-results-grid::-webkit-scrollbar-thumb {
+          background: #A85E72;
+          border-radius: 4px;
+        }
+        .search-results-grid::-webkit-scrollbar-thumb:hover {
+          background: #8e4e60;
         }
       `}</style>
     </div>
