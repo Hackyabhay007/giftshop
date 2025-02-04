@@ -74,6 +74,12 @@ const Header = () => {
 
             {/* Actions for mobile */}
             <div className="d-flex d-lg-none align-items-center gap-3">
+              <button 
+                className="mobile-menu-btn"
+                onClick={() => setIsCanvasOpen(true)}
+              >
+                <Menu />
+              </button>
               <SearchBar iconOnly={true} />
               <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
             </div>
@@ -111,6 +117,28 @@ const Header = () => {
         @keyframes slideDown {
           from { transform: translateY(-100%); }
           to { transform: translateY(0); }
+        }
+
+        .mobile-menu-btn {
+          background: rgba(168, 94, 114, 0.08);
+          border: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+          background: rgba(168, 94, 114, 0.12);
+          transform: scale(1.05);
+        }
+
+        .mobile-menu-btn:active {
+          transform: scale(0.95);
         }
       `}</style>
     </header>

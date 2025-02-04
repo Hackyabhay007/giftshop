@@ -56,7 +56,7 @@ const Menus = () => {
         return (
           <li 
             key={menu.id}
-            className={`menu-item ${menu.homes || menu.products ? 'has-mega-menu' : ''}`}
+            className="menu-item"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -77,6 +77,10 @@ const Menus = () => {
           gap: 45px;
         }
 
+        .menu-item {
+          position: relative;
+        }
+
         .menu-item a {
           color: #333;
           font-size: 15px;
@@ -87,23 +91,44 @@ const Menus = () => {
           position: relative;
         }
 
+        .menu-item a::before {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: #A85E72;
+          transform: scaleX(0);
+          transform-origin: right;
+          transition: transform 0.3s ease;
+        }
+
         .menu-item a::after {
           content: '';
           position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 0;
+          bottom: -2px;
+          right: 0;
+          width: 100%;
           height: 2px;
           background: #A85E72;
-          transition: width 0.3s ease;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.3s ease;
         }
 
         .menu-item:hover a {
           color: #A85E72;
         }
 
+        .menu-item:hover a::before {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+
         .menu-item:hover a::after {
-          width: 100%;
+          transform: scaleX(1);
+          transform-origin: right;
         }
 
         @media (max-width: 1199px) {
