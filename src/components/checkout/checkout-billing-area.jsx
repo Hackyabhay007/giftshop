@@ -182,11 +182,11 @@ const CheckoutBillingArea = ({
 
       <div className="tp-checkout-bill-form">
         <div className="tp-checkout-bill-inner">
-          <div className="row">
+          <div className="row" role="form" aria-label="Billing address form">
             {/* First Name */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>
+                <label htmlFor="billing_first_name">
                   First Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -198,9 +198,10 @@ const CheckoutBillingArea = ({
                     },
                   })}
                   type="text"
+                  id="billing_first_name"
                   placeholder="First Name"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                  autoComplete="given-name"
+                  autoComplete="billing given-name"
                 />
                 <ErrorMsg msg={errors?.firstName?.message} />
               </div>
@@ -209,7 +210,7 @@ const CheckoutBillingArea = ({
             {/* Last Name */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>
+                <label htmlFor="billing_last_name">
                   Last Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -221,9 +222,10 @@ const CheckoutBillingArea = ({
                     },
                   })}
                   type="text"
+                  id="billing_last_name"
                   placeholder="Last Name"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                  autoComplete="family-name"
+                  autoComplete="billing family-name"
                 />
                 <ErrorMsg msg={errors?.lastName?.message} />
               </div>
@@ -232,7 +234,7 @@ const CheckoutBillingArea = ({
             {/* Street Address */}
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>
+                <label htmlFor="billing_address">
                   Street address <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -244,9 +246,10 @@ const CheckoutBillingArea = ({
                     },
                   })}
                   type="text"
+                  id="billing_address"
                   placeholder="House number and street name"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                  autoComplete="street-address"
+                  autoComplete="billing street-address"
                 />
                 <ErrorMsg msg={errors?.address?.message} />
               </div>
@@ -314,7 +317,7 @@ const CheckoutBillingArea = ({
             {/* Zip Code */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>
+                <label htmlFor="billing_postcode">
                   Postcode ZIP <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -326,9 +329,10 @@ const CheckoutBillingArea = ({
                     },
                   })}
                   type="text"
+                  id="billing_postcode"
                   placeholder="Postcode ZIP"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                  autoComplete="postal-code"
+                  autoComplete="billing postal-code"
                 />
                 <ErrorMsg msg={errors?.zipCode?.message} />
               </div>
@@ -337,7 +341,7 @@ const CheckoutBillingArea = ({
             {/* Phone */}
             <div className="col-md-6">
               <div className="tp-checkout-input">
-                <label>
+                <label htmlFor="billing_phone">
                   Phone <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -349,9 +353,10 @@ const CheckoutBillingArea = ({
                     },
                   })}
                   type="tel"
+                  id="billing_phone"
                   placeholder="Phone"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                  autoComplete="tel"
+                  autoComplete="billing tel"
                 />
                 <ErrorMsg msg={errors?.contactNo?.message} />
               </div>
@@ -360,7 +365,7 @@ const CheckoutBillingArea = ({
             {/* Email */}
             <div className="col-md-12">
               <div className="tp-checkout-input">
-                <label>
+                <label htmlFor="billing_email">
                   Email address <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -372,9 +377,10 @@ const CheckoutBillingArea = ({
                     },
                   })}
                   type="email"
+                  id="billing_email"
                   placeholder="Email"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                  autoComplete="email"
+                  autoComplete="billing email"
                 />
                 <ErrorMsg msg={errors?.email?.message} />
                 <p className="text-sm text-gray-500 mt-1">

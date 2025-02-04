@@ -69,18 +69,19 @@ const CustomDropdown = ({
       ref={dropdownRef}
       style={styles.dropdownContainer}
     >
-      <label>
+      <label htmlFor={`billing_${name}`}>
         {label} {label !== "Village (Optional)" && <span>*</span>}
       </label>
       <div style={styles.inputContainer}>
         <input
           type="text"
+          id={`billing_${name}`}
           placeholder={isOtherSelected ? `Enter ${label}` : `Search ${label}`}
           value={searchTerm}
           onChange={handleInputChange}
           onFocus={() => !isOtherSelected && setIsOpen(true)}
           disabled={disabled}
-          autoComplete="new-input"
+          autoComplete={`billing ${name}`}
           style={styles.input}
         />
         {searchTerm && (
