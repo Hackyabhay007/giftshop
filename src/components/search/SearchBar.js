@@ -264,6 +264,8 @@ const SearchBar = () => {
           position: relative;
           margin: 0;
           padding: 0;
+          display: flex;
+          justify-content: flex-end;
         }
         .search-trigger {
           background: none;
@@ -272,19 +274,21 @@ const SearchBar = () => {
           padding: ${isMobile ? '8px' : '8px 12px'};
           border-radius: ${isMobile ? '50%' : '6px'};
           transition: all 0.2s;
-          width: ${isMobile ? '40px' : 'auto'};
-          height: ${isMobile ? '40px' : 'auto'};
+          width: ${isMobile ? '38px' : 'auto'};
+          height: ${isMobile ? '38px' : 'auto'};
           display: flex;
           align-items: center;
           justify-content: center;
         }
         @media (max-width: 991px) {
+          .search-wrapper {
+            margin-right: 2px;
+          }
           .search-trigger {
             background: rgba(168, 94, 114, 0.08);
             transform-origin: center;
-          }
-          .search-trigger:active {
-            transform: scale(0.92);
+            position: relative;
+            right: 0;
           }
         }
         .search-display {

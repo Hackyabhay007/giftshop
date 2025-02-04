@@ -177,10 +177,16 @@ const Header = () => {
                         display: flex;
                         align-items: center;
                         justify-content: flex-end;
-                        gap: 8px;
+                        gap: 5px;
                         margin-left: auto;
-                        padding-right: 5px;
-                        flex: 1;
+                        padding-right: 0;
+                        width: 100%;
+                      }
+                      @media (max-width: 991px) {
+                        .mobile-actions-wrap {
+                          padding-right: 8px;
+                          justify-content: flex-end;
+                        }
                       }
                     `}</style>
                   </div>
@@ -231,8 +237,19 @@ const Header = () => {
 
         {/* Column 2 & 3: SearchBar + Header Icons (Mobile: Placed Together on Right) */}
         <div className="col-6 d-flex justify-content-end d-md-none">
-          <SearchBar />
-          <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+          <div className="mobile-actions-sticky">
+            <SearchBar />
+            <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+          </div>
+          <style jsx>{`
+            .mobile-actions-sticky {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              padding-right: 8px;
+              margin-left: auto;
+            }
+          `}</style>
         </div>
 
         {/* Column 3: SearchBar (Only on Desktop) */}
