@@ -1,188 +1,143 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Link from "next/link";
 // internal
 import Menus from "./header-com/menus";
 import logo from "@assets/img/logo/logo.png";
 import useSticky from "@/hooks/use-sticky";
 import useCartInfo from "@/hooks/use-cart-info";
-import { openCartMini } from "@/redux/features/cartSlice";
-import HeaderTopRight from "./header-com/header-top-right";
 import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
-import {
-  CartTwo,
-  Compare,
-  Facebook,
-  Menu,
-  PhoneTwo,
-  Wishlist,
-  Search,
-} from "@/svg";
-import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import { useIsMobile } from "@/utils/isMobileUtil";
+import HeaderTopRight from "./header-com/header-top-right";
+import HeaderMainRight from "./header-com/header-main-right";
+import { Menu, Phone, ShippingCar } from "@/svg";
+import SearchBar from "@/components/search/SearchBar";
 
-const HeaderTwo = ({ style_2 = false }) => {
-  const { wishlist } = useSelector((state) => state.wishlist);
+const HeaderTwo = () => {
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
-  const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
   const isMobile = useIsMobile();
+
   return (
-    <>
-      <header>
-        <div
-          className={`tp-header-area tp-header-style-${
-            style_2 ? "primary" : "darkRed"
-          } tp-header-height`}
-        >
-          <div
-            
-            className="tp-header-top-2 p-relative z-index-11 tp-header-top-border d-none d-md-block"
-          >
-            <div className="container">
-              <div className="row align-items-center">
-                <div className="col-md-6">
-                  <div className="tp-header-info d-flex align-items-center">
-                    <div className="tp-header-info-item">
-                      <a
-                        href="#"
-                        style={{
-                          color: "black",
-                          textDecoration: "none",
-                          display: "flex",
-                          alignItems: "center",
-                          transition: "color 0.3s ease",
-                        }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.color = "#990100")
-                        }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.style.color = "black")
-                        }
-                      >
-                        <span>
-                          <Facebook />
-                        </span>
-                        1000 Followers
-                      </a>
-                    </div>
-                    <div className="tp-header-info-item">
-                      <a style={{ color: "black" }} href="tel:402-763-282-46">
-                        <span>
-                          <PhoneTwo />
-                        </span>{" "}
-                        +(91) 9996061015
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="tp-header-top-right tp-header-top-black d-flex align-items-center justify-content-end">
-                    <HeaderTopRight />
-                  </div>
-                </div>
+    <header className="position-relative bg-white">
+      {/* Top Bar */}
+      <div className="d-none d-lg-block border-bottom border-2" 
+           style={{ borderColor: "#A85E72 !important", borderStyle: "dashed !important" }}>
+        <div className="container py-2">
+          <div className="row align-items-center">
+            <div className="col-4">
+              <div className="d-flex align-items-center">
+                <ShippingCar />
+                <span className="ms-2">FREE Express Shipping On Orders Rs500+</span>
               </div>
             </div>
-          </div>
-
-          <div
-           style={{ backgroundColor: "#FFFFFF",height:"100px" }}
-            id="header-sticky"
-            className={`tp-header-bottom-2 d-flex align-items-center justify-content-center tp-header-sticky ${
-              sticky ? "header-sticky" : ""
-            }`}
-          >
-            <div className="container">
-              <div className="tp-mega-menu-wrapper p-relative">
-                <div className="row align-items-center justify-content-center">
-                  <div className="col-xl-5 col-lg-5 col-md-5 col-sm-4 col-6">
-                    <div className="logo">
-                      <Link href="/">
-                      <Image
-                      src={logo}
-                      alt="logo"
-                      style={{
-                        width: isMobile ? "50px" : "70px", // Apply 50px width on mobile, 100px on desktop
-                        height: isMobile ? "50px" : "70px", // Apply 50px height on mobile, 100px on desktop
-                        objectFit: "cover",
-                        backgroundColor:'#8B0000',
-                        borderRadius:'100%'
-                      }}
-                    />
-                      </Link>
-                      
-                    </div>
-                  </div>
-                  <div className="col-xl-5 d-none d-xl-block">
-                    <div className="main-menu menu-style-2">
-                      <nav className="tp-main-menu-content">
-                        <Menus />
-                      </nav>
-                    </div>
-                  </div>
-                  <div className="col-xl-2 col-lg-7 col-md-7 col-sm-8 col-6">
-                    <div className="tp-header-bottom-right d-flex align-items-center justify-content-end pl-30">
-                      <div className="tp-header-search-2 d-none d-sm-block">
-                        {/* <form onSubmit={handleSubmit}>
-                          <input
-                            onChange={(e) => setSearchText(e.target.value)}
-                            value={searchText}
-                            type="text"
-                            placeholder="Search for Products..." />
-                          <button type="submit">
-                            <Search />
-                          </button>
-                        </form> */}
-                      </div>
-                      <div className="tp-header-action d-flex align-items-center ml-30">
-                        <div className="tp-header-action-item d-none d-lg-block"></div>
-                        <div className="tp-header-action-item d-none d-lg-block"></div>
-                        <div className="tp-header-action-item">
-                          <button
-                            onClick={() => dispatch(openCartMini())}
-                            className="tp-header-action-btn cartmini-open-btn d-none d-md-block"
-                          >
-                            <CartTwo />
-                            <span style={{backgroundColor:"#990100",borderColor:"white"}} className="tp-header-action-badge">
-                              {quantity}
-                            </span>
-                          </button>
-                        </div>
-                        <div className="tp-header-action-item tp-header-hamburger mr-20 d-xl-none">
-                          <button
-                            onClick={() => setIsCanvasOpen(true)}
-                            type="button"
-                            className="tp-offcanvas-open-btn"
-                          >
-                            <Menu />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="col-4 text-center">
+              <div className="d-flex align-items-center justify-content-center">
+                <Phone />
+                <a href="tel:999-606-10-15" className="ms-2">+91 9996061015</a>
               </div>
+            </div>
+            <div className="col-4 text-end">
+              <HeaderTopRight />
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* cart mini sidebar start */}
+      {/* Main Navigation */}
+      <nav className={`navbar navbar-expand-lg bg-white ${sticky ? 'fixed-top shadow-sm' : ''}`}>
+        <div className="container py-2">
+          <div className="d-flex align-items-center justify-content-between w-100">
+            {/* Logo */}
+            <Link href="/" className="navbar-brand p-0">
+              <Image 
+                src={logo} 
+                alt="logo" 
+                className="rounded-circle"
+                style={{
+                  width: isMobile ? "45px" : "70px",
+                  height: isMobile ? "45px" : "70px",
+                  backgroundColor: "#8B0000"
+                }}
+              />
+            </Link>
+
+            {/* Actions for mobile */}
+            <div className="d-flex d-lg-none align-items-center gap-3">
+              {/* <SearchBar iconOnly={true} /> */}
+              <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+              <button 
+                className="mobile-menu-btn ms-1"
+                onClick={() => setIsCanvasOpen(true)}
+                aria-label="Menu"
+              >
+                <Menu />
+              </button>
+            </div>
+
+            {/* Desktop Menu */}
+            <div className="d-none d-lg-flex flex-grow-1 justify-content-center px-5">
+              <Menus />
+            </div>
+
+            {/* Desktop Actions */}
+            <div className="d-none d-lg-flex align-items-center gap-4">
+              <SearchBar iconOnly={false} />
+              <div className="border-start h-75"></div>
+              <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu & Other Components */}
       <CartMiniSidebar />
-      {/* cart mini sidebar end */}
-
-      {/* off canvas start */}
       <OffCanvas
         isOffCanvasOpen={isOffCanvasOpen}
         setIsCanvasOpen={setIsCanvasOpen}
-        categoryType="fashion"
+        categoryType="electronics"
       />
-      {/* off canvas end */}
-    </>
+
+      <style jsx>{`
+        .navbar {
+          transition: all 0.3s ease;
+        }
+        .fixed-top {
+          animation: slideDown 0.35s ease-out;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-100%); }
+          to { transform: translateY(0); }
+        }
+
+        .mobile-menu-btn {
+          background: rgba(168, 94, 114, 0.08);
+          border: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          margin-left: 8px;
+        }
+
+        .mobile-menu-btn:hover {
+          background: rgba(168, 94, 114, 0.12);
+          transform: scale(1.05);
+        }
+
+        .mobile-menu-btn:active {
+          transform: scale(0.95);
+        }
+      `}</style>
+    </header>
   );
 };
 

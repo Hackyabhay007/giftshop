@@ -98,7 +98,7 @@ const Menus = () => {
           left: 0;
           width: 100%;
           height: 2px;
-          background: #A85E72;
+          background: #FF0000;
           transform: scaleX(0);
           transform-origin: right;
           transition: transform 0.3s ease;
@@ -111,14 +111,14 @@ const Menus = () => {
           right: 0;
           width: 100%;
           height: 2px;
-          background: #A85E72;
+          background: #FF0000;
           transform: scaleX(0);
           transform-origin: left;
           transition: transform 0.3s ease;
         }
 
         .menu-item:hover a {
-          color: #A85E72;
+          color: #FF0000;
         }
 
         .menu-item:hover a::before {
