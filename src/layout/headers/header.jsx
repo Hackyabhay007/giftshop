@@ -208,7 +208,7 @@ const Header = () => {
     <div className="tp-mega-menu-wrapper p-relative">
       <div className="row align-items-center">
         {/* Column 1: Logo (Left Side) */}
-        <div className="col-xl-2 col-lg-2 col-md-3 col-6">
+        <div className="col-xl-2 col-lg-2 col-md-2 col-6">
           <div className="logo">
             <Link href="/">
               <Image
@@ -227,7 +227,7 @@ const Header = () => {
         </div>
 
         {/* Column 2: Menu (Only on Desktop) */}
-        <div className="col-xl-6 col-lg-6 col-md-6 d-none d-md-block">
+        <div className="col-xl-5 col-lg-5 col-md-5 d-none d-md-block">
           <div className="tp-header-sticky-menu main-menu menu-style-1 d-flex align-items-center">
             <nav id="mobile-menu">
               <Menus />
@@ -238,27 +238,39 @@ const Header = () => {
         {/* Column 2 & 3: SearchBar + Header Icons (Mobile: Placed Together on Right) */}
         <div className="col-6 d-flex justify-content-end d-md-none">
           <div className="mobile-actions-sticky">
-            <SearchBar />
+            <SearchBar placeholder="What are you looking for?" />
             <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
           </div>
           <style jsx>{`
             .mobile-actions-sticky {
               display: flex;
               align-items: center;
-              gap: 5px;
-              padding-right: 8px;
+              gap: 8px;
+              padding-right: 10px;
               margin-left: auto;
+              width: 100%;
+              justify-content: flex-end;
             }
           `}</style>
         </div>
 
         {/* Column 3: SearchBar (Only on Desktop) */}
-        <div className="col-xl-2 col-lg-2 mt-18 col-md-3 d-none d-md-block">
-          <SearchBar />
+        <div className="col-xl-3 col-lg-3 col-md-3 d-none d-md-block">
+          <div className="sticky-search-wrap">
+            <SearchBar placeholder="Search products..." />
+            <style jsx>{`
+              .sticky-search-wrap {
+                padding: 0 10px;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+              }
+            `}</style>
+          </div>
         </div>
 
         {/* Column 4: Header Icons (Only on Desktop) */}
-        <div className="col-xl-2 col-lg-2 col-md-3 d-none d-md-block text-end">
+        <div className="col-xl-2 col-lg-2 col-md-2 d-none d-md-block text-end">
           <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
         </div>
       </div>

@@ -210,7 +210,7 @@ const SearchResults = ({ data, isLoading, error, query }) => {
   );
 };
 
-const SearchBar = () => {
+const SearchBar = ({ placeholder = "Search products..." }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
@@ -236,8 +236,10 @@ const SearchBar = () => {
         onClick={() => setIsOpen(true)}
       >
         <div className="search-display">
-          <Image src={searchIcon} alt="Search" width={22} height={22} />
-          <span className="search-text d-none d-lg-inline">Search products...</span>
+          <Image src={searchIcon} alt="Search" width={20} height={20} />
+          <span className={`search-text ${isMobile ? 'd-none d-sm-inline' : 'd-none d-lg-inline'}`}>
+            {placeholder}
+          </span>
         </div>
       </button>
 
@@ -264,83 +266,62 @@ const SearchBar = () => {
           position: relative;
           margin: 0;
           padding: 0;
-          display: flex;
-          justify-content: flex-end;
+          width: 100%;
+          max-width: ${isMobile ? '160px' : '280px'};
         }
         .search-trigger {
-          background: none;
+          background: #f5f5f5;
           border: none;
           cursor: pointer;
-          padding: ${isMobile ? '8px' : '8px 12px'};
-          border-radius: ${isMobile ? '50%' : '6px'};
+          padding: 8px 15px;
+          border-radius: 20px;
           transition: all 0.2s;
-          width: ${isMobile ? '38px' : 'auto'};
-          height: ${isMobile ? '38px' : 'auto'};
+          width: 100%;
+          min-height: 38px;
           display: flex;
           align-items: center;
-          justify-content: center;
-        }
-        @media (max-width: 991px) {
-          .search-wrapper {
-            margin-right: 2px;
-          }
-          .search-trigger {
-            background: rgba(168, 94, 114, 0.08);
-            transform-origin: center;
-            position: relative;
-            right: 0;
-          }
         }
         .search-display {
           display: flex;
           align-items: center;
-          gap: 8px;
-          min-width: ${isMobile ? 'auto' : '200px'};
+          gap: 10px;
+          min-width: ${isMobile ? '100px' : '200px'};
           position: relative;
+          color: #666;
         }
         .search-text {
-          color: #666;
           font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
-        .search-display::after {
-          content: '';
-          position: absolute;
-          bottom: -4px;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: #ddd;
-          opacity: 0.8;
-          display: none;
-        }
-        @media (min-width: 992px) {
-          .search-trigger:hover {
-            background: rgba(168, 94, 114, 0.05);
-          }
-          .search-display::after {
-            display: block;
-          }
-        }
+        
         @media (max-width: 991px) {
           .search-wrapper {
-            position: relative;
-            right: auto;
-            top: auto;
-            transform: none;
-            margin-right: 0px;
-            margin-left: auto;
-            padding-right: 5px;
+            flex: 0 0 auto;
+            margin-right: 5px;
           }
           .search-trigger {
-            background: ${isMobile ? 'rgba(168, 94, 114, 0.08)' : 'none'};
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            background: #f5f5f5;
+            border: 1px solid #eee;
           }
           .search-trigger:active {
-            transform: scale(0.95);
+            background: #f0f0f0;
           }
         }
+        
+        @media (max-width: 374px) {
+          .search-trigger {
+            width: 38px;
+            border-radius: 50%;
+            padding: 8px;
+            justify-content: center;
+          }
+          .search-display {
+            min-width: auto;
+          }
+        }
+
         .search-input-wrapper {
           display: flex;
           align-items: center;
