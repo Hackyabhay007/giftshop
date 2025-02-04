@@ -8,29 +8,45 @@ const CustomDropdown = ({
   value,
   error,
   disabled,
+  allowOther = true, // New prop to control Other option
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isOtherSelected, setIsOtherSelected] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Use the current value to set the searchTerm initially
   useEffect(() => {
     setSearchTerm(value || "");
-  }, [value]);
+    setIsOtherSelected(!options.includes(value) && value !== "");
+  }, [value, options]);
 
-  // Filter options based on the searchTerm
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleOptionClick = (option) => {
-    setSearchTerm(option);
-    onChange(option);
+    if (option === "Other") {
+      setIsOtherSelected(true);
+      setSearchTerm("");
+    } else {
+      setIsOtherSelected(false);
+      setSearchTerm(option);
+      onChange(option);
+    }
     setIsOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (isOtherSelected) {
+      onChange(value);
+    }
   };
 
   const handleClearSelection = () => {
     setSearchTerm("");
+    setIsOtherSelected(false);
     onChange("");
   };
 
@@ -59,10 +75,10 @@ const CustomDropdown = ({
       <div style={styles.inputContainer}>
         <input
           type="text"
-          placeholder={`Search ${label}`}
+          placeholder={isOtherSelected ? `Enter ${label}` : `Search ${label}`}
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setIsOpen(true)}
+          onChange={handleInputChange}
+          onFocus={() => !isOtherSelected && setIsOpen(true)}
           disabled={disabled}
           autoComplete="new-input"
           style={styles.input}
@@ -72,28 +88,58 @@ const CustomDropdown = ({
             ×
           </span>
         )}
-        <span style={styles.dropdownArrow} onClick={() => setIsOpen(!isOpen)}>
-          ▼
-        </span>
+        {!isOtherSelected && (
+          <span style={styles.dropdownArrow} onClick={() => setIsOpen(!isOpen)}>
+            ▼
+          </span>
+        )}
       </div>
-      {isOpen && (
+      {isOpen && !isOtherSelected && (
         <ul className="dropdown-list" style={styles.dropdownList}>
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((option, index) => (
-              <li
-                key={index}
-                onClick={() => handleOptionClick(option)}
-                style={styles.dropdownItem}
-                onMouseEnter={(e) =>
-                  (e.target.style.backgroundColor = "#f0f0f0")
-                }
-                onMouseLeave={(e) => (e.target.style.backgroundColor = "white")}
-              >
-                {option}
-              </li>
-            ))
-          ) : (
-            <li style={styles.dropdownItem}>Other</li>
+          {filteredOptions.length > 0 && (
+            <>
+              {filteredOptions.map((option, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleOptionClick(option)}
+                  style={styles.dropdownItem}
+                  onMouseEnter={(e) =>
+                    (e.target.style.backgroundColor = "#f0f0f0")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.backgroundColor = "white")
+                  }
+                >
+                  {option}
+                </li>
+              ))}
+              {allowOther && (
+                <li
+                  onClick={() => handleOptionClick("Other")}
+                  style={styles.dropdownItem}
+                  onMouseEnter={(e) =>
+                    (e.target.style.backgroundColor = "#f0f0f0")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.backgroundColor = "white")
+                  }
+                >
+                  Other
+                </li>
+              )}
+            </>
+          )}
+          {filteredOptions.length === 0 && allowOther && (
+            <li
+              onClick={() => handleOptionClick("Other")}
+              style={styles.dropdownItem}
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "#f0f0f0")
+              }
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "white")}
+            >
+              Other
+            </li>
           )}
         </ul>
       )}

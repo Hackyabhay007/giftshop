@@ -107,17 +107,15 @@ const CheckoutBillingArea = ({
       try {
         const data = await stateCityData[state]();
         setDistricts(data.districts || []);
-        setSubDistricts([]);
-        setVillages([]);
       } catch (error) {
         console.error("Error loading state data:", error);
         setDistricts([]);
       }
     } else {
       setDistricts([]);
-      setSubDistricts([]);
-      setVillages([]);
     }
+    setSubDistricts([]);
+    setVillages([]);
   };
 
   const handleDistrictChange = (district) => {
@@ -126,10 +124,10 @@ const CheckoutBillingArea = ({
     setValue("subDistrict", "");
     setValue("village", "");
 
-    const selectedDistrictData = districts.find((d) => d.district === district);
-    setSubDistricts(
-      selectedDistrictData ? selectedDistrictData.subDistricts : []
-    );
+    if (districts.length > 0) {
+      const selectedDistrictData = districts.find((d) => d.district === district);
+      setSubDistricts(selectedDistrictData ? selectedDistrictData.subDistricts : []);
+    }
     setVillages([]);
   };
 
@@ -137,12 +135,12 @@ const CheckoutBillingArea = ({
     setValue("subDistrict", subDistrict);
     setValue("village", "");
 
-    const selectedSubDistrictData = subDistricts.find(
-      (sd) => sd.subDistrict === subDistrict
-    );
-    setVillages(
-      selectedSubDistrictData ? selectedSubDistrictData.villages : []
-    );
+    if (subDistricts.length > 0) {
+      const selectedSubDistrictData = subDistricts.find(
+        (sd) => sd.subDistrict === subDistrict
+      );
+      setVillages(selectedSubDistrictData ? selectedSubDistrictData.villages : []);
+    }
   };
 
   const handleClearForm = () => {
