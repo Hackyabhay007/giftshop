@@ -172,15 +172,18 @@ const Header = () => {
                   <div className="mobile-actions-wrap">
                     <SearchBar />
                     <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+                    <style jsx>{`
+                      .mobile-actions-wrap {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 8px;
+                        margin-left: auto;
+                        padding-right: 5px;
+                        flex: 1;
+                      }
+                    `}</style>
                   </div>
-                  <style jsx>{`
-                    .mobile-actions-wrap {
-                      display: flex;
-                      align-items: center;
-                      gap: 8px;
-                      margin-right: 10px;
-                    }
-                  `}</style>
                 </div>
               </div>
             </div>
