@@ -236,7 +236,7 @@ const SearchBar = () => {
         onClick={() => setIsOpen(true)}
       >
         <div className="search-display">
-          <Image src={searchIcon} alt="Search" width={isMobile ? 24 : 20} height={isMobile ? 24 : 20} />
+          <Image src={searchIcon} alt="Search" width={22} height={22} />
           <span className="search-text d-none d-lg-inline">Search products...</span>
         </div>
       </button>
@@ -262,43 +262,30 @@ const SearchBar = () => {
       <style jsx>{`
         .search-wrapper {
           position: relative;
-          margin-right: ${isMobile ? '12px' : '20px'};
-          margin-left: ${isMobile ? 'auto' : '0'};
-          display: flex;
-          justify-content: ${isMobile ? 'flex-end' : 'flex-start'};
+          margin: 0;
+          padding: 0;
         }
-        
-        @media (max-width: 991px) {
-          .search-wrapper {
-            position: relative;
-            right: 0;
-            margin-left: auto;
-            margin-right: 5px;
-            padding-right: 10px;
-            flex: 0 0 auto;
-          }
-          .search-trigger {
-            background: ${isMobile ? 'rgba(168, 94, 114, 0.08)' : 'none'};
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            position: relative;
-            right: 0;
-          }
-        }
-        
         .search-trigger {
           background: none;
           border: none;
           cursor: pointer;
-          padding: ${isMobile ? '10px' : '8px 12px'};
-          border-radius: 6px;
+          padding: ${isMobile ? '8px' : '8px 12px'};
+          border-radius: ${isMobile ? '50%' : '6px'};
           transition: all 0.2s;
-          min-width: ${isMobile ? '40px' : 'auto'};
-          min-height: ${isMobile ? '40px' : 'auto'};
+          width: ${isMobile ? '40px' : 'auto'};
+          height: ${isMobile ? '40px' : 'auto'};
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+        @media (max-width: 991px) {
+          .search-trigger {
+            background: rgba(168, 94, 114, 0.08);
+            transform-origin: center;
+          }
+          .search-trigger:active {
+            transform: scale(0.92);
+          }
         }
         .search-display {
           display: flex;
