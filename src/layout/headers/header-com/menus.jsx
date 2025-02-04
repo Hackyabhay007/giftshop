@@ -49,59 +49,69 @@ const Menus = () => {
   }
 
   return (
-    <ul style={{ listStyle: "none", padding: 0, display: "flex", gap: "5px" }}>
+    <ul className="main-menu-list">
       {menu_data.map((menu) => {
-        const [isHovered, setIsHovered] = useState(false); // State to track hover
+        const [isHovered, setIsHovered] = useState(false);
 
-        const linkStyle = {
-          color: isHovered ? "#953553" : "#811331", // Change color on hover
-          transition: "color 0.3s, background-size 0.3s", // Smooth transition for text color and underline
-          fontSize: "16px",
-          textDecoration: "none",
-          position: "relative",
-          display: "inline-block",
-          paddingBottom: "2px", // Space for the underline
-          backgroundImage: isHovered ? "linear-gradient(to right,rgb(83, 52, 48),rgb(110, 101, 100))" : "none", // Underline color
-          backgroundSize: isHovered ? "100% 2px" : "0% 2px", // Animate the underline
-          backgroundPosition: "bottom left", // Start the underline from the left
-          backgroundRepeat: "no-repeat",
-        };
-
-        return menu.homes ? (
-          <li
+        return (
+          <li 
             key={menu.id}
-            className="has-mega-menu"
-            onMouseEnter={() => setIsHovered(true)} // Set hover state to true
-            onMouseLeave={() => setIsHovered(false)} // Set hover state to false
-          >
-            <Link style={linkStyle} href={menu.link}>
-              {menu.title}
-            </Link>
-          </li>
-        ) : menu.products ? (
-          <li
-            key={menu.id}
-            className="has-mega-menu"
+            className={`menu-item ${menu.homes || menu.products ? 'has-mega-menu' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <Link style={linkStyle} href={menu.link}>
-              {menu.title}
-            </Link>
-          </li>
-        ) : (
-          <li key={menu.id}>
-            <Link
-              style={linkStyle}
-              href={menu.link}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
+            <Link href={menu.link}>
               {menu.title}
             </Link>
           </li>
         );
       })}
+
+      <style jsx>{`
+        .main-menu-list {
+          display: flex;
+          align-items: center;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          gap: 45px;
+        }
+
+        .menu-item a {
+          color: #333;
+          font-size: 15px;
+          font-weight: 500;
+          text-decoration: none;
+          padding: 8px 0;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+
+        .menu-item a::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: #A85E72;
+          transition: width 0.3s ease;
+        }
+
+        .menu-item:hover a {
+          color: #A85E72;
+        }
+
+        .menu-item:hover a::after {
+          width: 100%;
+        }
+
+        @media (max-width: 1199px) {
+          .main-menu-list {
+            gap: 35px;
+          }
+        }
+      `}</style>
     </ul>
   );
 };

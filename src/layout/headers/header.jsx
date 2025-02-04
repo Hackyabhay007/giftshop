@@ -65,29 +65,29 @@ const Header = () => {
                 alt="logo" 
                 className="rounded-circle"
                 style={{
-                  width: isMobile ? "50px" : "70px",
-                  height: isMobile ? "50px" : "70px",
+                  width: isMobile ? "45px" : "70px",
+                  height: isMobile ? "45px" : "70px",
                   backgroundColor: "#8B0000"
                 }}
               />
             </Link>
 
+            {/* Actions for mobile */}
+            <div className="d-flex d-lg-none align-items-center gap-3">
+              <SearchBar iconOnly={true} />
+              <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
+            </div>
+
             {/* Desktop Menu */}
-            <div className="d-none d-lg-flex flex-grow-1 justify-content-center px-4">
+            <div className="d-none d-lg-flex flex-grow-1 justify-content-center px-5">
               <Menus />
             </div>
 
-            {/* Actions */}
-            <div className="d-flex align-items-center gap-3">
-              <SearchBar iconOnly={isMobile} />
-              <div className="d-none d-lg-block border-start h-75 mx-2"></div>
+            {/* Desktop Actions */}
+            <div className="d-none d-lg-flex align-items-center gap-4">
+              <SearchBar iconOnly={false} />
+              <div className="border-start h-75"></div>
               <HeaderMainRight setIsCanvasOpen={setIsCanvasOpen} />
-              <button 
-                className="d-lg-none btn p-1"
-                onClick={() => setIsCanvasOpen(true)}
-              >
-                <Menu />
-              </button>
             </div>
           </div>
         </div>

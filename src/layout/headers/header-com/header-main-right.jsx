@@ -17,8 +17,9 @@ const HeaderMainRight = ({ setIsCanvasOpen }) => {
   const [hoveredItem, setHoveredItem] = useState(false); // State to track hovered item
 
   return (
-    <div className="tp-header-main-right d-flex align-items-center justify-content-end">
-      <div className="tp-header-login d-none d-lg-block">
+    <div className="header-actions d-flex align-items-center">
+      {/* User Section */}
+      <div className="d-none d-lg-block me-4">
         <div className="d-flex align-items-center">
           <div className="" style={{ marginRight: "8px" }}>
             <span>
@@ -79,35 +80,47 @@ const HeaderMainRight = ({ setIsCanvasOpen }) => {
           </div>
         </div>
       </div>
-      <div className="tp-header-action d-flex align-items-center ml-40">
-        <div className="tp-header-action-item">
-          <button
-            onClick={() => dispatch(openCartMini())}
-            type="button"
-            onMouseEnter={() => setHoveredItem(true)}
-            onMouseLeave={() => setHoveredItem(false)}
-            style={{ color: hoveredItem ? "#000000" : "#fff" }}
-            className="tp-header-action-btn cartmini-open-btn d-none d-md-block"
-          >
-            <CartTwo />
-            <span
-              style={{ backgroundColor: "#990100", borderColor: "black" }}
-              className="tp-header-action-badge"
-            >
-              {quantity}
-            </span>
-          </button>
-        </div>
-        <div className="tp-header-action-item d-lg-none">
-          <button
-            onClick={() => setIsCanvasOpen(true)}
-            type="button"
-            className="tp-header-action-btn tp-offcanvas-open-btn"
-          >
-            <Menu />
-          </button>
-        </div>
-      </div>
+
+      {/* Cart Button */}
+      <button
+        onClick={() => dispatch(openCartMini())}
+        className="cart-button"
+        onMouseEnter={() => setHoveredItem(true)}
+        onMouseLeave={() => setHoveredItem(false)}
+      >
+        <CartTwo />
+        <span className="cart-badge">{quantity}</span>
+      </button>
+
+      <style jsx>{`
+        .header-actions {
+          gap: 20px;
+        }
+        .cart-button {
+          background: none;
+          border: none;
+          padding: 8px;
+          cursor: pointer;
+          position: relative;
+          color: ${hoveredItem ? "#000000" : "#666"};
+          transition: color 0.2s ease;
+        }
+        .cart-badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background: #990100;
+          color: white;
+          border-radius: 50%;
+          min-width: 18px;
+          height: 18px;
+          font-size: 11px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #fff;
+        }
+      `}</style>
     </div>
   );
 };
