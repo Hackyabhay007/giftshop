@@ -24,7 +24,7 @@ const HomeHero = () => {
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         width: "100vw",
-        height: "100vh",
+        height: isMobile ? "300vh" : "100vh", // Triple height on mobile
         margin: 0,
         padding: 0,
       }}
@@ -34,7 +34,7 @@ const HomeHero = () => {
           key={item.id}
           style={{
             width: isMobile ? "100%" : "33.333333%",
-            height: "100%",
+            height: isMobile ? "33.333333%" : "100%", // Equal height sections on mobile
             position: "relative",
             overflow: "hidden",
           }}

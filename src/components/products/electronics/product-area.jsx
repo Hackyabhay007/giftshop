@@ -84,7 +84,7 @@ const ProductArea = ({ categories }) => {
       <div className="premium-background">
         <div className="container">
           <div className="header-container">
-            <h2 className="premium-title">Products</h2>
+            <h2 className="premium-title">Featured Products</h2>
             <div className="premium-sort">
               <select
                 className="sort-select"
