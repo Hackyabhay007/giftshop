@@ -5,13 +5,19 @@ import searchIcon from "public/assets/img/search/search.svg";
 import Link from "next/link";
 import { useIsMobile } from "@/utils/isMobileUtil";
 
-// Debounce utility
+// Updated debounce utility with cancel function
 const debounce = (func, wait) => {
   let timeout;
-  return (...args) => {
+  const debouncedFn = (...args) => {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
     clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
+    timeout = setTimeout(later, wait);
   };
+  debouncedFn.cancel = () => clearTimeout(timeout);
+  return debouncedFn;
 };
 
 const LoadingSpinner = () => (
@@ -134,10 +140,44 @@ const NoResults = () => (
 const SearchResults = ({ data, isLoading, error, query }) => {
   if (isLoading) return <LoadingSpinner />;
   if (error) return <p className="search-error">Error fetching results</p>;
+  
+  // Show initial message for short queries
+  if (query.length > 0 && query.length < 3) {
+    return (
+      <div className="initial-search">
+        <p>Please enter at least 3 characters to search products</p>
+        <style jsx>{`
+          .initial-search {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+          }
+        `}</style>
+      </div>
+    );
+  }
+  
+  // Show no results message only if query is valid
   if (!data?.length && query.length >= 3) {
     return <NoResults />;
   }
   
+  // Show empty state if no query
+  if (!query) {
+    return (
+      <div className="empty-search">
+        <p>Start typing to search products...</p>
+        <style jsx>{`
+          .empty-search {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   return (
     <div className="search-results-wrapper">
       <div className="search-results-grid">
@@ -250,21 +290,32 @@ const SearchResults = ({ data, isLoading, error, query }) => {
 
 const SearchBar = ({ iconOnly = false }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedTerm, setDebouncedTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
-  
-  const debouncedSearch = useCallback(
-    debounce((value) => setSearchTerm(value), 400),
-    []
-  );
 
-  const { data, error, isLoading } = useSearchProductsQuery(searchTerm, {
-    skip: searchTerm.length < 3,
+  // Update debounced term after delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const { data, error, isLoading } = useSearchProductsQuery(debouncedTerm, {
+    skip: debouncedTerm.length < 3,
   });
+
+  const handleSearchInput = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+  };
 
   const handleClose = () => {
     setIsOpen(false);
     setSearchTerm("");
+    setDebouncedTerm("");
   };
 
   return (
@@ -291,8 +342,9 @@ const SearchBar = ({ iconOnly = false }) => {
           <Image src={searchIcon} alt="" width={20} height={20} />
           <input
             type="text"
-            placeholder="Search for products..."
-            onChange={(e) => debouncedSearch(e.target.value)}
+            placeholder="Start typing to search..."
+            value={searchTerm}
+            onChange={handleSearchInput}
             autoFocus
           />
         </div>
@@ -300,7 +352,7 @@ const SearchBar = ({ iconOnly = false }) => {
           data={data} 
           isLoading={isLoading} 
           error={error}
-          query={searchTerm}
+          query={searchTerm}  // Changed from debouncedTerm to searchTerm
         />
       </SearchOverlay>
 
