@@ -61,21 +61,19 @@ const ProductArea = ({ categories }) => {
       content = displayedProducts.map((prd) => (
         <div
           key={prd.id}
-          className={`col-xl-3 col-lg-3 col-sm-6 ${isMobile ? "col-6 " : ""}`} // Added gap-4 for mobile
-          style={{
-            borderRadius: isMobile ? "0px" : "", // Apply radius for mobile only
-            boxShadow: isMobile ? "0px 0px 0px rgba(0, 0, 0, 0)" : "", // Apply shadow for mobile only
-            height: isMobile ? "auto" : "", // Optional: You can set a fixed height for mobile if needed
-            marginBottom: isMobile ? "20px" : "", // Adding margin for mobile
-          }}
+          className={`${
+            isMobile ? "col-6" : "col-xl-3 col-lg-3 col-md-4 col-sm-6"
+          }`}
         >
-          <ProductItem
-            product={prd}
-            style={{
-              height: isMobile ? "200px" : "auto", // Set fixed height for product image in mobile
-              fontSize: isMobile ? "14px" : "16px", // Reduce font size for mobile
-            }}
-          />
+          <div className="product-card">
+            <ProductItem
+              product={prd}
+              style={{
+                height: isMobile ? "auto" : "100%",
+                fontSize: isMobile ? "14px" : "16px",
+              }}
+            />
+          </div>
         </div>
       ));
     }
@@ -83,91 +81,13 @@ const ProductArea = ({ categories }) => {
 
   return (
     <section className="tp-product-area mt-40 mb-40 pb-55">
-      <div className="container">
-        <div className="container" style={{ textAlign: "center" }}>
-          <h2
-            style={{
-              padding: "0 10px", // Top padding
-              paddingTop: "22px",
-              paddingBottom: "10px",
-              fontSize: "55px",
-              fontFamily: "'Tangerine', cursive",
-              borderBottom: "2px dotted gray",
-              display: "inline-block", // Ensures the border wraps the text
-              margin: "1px 20px", // Center the element horizontally
-              color:'#990100'
-            }}
-          >
-            Products
-          </h2>
-        </div>
-        {/* Mobile and Desktop Layout */}
-        <div className="my-4 text-center">
-          <button
-            className={`btn ${
-              activeTab === "Trending" ? "bg-white active text-black" : " text-gray"
-            }`}
-            style={{
-              marginRight: "10px",
-              padding: "10px 20px",
-              cursor: "pointer",
-              fontWeight: "500",
-              border:'none',
-              fontSize:'24px',
-               borderRadius:'0px',
-              position: "relative", // Allow pseudo-element positioning
-            }}
-            onClick={() => handleTabSwitch("Trending")}
-          >
-            Trending
-            <span
-              className={`border-effect ${
-                activeTab === "Trending" ? "active" : ""
-              }`}
-            ></span>
-          </button>
-          <button
-            className={`btn ${
-              activeTab === "Featured" ? "bg-white  active text-black" : ""
-            }`}
-            style={{
-              fontWeight: "500",
-              padding: "10px 20px",
-              cursor: "pointer",
-              position: "relative", // Allow pseudo-element positioning
-              border:'none',
-              borderRadius:'0px',
-              fontSize:'24px',
-              
-            }}
-            onClick={() => handleTabSwitch("Featured")}
-          >
-            Featured
-            <span
-              className={`border-effect ${
-                activeTab === "Featured" ? "active" : ""
-              }`}
-            ></span>
-          </button>
-        </div>
-        <div className="row align-items-start">
-          <div className="col-xl-4 col-lg-5 col-md-5">
-            <div className="tp-section-title-wrapper mb-40">
-              {/* <h3 className="fs-1 text-20">{categories} Products</h3> */}
-            </div>
-          </div>
-          <div className="col-xl-8 text-md-end text-sm-start mb-3 mb-md-0 col-lg-7 col-md-7">
-            <div className="sort-filter">
+      <div className="premium-background">
+        <div className="container">
+          <div className="header-container">
+            <h2 className="premium-title">Products</h2>
+            <div className="premium-sort">
               <select
-                style={{
-                  width: "40%",
-                  padding: "3px",
-                  outline: "none",
-                  boxShadow: "none",
-                  borderRadius: "4px",
-                  border:'1px dashed red'
-                }}
-                id="sort-by-price"
+                className="sort-select"
                 value={sortOption}
                 onChange={handleSortChange}
               >
@@ -177,63 +97,191 @@ const ProductArea = ({ categories }) => {
               </select>
             </div>
           </div>
-        </div>
-        <div className="row">{content}</div>
-        {/* See More Button */}
-        <div className="text-center mt-2">
-          <Link href="/shop">
+
+          <div className="premium-tabs">
             <button
-              className="btn"
-              style={{
-                backgroundColor: "transparent",
-                color: "#990100",
-                padding: isMobile ? "5px 10px" : "10px 20px",
-                borderRadius: "0px",
-                border: "2px dashed #990100",
-                cursor: "pointer",
-                fontSize: isMobile ? "12px" : "16px",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-                maxWidth: "50%",
-                minWidth: isMobile ? "100px" : "",
-                
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#990100";
-                e.currentTarget.style.color = "white";
-                e.currentTarget.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.color = "#990100";
-                e.currentTarget.style.transform = "scale(1)";
-              }}
+              className={`premium-tab ${activeTab === "Trending" ? "active" : ""}`}
+              onClick={() => handleTabSwitch("Trending")}
             >
-              See More Products
+              Trending
+              <span className="tab-underline"></span>
             </button>
-          </Link>
+            <button
+              className={`premium-tab ${activeTab === "Featured" ? "active" : ""}`}
+              onClick={() => handleTabSwitch("Featured")}
+            >
+              Featured
+              <span className="tab-underline"></span>
+            </button>
+          </div>
+
+          <div className="row product-grid">
+            {content}
+          </div>
+
+          <div className="text-center mt-4">
+            <Link href="/shop">
+              <button className="premium-button">
+                See More Products
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
+
       <style jsx>{`
-       .btn {
-    position: relative;
-    overflow: hidden;
-    background: transparent; /* Ensure background is transparent */
-  }
+        .premium-background {
+          background: linear-gradient(to right, #ffffff, #f8f8f8);
+          background-image: radial-gradient(#99010015 1px, transparent 1px);
+          background-size: 20px 20px;
+          padding: 60px 0;
+        }
 
-  .border-effect {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: black;
-    transition: width 0.3s ease;
-  }
+        .product-grid {
+          margin: 0 -15px;
+        }
 
-  .btn.active .border-effect {
-    width: 100%;
-  }
+        .product-grid > div {
+          margin-bottom: 30px;
+          padding: 0 15px;
+        }
+
+        .header-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 40px;
+          padding: 0 15px;
+        }
+
+        .premium-title {
+          font-family: 'Tangerine', cursive;
+          font-size: 65px;
+          color: #990100;
+          margin: 0;
+          padding: 0;
+        }
+
+        .premium-tabs {
+          display: flex;
+          justify-content: center;
+          gap: 30px;
+          margin-bottom: 40px;
+        }
+
+        .premium-tab {
+          font-size: 24px;
+          padding: 12px 30px;
+          background: transparent;
+          border: none;
+          color: #666;
+          position: relative;
+          transition: all 0.3s ease;
+        }
+
+        .premium-tab.active {
+          color: #990100;
+        }
+
+        .tab-underline {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: #990100;
+          transition: width 0.3s ease;
+        }
+
+        .premium-tab.active .tab-underline {
+          width: 100%;
+        }
+
+        .premium-grid {
+          display: grid;
+          gap: 30px;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          padding: 20px 0;
+        }
+
+        .sort-select {
+          width: 200px;
+          padding: 8px 15px;
+          border: 1px dashed #990100;
+          border-radius: 4px;
+          background: white;
+          color: #990100;
+          font-size: 16px;
+          transition: all 0.3s ease;
+        }
+
+        .sort-select:hover {
+          box-shadow: 0 0 10px rgba(153, 1, 0, 0.1);
+        }
+
+        .premium-button {
+          background: transparent;
+          color: #990100;
+          border: 2px dashed #990100;
+          padding: 12px 30px;
+          font-size: 18px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .premium-button:hover {
+          background: #990100;
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(153, 1, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+          .premium-background {
+            padding: 30px 0;
+          }
+
+          .product-grid {
+            margin: 0 -10px;
+          }
+
+          .product-grid > div {
+            padding: 0 10px;
+            margin-bottom: 20px;
+          }
+
+          .header-container {
+            flex-direction: column;
+            gap: 15px;
+          }
+
+          .premium-title {
+            font-size: 45px;
+          }
+
+          .premium-tab {
+            font-size: 18px;
+            padding: 8px 15px;
+          }
+
+          .premium-grid {
+            gap: 15px;
+          }
+
+          .sort-select {
+            width: 150px;
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .product-grid > div {
+            padding: 0 8px;
+            margin-bottom: 16px;
+          }
+        }
       `}</style>
     </section>
   );

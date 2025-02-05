@@ -21,7 +21,7 @@ const BlogArea = () => {
   const { data: blogs = [], total_blogs } = blogData;
 
   return (
-    <section className="tp-blog-area pt-50 pb-5">
+    <section className="tp-blog-area  pb-5">
       <div className="container">
         {/* Centered Title */}
         <div className="container text-center">
