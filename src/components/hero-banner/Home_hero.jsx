@@ -22,81 +22,97 @@ const HomeHero = () => {
     <section
       style={{
         display: "flex",
-        flexDirection: isMobile ? "column" : "row", // Column in mobile, Row in desktop
-        justifyContent: "space-between",
-        width: "100%",
-        height: isMobile ? "auto" : "100vh",
-        flexWrap: "wrap",
-        marginTop: isMobile ? "-7%" : "-2%",
+        flexDirection: isMobile ? "column" : "row",
+        width: "100vw",
+        height: "100vh",
+        margin: 0,
+        padding: 0,
       }}
     >
-      {sliderData?.slice(0, 3).map((item, index) => (
+      {sliderData?.slice(0, 3).map((item) => (
         <div
           key={item.id}
           style={{
-            width: isMobile ? "100%" : index === 1 ? "40%" : "30%", // Full width in mobile
-            height: isMobile ? "auto" : "100%",
-            backgroundColor: item.bg_color,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
+            width: isMobile ? "100%" : "33.333333%",
+            height: "100%",
             position: "relative",
-            textAlign: "center",
-            transition: "transform 0.3s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.querySelector(".hero-image").style.transform = "scale(1.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.querySelector(".hero-image").style.transform = "scale(1)";
+            overflow: "hidden",
           }}
         >
-          {/* Image (Scales on Hover of Card) */}
+          {/* Background Image with Gradient Overlay */}
           <div
             style={{
-              width: "250px",
-              height: "250px",
-              overflow: "hidden",
-              borderRadius: "10px",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
             }}
           >
             <Image
               src={item.image}
-              alt="Slider Image"
-              width={250}
-              height={250}
+              alt="Background Image"
+              fill
               className="hero-image"
               style={{
                 objectFit: "cover",
+                transition: "transform 0.3s ease",
+              }}
+            />
+            {/* Gradient Overlay */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
                 width: "100%",
                 height: "100%",
-                transition: "transform 0.3s ease",
+                background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.9) 100%)",
               }}
             />
           </div>
 
-          {/* Text and Button */}
-          <div style={{ zIndex: 2 }}>
-            <h3 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "10px", color: "white" }}>
+          {/* Content Container - Moved to bottom */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              padding: "2rem",
+              background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, transparent 100%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              zIndex: 2,
+            }}
+          >
+            <h3 style={{ 
+              fontSize: "clamp(1.5rem, 2vw, 2rem)", 
+              fontWeight: "bold", 
+              marginBottom: "0.5rem", 
+              color: "white",
+              textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+            }}>
               {item.heading}
             </h3>
-            <p style={{ fontSize: "18px", marginBottom: "15px", color: "white" }}>{item.subheading}</p>
-            <div>
-              <Link
-                href={
-                  /^[0-9]+$/.test(item.button_link)
-                    ? `shop?category=${item.button_link}`
-                    : `product-details/${item.button_link}`
-                }
-                legacyBehavior
-              >
-                <a className="button-link">
-                  {item.button_text}
-                </a>
-              </Link>
-            </div>
+            <p style={{ 
+              fontSize: "clamp(1rem, 1.5vw, 1.25rem)", 
+              marginBottom: "1rem", 
+              color: "white",
+              opacity: 0.9,
+            }}>
+              {item.subheading}
+            </p>
+            <Link
+              href={/^[0-9]+$/.test(item.button_link)
+                ? `shop?category=${item.button_link}`
+                : `product-details/${item.button_link}`}
+              legacyBehavior
+            >
+              <a className="button-link">{item.button_text}</a>
+            </Link>
           </div>
         </div>
       ))}

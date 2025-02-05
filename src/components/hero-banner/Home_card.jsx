@@ -64,8 +64,8 @@ const HomeCard = () => {
           {/* Image (Scales on Hover of Card) */}
           <div
             style={{
-              width: "250px",
-              height: "250px",
+              width: "300px",
+              height: "300px",
               overflow: "hidden",
               borderRadius: "10px", // Square-shaped image with rounded corners
             }}
@@ -73,8 +73,8 @@ const HomeCard = () => {
             <Image
               src={item.image}
               alt="Slider Image"
-              width={250}
-              height={250}
+              width={300}
+              height={300}
               className="hero-image"
               style={{
                 objectFit: "cover",
@@ -86,7 +86,7 @@ const HomeCard = () => {
           </div>
 
           {/* Text and Button */}
-          <div style={{ zIndex: 2 }}>
+          <div style={{ zIndex: 2, marginTop: "20px" }}>
             <h3 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "10px", color: "white" }}>
               {item.heading}
             </h3>
