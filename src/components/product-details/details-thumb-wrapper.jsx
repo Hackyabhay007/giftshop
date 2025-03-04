@@ -11,115 +11,122 @@ const DetailsThumbWrapper = ({
   imgHeight = 480,
   videoId = false,
   status,
+  size,
 }) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const isMobile = useIsMobile(); // Detect if the device is mobile
 
   return (
     <>
-      <div
-        className={`tp-product-details-thumb-wrapper tp-tab flex ${
-          isMobile ? "flex-col" : "d-sm-flex"
-        }`}
-      >
-        {/* Main Image */}
-        <div
-          className={`tab-content m-img ${
-            isMobile ? "order-0 w-full" : "order-1 w-full"
-          }`}
-          style={{
-            maxWidth: isMobile ? "100%" : "600px",
-            margin: isMobile ? "" : "0 auto", // Remove margin in mobile
-          }}
-        >
-          <div className="tab-pane fade show active">
-            <div className="tp-product-details-nav-main-thumb p-relative">
-              <Image
-                src={activeImg}
-                alt="Product image"
-                width={imgWidth}
-                height={imgHeight}
-                layout="responsive"
-                objectFit="cover"
-                style={{
-                  borderRadius: "8px",
-                  width: isMobile ? "100%" : "100%",
-
-                  boxShadow: isMobile
-                    ? "1px 5px 20px rgba(0, 0, 0, 0.1)"
-                    : "none",
-                }}
-              />
-              <div className="tp-product-badge">
-                {status === "out-of-stock" && (
-                  <span className="product-hot">Out of Stock</span>
-                )}
-              </div>
-              {videoId && (
-                <div
-                  onClick={() => setIsVideoOpen(true)}
-                  className="tp-product-details-thumb-video"
+      <div className="tp-product-details-thumb-wrapper">
+        <div className={`d-flex ${isMobile ? 'flex-column-reverse' : 'flex-row gap-4'}`}>
+          {/* Thumbnails */}
+          <nav
+            className={`${
+              isMobile ? 'w-100 mt-4' : ''
+            }`}
+            style={{
+              maxHeight: isMobile ? "auto" : "600px",
+              overflowY: isMobile ? "visible" : "auto",
+              width: isMobile ? "100%" : "120px",
+              minWidth: isMobile ? "auto" : "120px",
+            }}
+          >
+            <div 
+              className={`nav nav-tabs ${isMobile ? 'flex-row justify-content-center' : 'flex-column'}`}
+              style={{ gap: '10px' }}
+            >
+              {images?.map((item, i) => (
+                <button
+                  key={i}
+                  className={`nav-link ${item === activeImg ? "active" : ""}`}
+                  onClick={() => handleImageActive(item)}
                   style={{
-                    position: "absolute",
-                    bottom: "10px",
-                    right: "10px",
+                    padding: 0,
+                    margin: 0,
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    border: `2px solid ${item === activeImg ? '#990100' : '#eee'}`,
+                    width: isMobile ? "80px" : "100%",
+                    height: isMobile ? "80px" : "120px",
+                    overflow: "hidden",
+                    transition: "all 0.3s ease",
                   }}
                 >
-                  <a className="tp-product-details-thumb-video-btn cursor-pointer popup-video">
-                    <i className="fas fa-play"></i>
-                  </a>
-                </div>
-              )}
+                  <div style={{ width: "100%", height: "100%", position: "relative" }}>
+                    <Image
+                      src={item}
+                      alt={`Product thumbnail ${i + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                      style={{ borderRadius: "6px" }}
+                    />
+                  </div>
+                </button>
+              ))}
             </div>
-          </div>
-        </div>
+          </nav>
 
-        {/* Thumbnails */}
-        <nav
-          className={`${isMobile ? "order-1 w-full mt-4" : "order-0 w-1/4"}`}
-          style={{
-            maxHeight: isMobile ? "auto" : "800px",
-            overflowY: isMobile ? "visible" : "auto",
-            padding: isMobile ? "0" : "10px", // Remove padding in mobile
-          }}
-        >
-          <div className="nav nav-tabs flex-col">
-            {images?.map((item, i) => (
-              <button
-                key={i}
-                className={`nav-link ${item === activeImg ? "active" : ""}`}
-                onClick={() => handleImageActive(item)}
-                style={{
-                  padding: 0,
-                  marginBottom: "10px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  border: isMobile ? "2px solid #d3d3d3" : "none", // Gray border in mobile
-                  boxShadow: isMobile ? "0 2px 4px rgba(0, 0, 0, 0.1)" : "none", // Shadow in mobile
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                  }}
-                >
+          {/* Main Image */}
+          <div 
+            className="position-relative flex-grow-1"
+            style={{
+              maxWidth: isMobile ? "100%" : "calc(100% - 140px)",
+            }}
+          >
+            <div className="tab-content">
+              <div className="tab-pane fade show active">
+                <div className="tp-product-details-nav-main-thumb">
                   <Image
-                    src={item}
-                    alt={`Product thumbnail ${i + 1}`}
+                    src={activeImg}
+                    alt="Product image"
                     width={imgWidth}
                     height={imgHeight}
                     layout="responsive"
                     objectFit="cover"
-                    style={{
-                      borderRadius: "8px",
-                    }}
+                    style={{ borderRadius: "8px" }}
                   />
+                  {size && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        left: "10px",
+                        background: "rgba(0,0,0,0.7)",
+                        color: "white",
+                        padding: "5px 10px",
+                        borderRadius: "4px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      Size: {size}
+                    </div>
+                  )}
+                  <div className="tp-product-badge">
+                    {status === "out-of-stock" && (
+                      <span className="product-hot">Out of Stock</span>
+                    )}
+                  </div>
+                  {videoId && (
+                    <div
+                      onClick={() => setIsVideoOpen(true)}
+                      className="tp-product-details-thumb-video"
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px",
+                      }}
+                    >
+                      <a className="tp-product-details-thumb-video-btn cursor-pointer popup-video">
+                        <i className="fas fa-play"></i>
+                      </a>
+                    </div>
+                  )}
                 </div>
-              </button>
-            ))}
+              </div>
+            </div>
           </div>
-        </nav>
+        </div>
       </div>
 
       {/* Video Popup */}

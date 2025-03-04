@@ -16,6 +16,7 @@ const ProductDetailsArea = ({ productItem }) => {
     categories = [],
     sku = "",
     product_id,
+    size = null,  // Add size
   } = productItem || {};
 
   const [activeImg, setActiveImg] = useState(images[0] || "");
@@ -51,12 +52,13 @@ const ProductDetailsArea = ({ productItem }) => {
                 imgHeight={480}
                 videoId={videoId}
                 status={stock_quantity > 0 ? "in-stock" : "out-of-stock"}
+                size={size} // Pass size prop
               />
             </div>
 
             <div className="col-xl-5 col-lg-6">
               <DetailsWrapper
-                productItem={productItem}
+                productItem={{...productItem, size}} // Pass size in productItem
                 handleImageActive={handleImageActive}
                 activeImg={activeImg}
                 detailsBottom={true}

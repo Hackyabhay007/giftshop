@@ -6,12 +6,7 @@ import logo3 from "../../../public/assets/img/banner/Category/3.png";
 import logo4 from "../../../public/assets/img/banner/Category/4.png";
 import logo6 from "../../../public/assets/img/banner/Category/6.png";
 
-import mlogo5 from "../../../public/assets/img/banner/Category/m5.jpg";
-import mlogo2 from "../../../public/assets/img/banner/Category/m2.png";
-import mlogo1 from "../../../public/assets/img/banner/Category/m1.jpg";
-import mlogo3 from "../../../public/assets/img/banner/Category/m3.jpg";
-import mlogo4 from "../../../public/assets/img/banner/Category/m4.jpg";
-import mlogo6 from "../../../public/assets/img/banner/Category/m6.jpg";
+// Remove mobile logo imports
 
 import { useRouter } from "next/router";
 import { useIsMobile } from "@/utils/isMobileUtil";
@@ -26,12 +21,12 @@ const desktopCategories = [
 ];
 
 const mobileCategories = [
-  { id: 23, label: "THE SURPRISE BOX", icon: mlogo1 },
-  { id: 27, label: "THE TEDDY MADDY", icon: mlogo2 },
-  { id: 28, label: "THE HAPPY CARDS", icon: mlogo3 },
-  { id: 32, label: "THE WALL PAINTINGS", icon: mlogo4 },
-  { id: 33, label: "THE FLOWER POT", icon: mlogo5 },
-  { id: 31, label: "Personalised", icon: mlogo6 },
+  { id: 23, label: "THE SURPRISE BOX", icon: logo1 },
+  // { id: 27, label: "THE TEDDY MADDY", icon: logo2 },
+  // { id: 28, label: "THE HAPPY CARDS", icon: logo3 },
+  { id: 32, label: "THE WALL PAINTINGS", icon: logo4 },
+  { id: 33, label: "THE FLOWER POT", icon: logo5 },
+  { id: 31, label: "Personalised", icon: logo6 },
 ];
 
 export default function CategorySection() {

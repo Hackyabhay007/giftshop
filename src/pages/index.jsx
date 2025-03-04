@@ -78,7 +78,6 @@ export default function Home() {
       <ProductArea categories="Featured" isMobile={isMobile} /> */}
       {!isMobile ? (
         <>
-        
           <ProductArea categories="Trending" />
           {/* <ProductBanner /> */}
           <BlogArea />
@@ -88,12 +87,11 @@ export default function Home() {
         </>
       ) : (
         <>
-        
           <ProductArea categories="Trending" isMobile={isMobile} />
         </>
       )}
-     
       <Footer />
     </Wrapper>
   );
 }
+
