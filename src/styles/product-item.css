@@ -1,0 +1,18 @@
+.tp-product-action-btn-2:hover {
+  background-color: #800000 !important;
+  border-color: #800000 !important;
+}
+
+.tp-product-action-btn-2.active {
+  background-color: #800000 !important;
+  border-color: #800000 !important;
+}
+
+.tp-product-title-2 a:hover {
+  color: #800000 !important;
+}
+
+.tp-product-title-2 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

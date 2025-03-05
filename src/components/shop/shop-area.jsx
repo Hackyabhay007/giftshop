@@ -124,18 +124,20 @@ const ShopArea = ({ all_products, products, otherProps, resetCategory }) => {
                       aria-labelledby="grid-tab"
                       tabIndex="0"
                     >
-                      <div className="row">
+                      <div className="row g-4"> {/* Added consistent grid gap */}
                         {filteredRows
                           .slice(pageStart, pageStart + countOfPage)
                           .map((item) => (
                             <div
                               key={item._id}
-                              className="col-xl-4 col-md-6 col-sm-6 col-6"
+                              className={`${
+                                isMobile ? 'col-6' : 'col-xl-4 col-md-6'
+                              }`}
+                              style={{
+                                padding: isMobile ? "4px" : "12px"
+                              }}
                             >
-                              <div
-                                style={{ fontSize: "14px" }}
-                                className="product-item"
-                              >
+                              <div className="product-item">
                                 <ProductItem product={item} />
                               </div>
                             </div>
