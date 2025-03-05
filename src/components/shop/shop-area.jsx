@@ -49,7 +49,7 @@ const ShopArea = ({ all_products, products, otherProps, resetCategory }) => {
                     borderRadius: "0px",
                   }}
                 >
-                  {showFilters ? "Hide Filters" : "Show Filters"}
+                  {showFilters ? "Hide" : "CATEGORIES"}
                 </button>
               </div>
 
