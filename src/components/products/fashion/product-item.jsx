@@ -11,6 +11,33 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { useIsMobile } from "@/utils/isMobileUtil";
 
+const shimmer = (w, h) => `
+<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shimmer" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0.1" stop-color="#f3f3f3">
+        <animate attributeName="stop-color"
+          values="#f3f3f3; #fafafa; #f3f3f3"
+          dur="2s"
+          repeatCount="indefinite" />
+      </stop>
+      <stop offset="0.9" stop-color="#fafafa">
+        <animate attributeName="stop-color"
+          values="#fafafa; #f3f3f3; #fafafa"
+          dur="2s"
+          repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+  </defs>
+  <rect width="${w}" height="${h}" fill="url(#shimmer)" />
+</svg>
+`;
+
+const toBase64 = (str) =>
+  typeof window === 'undefined'
+    ? Buffer.from(str).toString('base64')
+    : window.btoa(str);
+
 const ProductItem = ({ product, style_2 = false }) => {
   const { product_id, name, images, categories, price, stock_quantity } =
     product || {};
@@ -83,6 +110,9 @@ const ProductItem = ({ product, style_2 = false }) => {
               src={images[0]}
               alt={name}
               layout="fill" // Use fill layout
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 700))}`}
               style={{
                 position: "absolute",
                 top: 0,
@@ -93,6 +123,10 @@ const ProductItem = ({ product, style_2 = false }) => {
                 mixBlendMode: "multiply", // Apply your desired blend mode here
                 objectFit: "contain",
                 padding: "12px",
+              }}
+              onLoadingComplete={(e) => {
+                e.target.style.opacity = "1";
+                e.target.style.transition = "opacity 0.3s ease-in-out";
               }}
             />
           </div>
