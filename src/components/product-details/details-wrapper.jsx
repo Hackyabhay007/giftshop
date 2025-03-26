@@ -26,6 +26,7 @@ const DetailsWrapper = ({
   handleImageActive,
   activeImg,
   detailsBottom = false,
+  isModal = false, // New prop to determine if used inside modal
 }) => {
   const {
     sku,
@@ -35,6 +36,9 @@ const DetailsWrapper = ({
     price,
     stock_quantity,
     categories = [],
+    created_at,
+    manufacturing_date,
+    expiry_date,
   } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
@@ -64,6 +68,28 @@ const DetailsWrapper = ({
       setRatingVal(0);
     }
   }, [reviews]);
+
+  // Format date function
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    
+    try {
+      const date = new Date(dateString);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) return "";
+      
+      // Format date: DD MMM YYYY
+      return date.toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
+    }
+  };
 
   // Handle add product to cart
   const handleAddProduct = (prd) => {
@@ -99,7 +125,8 @@ const DetailsWrapper = ({
       <h3
         className="tp-product-details-title"
         style={{
-          fontSize: isMobile ? "20px" : "", // Smaller font size on mobile
+          fontSize: isMobile ? "18px" : "22px",
+          marginBottom: isModal ? '10px' : '15px',
         }}
       >
         {name}
@@ -111,44 +138,75 @@ const DetailsWrapper = ({
           <span
             style={{
               color: "#990100",
-              boxShadow: isMobile ? "0 2px 4px rgba(255, 0, 0, 0.2)" : "none", // Light shadow on mobile
-              borderRadius: isMobile ? "2px" : "0", // Rounded edges on mobile
-              padding: isMobile ? "4px 6px" : "", // Padding on mobile
+              boxShadow: isMobile ? "0 2px 4px rgba(255, 0, 0, 0.2)" : "none",
+              borderRadius: isMobile ? "2px" : "0",
+              padding: isMobile ? "2px 4px" : "",
+              fontSize: isModal ? '14px' : 'inherit',
             }}
           >
             {stock_quantity > 0 ? "▪ In Stock" : "Out of Stock"}
           </span>
         </div>
+
+        {/* Date Information (if available) */}
+        {(manufacturing_date || expiry_date) && !isModal && (
+          <div className="tp-product-details-date ms-4" style={{ fontSize: '14px', color: '#666' }}>
+            {manufacturing_date && (
+              <div>Mfg: {formatDate(manufacturing_date)}</div>
+            )}
+            {expiry_date && (
+              <div>Exp: {formatDate(expiry_date)}</div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Product Description */}
-      <p>
-        {textMore ? description : `${description?.substring(0, 100)}...`}
-        <span
-          style={{ color: "#990100", cursor: "pointer" }}
-          onClick={() => setTextMore(!textMore)}
-        >
-          {textMore ? "See less" : "See more"}
-        </span>
-      </p>
+      {!isModal || !isMobile ? (
+        <p style={{
+          fontSize: isModal ? '14px' : 'inherit',
+          lineHeight: isModal ? '1.4' : 'inherit',
+          marginBottom: isModal ? '10px' : '15px',
+        }}>
+          {textMore ? description : `${description?.substring(0, isModal ? 80 : 100)}...`}
+          <span
+            style={{ color: "#990100", cursor: "pointer", marginLeft: '5px' }}
+            onClick={() => setTextMore(!textMore)}
+          >
+            {textMore ? "See less" : "See more"}
+          </span>
+        </p>
+      ) : null}
 
       {/* Product Price */}
-      <div className="tp-product-details-price-wrapper mb-20">
-        <span className="tp-product-details-price new-price">
+      <div className="tp-product-details-price-wrapper mb-20" style={{marginBottom: isModal ? '10px' : '20px'}}>
+        <span 
+          className="tp-product-details-price new-price"
+          style={{fontSize: isModal ? '18px' : 'inherit'}}
+        >
           Price: ₹{parseFloat(price).toFixed(2)}
         </span>
       </div>
 
       {/* Product Actions */}
-      <h3 className="tp-product-details-action-title">Quantity</h3>
-      <ProductQuantity />
+      <h3 
+        className="tp-product-details-action-title"
+        style={{fontSize: isModal ? '15px' : 'inherit', marginBottom: isModal ? '5px' : 'inherit'}}
+      >
+        Quantity
+      </h3>
+      <ProductQuantity isModal={isModal} />
 
       <div
         className={`tp-product-details-action-wrapper ${
           isMobile
-            ? "d-flex flex-row justify-content-between gap-3 pt-20 pb-70"
+            ? "d-flex flex-row justify-content-between gap-3 pt-10 pb-20"
             : ""
         }`}
+        style={{
+          marginTop: isModal ? '10px' : '',
+          marginBottom: isModal ? '10px' : '',
+        }}
       >
         <div
           className={`tp-product-details-action-item-wrapper ${
@@ -158,7 +216,7 @@ const DetailsWrapper = ({
           {/* Add to Cart Button */}
           <div
             className={`tp-product-details-add-to-cart ${
-              isMobile ? "w-100" : "mb-15 w-100"
+              isMobile ? "w-100" : `mb-${isModal ? '10' : '15'} w-100`
             }`}
           >
             {stock_quantity > 0 ? (
@@ -171,20 +229,22 @@ const DetailsWrapper = ({
                 style={{
                   ...(isMobile
                     ? {
-                        backgroundColor: "#fff", // White background for mobile
-                        color: stock_quantity > 0 ? "#990100" : "#cccccc", // Red text if in stock, gray otherwise
+                        backgroundColor: "#fff",
+                        color: stock_quantity > 0 ? "#990100" : "#cccccc",
                         border: `2px solid ${
                           stock_quantity > 0 ? "#990100" : "#cccccc"
-                        }`, // Red border if in stock
+                        }`,
                       }
                     : {
                         backgroundColor:
-                          stock_quantity > 0 ? "#990100" : "#cccccc", // Red background for desktop
-                        color: "#fff", // White text for desktop
-                        cursor: stock_quantity > 0 ? "pointer" : "not-allowed", // Pointer cursor for in-stock
+                          stock_quantity > 0 ? "#990100" : "#cccccc",
+                        color: "#fff",
+                        cursor: stock_quantity > 0 ? "pointer" : "not-allowed",
                       }),
-                  padding: "10px 15px", // Ensure consistent padding
-                  width: "100%", // Full width for button
+                  padding: isModal ? "8px 12px" : "10px 15px",
+                  width: "100%",
+                  fontSize: isModal ? '14px' : 'inherit',
+                  fontWeight: isModal ? '500' : 'inherit',
                 }}
               >
                 Add To Cart
@@ -198,7 +258,7 @@ const DetailsWrapper = ({
         {/* Buy Now Button */}
         <div
           className={`tp-product-details-buy-now ${
-            isMobile ? "w-50" : "mb-15 w-100"
+            isMobile ? "w-50" : `mb-${isModal ? '10' : '15'} w-100`
           }`}
         >
           <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
@@ -207,14 +267,16 @@ const DetailsWrapper = ({
               className="tp-product-details-buy-now-btn"
               style={{
                 ...buttonStyle,
-                padding: "10px 15px", // Ensure consistent padding
-                width: "100%", // Full width for button
+                padding: isModal ? "8px 12px" : "10px 15px",
+                width: "100%",
                 border: `2px solid ${
                   stock_quantity > 0 ? "#990100" : "#cccccc"
                 }`,
+                fontSize: isModal ? '14px' : 'inherit',
+                fontWeight: isModal ? '500' : 'inherit',
               }}
-              onMouseEnter={() => setIsHovered(true)} // Set hover state to true
-              onMouseLeave={() => setIsHovered(false)} // Set hover state to false
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
             >
               Buy Now
             </button>
@@ -223,22 +285,24 @@ const DetailsWrapper = ({
       </div>
       
       {/* WhatsApp Buy Button */}
-      <div className="tp-product-details-buy-whatsapp w-100 mb-15">
+      <div className="tp-product-details-buy-whatsapp w-100 mb-15" style={{marginBottom: isModal ? '10px' : '15px'}}>
         <button
           onClick={handleWhatsAppBuy}
           className="tp-product-details-buy-now-btn"
           style={{
-            backgroundColor: "#25D366", // WhatsApp green color
+            backgroundColor: "#25D366",
             color: "#FFFFFF",
             width: "100%",
             border: "none",
-            padding: "10px",
+            padding: isModal ? "8px 12px" : "10px 15px",
             cursor: "pointer",
             transition: "background-color 0.3s ease",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px"
+            gap: "8px",
+            fontSize: isModal ? '14px' : 'inherit',
+            fontWeight: isModal ? '500' : 'inherit',
           }}
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#128C7E"}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#25D366"}
@@ -249,10 +313,39 @@ const DetailsWrapper = ({
 
       {/* Bottom Info if detailsBottom is true */}
       {detailsBottom && (
-        <DetailsBottomInfo
-          category={categories.length > 0 ? categories[0] : "Unknown Category"}
-          sku={sku}
-        />
+        <>
+          <DetailsBottomInfo
+            category={categories.length > 0 ? categories[0] : "Unknown Category"}
+            sku={sku}
+          />
+          
+          {/* Additional date information in product details page */}
+          {(manufacturing_date || expiry_date || created_at) && (
+            <div className="tp-product-details-date-info mt-20">
+              <h4 style={{ fontSize: '16px', marginBottom: '10px' }}>Product Information</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '14px' }}>
+                {created_at && (
+                  <li style={{ marginBottom: '5px' }}>
+                    <span style={{ fontWeight: 500, marginRight: '5px' }}>Listed on:</span>
+                    {formatDate(created_at)}
+                  </li>
+                )}
+                {manufacturing_date && (
+                  <li style={{ marginBottom: '5px' }}>
+                    <span style={{ fontWeight: 500, marginRight: '5px' }}>Manufacturing Date:</span>
+                    {formatDate(manufacturing_date)}
+                  </li>
+                )}
+                {expiry_date && (
+                  <li style={{ marginBottom: '5px' }}>
+                    <span style={{ fontWeight: 500, marginRight: '5px' }}>Expiry Date:</span>
+                    {formatDate(expiry_date)}
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

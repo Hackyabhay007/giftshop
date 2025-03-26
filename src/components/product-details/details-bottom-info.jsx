@@ -33,7 +33,7 @@ const DetailsBottomInfo = ({ sku, category, tag }) => {
 
       <div className="tp-product-details-msg mb-15">
         <ul>
-          <li>30 days easy returns</li>
+          <li>7404510125</li>
           <li>Order yours before 2.30pm for same day dispatch</li>
         </ul>
       </div>
