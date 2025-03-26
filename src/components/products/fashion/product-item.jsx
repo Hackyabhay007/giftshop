@@ -52,7 +52,7 @@ const ProductItem = ({ product, style_2 = false }) => {
 
   // Handle WhatsApp buy button click
   const handleWhatsAppBuy = () => {
-    const whatsappNumber = "919999999999"; // Replace with your actual WhatsApp number
+    const whatsappNumber = "7404510125"; // Replace with your actual WhatsApp number
     const productLink = `${window.location.origin}/product-details/${product_id}`;
     const message = `I want to buy this product: ${name} ${productLink}`;
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
