@@ -17,6 +17,7 @@ import Service from "@/components/service/Service";
 import HomeHero from "@/components/hero-banner/Home_hero";
 import HomeCard from "@/components/hero-banner/Home_card";
 import SearchBar from "@/components/search/SearchBar";
+import WhatsAppButton from "@/components/common/WhatsAppButton";
 
 export default function Home() {
   const isMobile = useIsMobile();
@@ -91,6 +92,9 @@ export default function Home() {
         </>
       )}
       <Footer />
+      
+      {/* WhatsApp Button */}
+      <WhatsAppButton phoneNumber="7404510125" />
     </Wrapper>
   );
 }

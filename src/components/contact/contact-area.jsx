@@ -69,7 +69,7 @@ const ContactArea = () => {
                         </a>
                       </p>
                       <p data-info="phone">
-                        <a href="tel:999-606-10-15">+(91) 9996061015</a>
+                        <a href="tel:999-606-10-15">+(91) 7404510125</a>
                       </p>
                     </div>
                   </div>

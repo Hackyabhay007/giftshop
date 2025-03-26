@@ -51,7 +51,7 @@ const AboutPage = () => {
         },
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+91-9996061015",
+          "telephone": "+91-7404510125",
           "email": "ankit@mysweetwishes.com",
           "contactType": "Customer Support"
         }

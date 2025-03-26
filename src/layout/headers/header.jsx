@@ -44,7 +44,7 @@ const Header = () => {
             <div className="col-4 text-center">
               <div className="d-flex align-items-center justify-content-center">
                 <Phone />
-                <a href="tel:999-606-10-15" className="ms-2">+91 9996061015</a>
+                <a href="tel:999-606-10-15" className="ms-2">+91 7404510125</a>
               </div>
             </div>
             <div className="col-4 text-end">

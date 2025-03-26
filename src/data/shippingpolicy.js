@@ -40,7 +40,7 @@ const shippingPolicy = {
       content: `
         If you have any questions regarding our shipping policy, please contact us at 
         Email: ankit@mysweetwishes.com mailto:ankit@mysweetwishes.com 
-        or call us at Mobile: +91 9996061015.
+        or call us at Mobile: +91 7404510125.
       `,
     },
     section8: {
