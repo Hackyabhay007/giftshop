@@ -19,7 +19,7 @@ const WhatsAppButton = ({ phoneNumber }) => {
       <style jsx>{`
         .whatsapp-button {
           position: fixed;
-          bottom: 70px; /* Adjusted from 20px to 70px to be higher from bottom */
+          bottom: 25px; /* Decreased from 40px to 25px to be even lower on desktop */
           right: 20px;
           background-color: #25D366;
           color: white;
