@@ -18,6 +18,7 @@ import HomeHero from "@/components/hero-banner/Home_hero";
 import HomeCard from "@/components/hero-banner/Home_card";
 import SearchBar from "@/components/search/SearchBar";
 import WhatsAppButton from "@/components/common/WhatsAppButton";
+import Reels from "@/components/reels/Reels";
 
 export default function Home() {
   const isMobile = useIsMobile();
@@ -91,6 +92,10 @@ export default function Home() {
           <ProductArea categories="Trending" isMobile={isMobile} />
         </>
       )}
+      
+      {/* Add Reels Section */}
+      <Reels isMobile={isMobile} />
+      
       <Footer />
       
       {/* WhatsApp Button */}
